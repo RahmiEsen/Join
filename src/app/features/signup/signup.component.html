@@ -1,0 +1,38 @@
+<img class="logo"
+src="../../../.././assets/images/logo-dark.png" 
+alt="Back">
+<div class="card">
+    <a href="" class="back">
+        <img src="../../../.././assets/images/back.png" alt="Back">
+    </a>
+    <div class="headline">
+        <h1>Sign up</h1>
+        <div class="underline"></div>
+    </div>
+    <form action="">
+        <div *ngFor="let field of formFields" class="form-wrapper">
+            <div class="form-group">
+                <input [type]="field.type" [placeholder]="field.placeholder" />
+                <div class="form-icon">
+                    <img [src]="'../../../../assets/images/' + field.icon" [alt]="field.alt" />
+                </div>
+            </div>
+            <div class="errortext">
+                <p class="error">Check your email and password. Please try again.</p>
+            </div>
+        </div>
+        <div class="form-privacy">
+            <div class="checkbox-icon">
+                <img src="../../../../assets/images/unchecked.png" alt="unchecked" />
+            </div>
+            <span>I accept the 
+                <a href="">Privacy policy</a>
+            </span>
+        </div>
+    </form>
+    <button>Sign up</button>
+</div>
+<footer>
+    <a href="">Privacy Policy</a>
+    <a href="">Legal notice</a>
+</footer>

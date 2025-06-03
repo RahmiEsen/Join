@@ -13,9 +13,10 @@ body {
 }
 
 h1 {
+    color: #000;
     font-size: 61px;
     font-weight: 700;
-    color: #000;
+    line-height: 1.2
 }
 
 input {
@@ -23,6 +24,7 @@ input {
     color: #000;
     font-size: 20px;
     font-weight: 400;
+    line-height: 1.2;
     border: $border;
     border-radius: $border-radius;
     border-color: $border-color;
@@ -32,6 +34,7 @@ input {
     }
     &:focus {
         outline: none;
+        border-color: $hover
     }
 }
 
@@ -39,6 +42,7 @@ button {
     @include center;
     background-color: $primary;
     color: #fff;
+    font-family: $font-family;
     font-size: 21px;
     font-weight: 700;
     border: $border;
@@ -79,6 +83,14 @@ textarea {
     }
 }
 
+a {
+    text-decoration: none;
+    color: $hover;
+    &:hover {
+        border-bottom: 1px solid $hover;
+    }
+}
+
 .secondary {
     background-color: transparent;
     color: $primary;
@@ -94,3 +106,24 @@ textarea {
         }
     }
 }
+
+.error {
+    color: $error;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+app-signup {
+    @include center;
+    height: 100vh;
+}
+
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 47px;
+    }
+    button {
+        font-size: 16px;
+    }
+} 

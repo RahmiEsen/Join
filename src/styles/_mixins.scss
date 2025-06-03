@@ -11,6 +11,12 @@
     flex-direction: column;
 }
 
+@mixin column {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 @mixin space-between {
     display: flex;
     justify-content: space-between;
