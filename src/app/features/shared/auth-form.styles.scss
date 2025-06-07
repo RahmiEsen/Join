@@ -1,0 +1,154 @@
+@use '../../../styles/mixins' as *;
+@use '../../../styles/_variables' as *;
+
+footer {
+    position: absolute;
+    @include space-between;
+    height: 35px;
+    width: 246px;
+    bottom: 50px;
+    a {
+        @include center;
+        color: $border-color;
+        padding: 8px;
+        &:hover {
+            color: $hover;
+            font-weight: 700;
+            border: 0;
+        }
+    }
+}
+
+.logo {
+    position: absolute;
+    width: 100px;
+    height: 120px;
+    top: 80px;
+    left: 77px;
+}
+
+.singup-wrapper {
+    position: absolute;
+    @include center;
+    top: 65px;
+    right: 50px;
+    gap: 35px;
+    button {
+        font-size: 16px;
+    }
+    a {
+        &:hover {
+            border-bottom: 0px;
+        }
+    }
+}
+
+.card {
+    position: relative;
+    @include column-center;
+    height: auto;
+    width: 598px;
+    background-color: #fff;
+    padding: 48px 88px;
+    border-radius: 30px;
+    box-shadow: 0px 0px 14px 3px #0000000A;
+    gap: 30px;
+    .back {
+        position: absolute;
+        @include center;
+        height: 32px;
+        width: 32px;
+        top: 10%;
+        left: 10%;
+        cursor: pointer;
+        &:hover {
+            border: 0;
+        }
+    }
+    .headline {
+        @include column-center;
+        gap: 16px;
+        .underline {
+            width: 150px;
+            height: 3px;
+            background-color: $hover;
+        }
+    }
+    .button-wrapper {
+        @include center;
+        gap: 30px;
+    }
+    form {
+        @include column-center;
+        width: 100%;
+        .form-wrapper {
+            @include column;
+            width: 100%;
+            margin-bottom: 24px;
+            gap: 8px;
+            .form-group {
+                @include center;
+                width: 100%;
+                input {
+                    width: 100%;
+                }
+                .form-icon {
+                    position: relative;
+                    @include center;
+                    height: 24px;
+                    width: 24px;
+                    right: 40px;
+                }
+            }
+            .errortext {
+                display: none;
+                margin-left: 10px;
+            }
+        }
+        .form-privacy {
+            @include center;
+            height: 24px;
+            margin-top: 11px;
+            .checkbox-icon {
+                width: 24px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .logo {
+        width: 64px;
+        height: 78px;
+        top: 37px;
+        left: 38px;
+    }
+    .card {
+        width: auto;
+        padding: 32px;
+        .button-wrapper {
+            @include column-center;
+        }
+    }
+    .singup-wrapper {
+        top: unset;
+        right: unset;
+        bottom: 115px;
+        button {
+            width: 104px;
+            padding: 15px 16px;
+        }
+    }
+    .form-privacy span {
+        font-size: 16px;
+    }
+    .underline {
+        width: 88px !important;
+    }
+    button {
+        width: 180px;
+        height: 51px;
+        padding: 4px;
+    }
+}

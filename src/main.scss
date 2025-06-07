@@ -19,6 +19,10 @@ h1 {
     line-height: 1.2
 }
 
+span {
+    font-size: 20px;
+}
+
 input {
     @include space-between;
     color: #000;
@@ -48,7 +52,7 @@ button {
     border: $border;
     border-radius: $border-radius;
     border-color: $primary;
-    padding: 16px;
+    padding: 15px 24px;
     gap: 4px;
     cursor: pointer;
     .img {
@@ -91,14 +95,13 @@ a {
     }
 }
 
-.secondary {
+.secondary-btn {
     background-color: transparent;
     color: $primary;
-    font-weight: 400;
+    font-weight: 700;
     &:hover {
         color: $hover;
         background-color: transparent;
-        border: 2px solid;
         border-color: $hover;
         box-shadow: $shadow-hover;
         .img img {
@@ -113,7 +116,7 @@ a {
     font-weight: 400;
 }
 
-app-signup {
+app-signup, app-login {
     @include center;
     height: 100vh;
 }
