@@ -1,13 +1,12 @@
 <img class="logo"
-src="../../../.././assets/images/logo-dark.png" 
+src="assets/images/logo-dark.png" 
 alt="Back">
-<div class="singup-wrapper">
-    <span>Not a Join user?</span>
-    <button (click)="goToSignup()" class="btn-signup">Sign up</button>
-</div>
 <div class="card">
+    <a href="" class="back">
+        <img src="assets/images/back.png" alt="Back">
+    </a>
     <div class="headline">
-        <h1>Log  in</h1>
+        <h1>Sign up</h1>
         <div class="underline"></div>
     </div>
     <form action="">
@@ -15,18 +14,23 @@ alt="Back">
             <div class="form-group">
                 <input [type]="field.type" [placeholder]="field.placeholder" />
                 <div class="form-icon">
-                    <img [src]="'../../../../assets/images/' + field.icon" [alt]="field.alt" />
+                    <img [src]="'assets/images/' + field.icon" [alt]="field.alt" />
                 </div>
             </div>
             <div class="errortext">
                 <p class="error">Check your email and password. Please try again.</p>
             </div>
         </div>
+        <div class="form-privacy">
+            <div class="checkbox-icon">
+                <img src="assets/images/unchecked.png" alt="unchecked" />
+            </div>
+            <span>I accept the 
+                <a href="">Privacy policy</a>
+            </span>
+        </div>
     </form>
-    <div class="button-wrapper">
-        <button>Log in</button>
-        <button class="secondary-btn">Guest Log in</button>
-    </div>
+    <button>Sign up</button>
 </div>
 <footer>
     <a href="">Privacy Policy</a>
