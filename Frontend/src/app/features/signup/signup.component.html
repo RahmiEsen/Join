@@ -1,38 +1,72 @@
-<img class="logo"
-src="assets/images/logo-dark.png" 
-alt="Back">
+<img class="logo" src="assets/images/logo-dark.png" alt="Back" />
 <div class="card">
     <a href="" class="back">
-        <img src="assets/images/back.png" alt="Back">
+        <img src="assets/images/back.png" alt="Back" />
     </a>
     <div class="headline">
         <h1>Sign up</h1>
         <div class="underline"></div>
     </div>
-    <form action="">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div *ngFor="let field of formFields" class="form-wrapper">
-            <div class="form-group">
-                <input [type]="field.type" [placeholder]="field.placeholder" />
-                <div class="form-icon">
-                    <img [src]="'assets/images/' + field.icon" [alt]="field.alt" />
-                </div>
-            </div>
-            <div class="errortext">
-                <p class="error">Check your email and password. Please try again.</p>
+        <div class="form-group">
+            <input
+            #passwordInput
+            [type]="getInputType(field)"
+            [placeholder]="field.placeholder"
+            [formControlName]="getControlName(field.placeholder)"
+            (blur)="onBlur(getControlName(field.placeholder))"
+            [ngClass]="{
+                'has-error': getControlName(field.placeholder) === 'confirmPassword'
+                ? hasConfirmPasswordError()
+                : hasError(getControlName(field.placeholder))
+            }"
+            />
+            <div
+            class="form-icon"
+            (mousedown)="$event.preventDefault()"
+            (click)="togglePasswordVisibility(getControlName(field.placeholder))"
+            [ngStyle]="{
+                cursor: isToggleablePasswordField(field) ? 'pointer' : 'default'
+            }"
+            >
+            <img
+                [src]="'assets/images/' + getFormIconSrc(field)"
+                [alt]="field.alt"
+            />
             </div>
         </div>
+        <div
+            class="errortext"
+            *ngIf="getErrorMessage(getControlName(field.placeholder))"
+            [class.visible]="getErrorMessage(getControlName(field.placeholder))"
+        >
+            <p class="error">
+            {{ getErrorMessage(getControlName(field.placeholder)) }}
+            </p>
+        </div>
+        </div>
+        <div class="pricacy-wrapper">
         <div class="form-privacy">
             <div class="checkbox-icon">
-                <img src="assets/images/unchecked.png" alt="unchecked" />
+            <input
+                class="custom-checkbox"
+                type="checkbox"
+                formControlName="privacyAccepted"
+            />
             </div>
-            <span>I accept the 
-                <a href="">Privacy policy</a>
+            <span>
+            I accept the <a href="">Privacy policy</a>
             </span>
         </div>
+        <p class="error" *ngIf="shouldShowPrivacyError()">
+            Please accept the privacy policy.
+        </p>
+        </div>
+        <button type="submit">Sign up</button>
     </form>
-    <button>Sign up</button>
-</div>
+    </div>
 <footer>
-    <a href="">Privacy Policy</a>
-    <a href="">Legal notice</a>
+  <a href="">Privacy Policy</a>
+  <a href="">Legal notice</a>
 </footer>

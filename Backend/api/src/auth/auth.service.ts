@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
+
 export class AuthService {
     constructor(
         private prisma: PrismaService,
@@ -25,15 +26,15 @@ export class AuthService {
         const user = await this.prisma.user.findUnique({
         where: { email },
         });
-
+        
         if (!user) throw new ForbiddenException('User not found');
-
+        
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) throw new ForbiddenException('Wrong credentials');
-
+        
         const payload = { sub: user.id, email: user.email };
         const token = await this.jwt.signAsync(payload);
-
+        
         return { access_token: token };
     }
 }
