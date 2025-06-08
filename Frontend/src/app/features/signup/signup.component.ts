@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-signup',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
 export class SignupComponent {
   @ViewChildren('passwordInput') passwordInputs!: QueryList<ElementRef>;
 
-  form: FormGroup;
+  form!: FormGroup;
   submitted = false;
   ignoreNextBlur = false;
   blurredFields: Record<string, boolean> = {};
@@ -21,20 +22,66 @@ export class SignupComponent {
     password: false,
     confirmPassword: false
   };
-
   formFields = [
     { type: 'text', placeholder: 'Name', icon: 'person.png', alt: 'Person' },
     { type: 'email', placeholder: 'Email', icon: 'mail.png', alt: 'Mail' },
     { type: 'password', placeholder: 'Password', icon: 'lock.png', alt: 'Password' },
     { type: 'password', placeholder: 'Confirm Password', icon: 'lock.png', alt: 'Confirm Password' }
   ];
-
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.form = this.createForm();
   }
+
+  onSubmit(): void {
+    this.submitted = true;
+
+    if (this.form.invalid) {
+      this.markAllAsTouched();
+      return;
+    }
+
+    const [firstname, ...rest] = this.form.value.name.trim().split(' ');
+    const lastname = rest.join(' ') || '-';
+
+    const data = {
+      firstname,
+      lastname,
+      email: this.form.value.email,
+      password: this.form.value.password
+    };
+
+    this.registerUser(data);
+  }
+
+  private registerUser(data: any): void {
+    this.http.post('http://localhost:3000/auth/signup', data).subscribe({
+      next: (res) => this.handleSuccess(res),
+      error: (err) => this.handleError(err),
+    });
+  }
+
+  private handleSuccess(response: any): void {
+    console.log('✅ Erfolgreich registriert', response);
+    this.resetForm();
+    this.router.navigate(['/login']);
+  }
+
+  private handleError(error: any): void {
+    console.error('Fehler bei der Registrierung', error);
+  }
+
+  /* private initForm(): FormGroup {
+    return this.fb.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+    });
+  } */
 
   private createForm(): FormGroup {
     return this.fb.group({
@@ -44,16 +91,6 @@ export class SignupComponent {
       confirmPassword: ['', Validators.required],
       privacyAccepted: [false, Validators.requiredTrue]
     });
-  }
-
-  onSubmit(): void {
-    this.submitted = true;
-    if (this.form.invalid) {
-      this.markAllAsTouched();
-      return;
-    }
-    this.resetForm();
-    this.router.navigate(['/login']);
   }
 
   private resetForm(): void {

@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { SignupDto } from './dto/signup.dto';
 
 @Injectable()
 
@@ -11,14 +12,18 @@ export class AuthService {
         private jwt: JwtService
     ) {}
     
-    async signup(email: string, password: string) {
-        const hashedPassword = await bcrypt.hash(password, 10);
+    async signup(dto: SignupDto) {
+        console.log('✅ Signup aufgerufen mit:', dto);
+        const hash = await bcrypt.hash(dto.password, 10);
         const user = await this.prisma.user.create({
-        data: {
-            email,
-            password: hashedPassword,
-        },
+            data: {
+            email: dto.email,
+            password: hash,
+            firstname: dto.firstname,
+            lastname: dto.lastname,
+            },
         });
+
         return { message: 'User created', userId: user.id };
     }
     
