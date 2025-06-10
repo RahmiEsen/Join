@@ -16,7 +16,8 @@ h1 {
     color: #000;
     font-size: 61px;
     font-weight: 700;
-    line-height: 1.2
+    line-height: 1.2;
+    text-align: center;
 }
 
 span {
@@ -116,7 +117,7 @@ a {
     font-weight: 400;
 }
 
-app-signup, app-login {
+app-signup, app-login, app-forgot-password {
     @include center;
     height: 100vh;
 }

@@ -20,7 +20,7 @@ export class LoginComponent {
   blurredFields: Record<string, boolean> = {};
   loginErrorMessage: string | null = null;
   passwordVisibility: Record<string, boolean> = { password: false };
-  
+  loginFailed = false;
   formFields = [
     { type: 'email', placeholder: 'Email', icon: 'mail.png', alt: 'Mail' },
     { type: 'password', placeholder: 'Password', icon: 'lock.png', alt: 'Password' }
@@ -56,6 +56,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.submitted = true;
+    this.loginFailed = false;
     this.loginErrorMessage = null;
     this.clearFieldErrors();
     if (this.form.valid) this.attemptLogin();
@@ -85,6 +86,7 @@ export class LoginComponent {
   }
 
   private handleLoginError(): void {
+    this.loginFailed = true;
     this.submitted = true;
     this.loginErrorMessage = 'Check your email and password. Please try again.';
     this.markControlsAsFailed();

@@ -74,6 +74,17 @@ footer {
             background-color: $hover;
         }
     }
+    .confirmation-wrapper {
+        @include column-center;
+        gap: 20px;
+        .message-wrapper {
+            @include column-center;
+            gap: 20px;
+            span {
+            text-align: center;
+            }
+        }
+    }
     form {
         @include column-center;
         width: 100%;
@@ -111,6 +122,10 @@ footer {
                     opacity: 1;
                 }
             }
+        }
+        .mail-wrapper {
+            justify-content: end !important;
+            width: 100%;
         }
         .button-wrapper {
             @include center;
