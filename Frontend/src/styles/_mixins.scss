@@ -28,3 +28,9 @@
     justify-content: space-evenly;
     align-items: center;
 }
+
+@mixin start {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}

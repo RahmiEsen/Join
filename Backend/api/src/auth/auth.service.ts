@@ -13,17 +13,14 @@ export class AuthService {
     ) {}
     
     async signup(dto: SignupDto) {
-        console.log('✅ Signup aufgerufen mit:', dto);
         const hash = await bcrypt.hash(dto.password, 10);
         const user = await this.prisma.user.create({
             data: {
             email: dto.email,
             password: hash,
-            firstname: dto.firstname,
-            lastname: dto.lastname,
+            name: dto.name,
             },
         });
-
         return { message: 'User created', userId: user.id };
     }
     

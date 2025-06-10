@@ -38,25 +38,18 @@ export class SignupComponent {
 
   onSubmit(): void {
     this.submitted = true;
-
     if (this.form.invalid) {
       this.markAllAsTouched();
       return;
     }
-
-    const [firstname, ...rest] = this.form.value.name.trim().split(' ');
-    const lastname = rest.join(' ') || '-';
-
     const data = {
-      firstname,
-      lastname,
+      name: this.form.value.name.trim(),
       email: this.form.value.email,
       password: this.form.value.password
     };
-
     this.registerUser(data);
   }
-
+//Backend
   private registerUser(data: any): void {
     this.http.post('http://localhost:3000/auth/signup', data).subscribe({
       next: (res) => this.handleSuccess(res),
@@ -74,15 +67,8 @@ export class SignupComponent {
     console.error('Fehler bei der Registrierung', error);
   }
 
-  /* private initForm(): FormGroup {
-    return this.fb.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
-  } */
 
+//Start
   private createForm(): FormGroup {
     return this.fb.group({
       name: ['', Validators.required],

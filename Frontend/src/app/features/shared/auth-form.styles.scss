@@ -74,10 +74,6 @@ footer {
             background-color: $hover;
         }
     }
-    .button-wrapper {
-        @include center;
-        gap: 30px;
-    }
     form {
         @include column-center;
         width: 100%;
@@ -115,6 +111,13 @@ footer {
                     opacity: 1;
                 }
             }
+        }
+        .button-wrapper {
+            @include center;
+            gap: 30px;
+        }
+        .forgot-wrapper {
+            margin-bottom: 15px;
         }
         .pricacy-wrapper {
             @include column-center;
@@ -156,8 +159,16 @@ footer {
     .card {
         width: auto;
         padding: 32px;
-        .button-wrapper {
-            @include column-center;
+        form {
+            .remember-wrapper {
+                margin-bottom: 24px;
+            }
+            .button-wrapper {
+                @include column-center;
+                button {
+                    margin-top: 0;
+                }
+            }
         }
     }
     .singup-wrapper {
