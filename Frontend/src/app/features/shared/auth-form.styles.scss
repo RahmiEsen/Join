@@ -118,6 +118,9 @@ footer {
         }
         .forgot-wrapper {
             margin-bottom: 15px;
+            a {
+                cursor: pointer;
+            }
         }
         .pricacy-wrapper {
             @include column-center;

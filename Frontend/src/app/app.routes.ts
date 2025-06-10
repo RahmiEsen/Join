@@ -12,6 +12,11 @@ export const routes: Routes = [
         import('./features/signup/signup.routes').then(m => m.SIGNUP_ROUTES)
     },
     {
+    path: 'forgot-password',
+    loadChildren: () => 
+        import('./features/forgot-password/forgot-password.routes').then(m => m.FORGOTPASSWORD_ROUTES)
+    },
+    {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'

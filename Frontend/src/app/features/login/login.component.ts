@@ -50,6 +50,10 @@ export class LoginComponent {
     this.router.navigate(['/signup']);
   }
 
+  goToForgotPassword(): void {
+    this.router.navigate(['/forgot-password']);
+  }
+
   onSubmit(): void {
     this.submitted = true;
     this.loginErrorMessage = null;
