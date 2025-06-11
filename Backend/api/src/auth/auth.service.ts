@@ -16,7 +16,8 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
-    private mailService: MailService
+    private mailService: MailService,
+    private jwtService: JwtService
   ) {}
 
   async signup(dto: SignupDto) {
@@ -102,5 +103,30 @@ export class AuthService {
         resetTokenExpiry: new Date(Date.now() + 1000 * 60 * 60),
       },
     });
+  }
+
+  generateToken(payload: { sub: string; email: string }) {
+    return this.jwtService.sign(payload);
+  }
+
+  findOrCreate(userData: {
+    email: string;
+    name: string;
+    picture: string;
+  }) {
+    let user =  this.prisma.user.findUnique({
+      where: { email: userData.email },
+    });
+    if (!user) {
+      user =  this.prisma.user.create({
+        data: {
+          email: userData.email,
+          name: userData.email,
+          picture: userData.picture,
+          provider: 'google',
+        },
+      });
+    }
+    return user;
   }
 }
