@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { FormHelperService } from '../shared/form-helper.service';
 import { AuthService } from '../shared/auth.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-reset-password',
@@ -16,6 +17,7 @@ export class ResetPasswordComponent {
   form!: FormGroup;
   submitted = false;
   ignoreNextBlur = false;
+  token!: string;
   blurredFields: Record<string, boolean> = {};
   passwordVisibility: Record<string, boolean> = {
     password: false,
@@ -28,22 +30,39 @@ export class ResetPasswordComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router,
     private formHelper: FormHelperService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.form = this.createForm();
   }
 
+  ngOnInit(): void {
+    this.token = this.route.snapshot.queryParamMap.get('token') || '';
+  }
+
   onSubmit(): void {
     this.submitted = true;
+    if (this.form.invalid || !this.token) {
+      console.warn('Form ist ungültig oder Token fehlt.');
+      return;
+    }
+    const newPassword = this.form.value.password;
+    this.authService.resetPassword(this.token, newPassword).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('❌ Passwort-Reset fehlgeschlagen:', err);
+      }
+    });
   }
 
   private createForm(): FormGroup {
     return this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/)]],
       confirmPassword: ['', Validators.required],
-      privacyAccepted: [false, Validators.requiredTrue]
     });
   }
 
