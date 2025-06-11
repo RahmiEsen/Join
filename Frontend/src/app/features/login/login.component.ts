@@ -196,4 +196,8 @@ export class LoginComponent {
   isPasswordField(placeholder: string): boolean {
     return placeholder.toLowerCase() === 'password';
   }
+
+  loginWithGoogle(): void {
+    window.location.href = 'http://localhost:3000/auth/google';
+  }
 }

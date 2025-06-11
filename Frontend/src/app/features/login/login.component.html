@@ -50,6 +50,17 @@ alt="Logo">
         <div class="forgot-wrapper" *ngIf="loginFailed">
             <a (click)="goToForgotPassword()">Forgotten your password?</a>
         </div>
+        <div class="auth-wrapper">
+            <div class="divider">
+                OR
+            </div>
+            <button type="button" (click)="loginWithGoogle()" class="auth-btn">
+                <div class="img-wrapper">
+                    <img src="assets/images/google.png" alt="OAuth">
+                </div>
+                Sign in with Google
+            </button>
+        </div>
         <div class="pricacy-wrapper remember-wrapper">
             <div class="form-privacy">
                 <div class="checkbox-icon">

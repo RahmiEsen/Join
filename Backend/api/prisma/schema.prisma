@@ -14,8 +14,9 @@ model user {
   name             String?  // für normalen Login
   firstName        String?
   lastName         String?
-  picture          String?
-  provider         String?
+  picture          String?  // Profilbild-URL
+  provider         String?  // z. B. "google"
+  googleId         String?  // Google OAuth ID
   resetToken       String?
   resetTokenExpiry DateTime?
   createdAt        DateTime @default(now())

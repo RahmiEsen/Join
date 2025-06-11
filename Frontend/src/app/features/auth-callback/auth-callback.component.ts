@@ -1,11 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-callback',
-  imports: [],
-  templateUrl: './auth-callback.component.html',
-  styleUrl: './auth-callback.component.scss'
+  template: `<p>Du wirst weitergeleitet...</p>`,
 })
-export class AuthCallbackComponent {
+export class AuthCallbackComponent implements OnInit {
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+
+      if (token) {
+        localStorage.setItem('accessToken', token);
+        this.router.navigate(['/']);
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 }

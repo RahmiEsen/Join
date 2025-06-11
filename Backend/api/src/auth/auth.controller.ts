@@ -1,20 +1,23 @@
 import {
-  Controller,
-  Post,
-  Body,
-  NotFoundException,
-  Get, 
-  Req, 
-  UseGuards,
-  Res
+  Controller, Post, Body, Get, Req, Res,
+  UseGuards, NotFoundException
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { SignupDto } from './dto/signup.dto';
-import { MailService } from '../mail/mail.service';
-import { randomBytes } from 'crypto';
-import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
+import { randomBytes } from 'crypto';
+import { AuthService } from './auth.service';
+import { MailService } from '../mail/mail.service';
+import { GoogleAuthGuard } from './guard/google-auth.guard';
+import { SignupDto } from './dto/signup.dto';
+import { LoginDto } from './dto/login.dto';
+
+const FRONTEND_URL = 'http://localhost:4200';
+const RESET_EMAIL_SENT_MSG = 'Reset-Mail gesendet';
+const USER_NOT_FOUND_MSG = 'Nutzer nicht gefunden';
+
+interface GoogleUser {
+  email: string;
+  token: string;
+}
 
 @Controller('auth')
 export class AuthController {
@@ -22,58 +25,65 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly mailService: MailService,
   ) {}
-
+  
   @Post('signup')
-  signup(@Body() dto: SignupDto) {
+  async signup(@Body() dto: SignupDto) {
     return this.authService.signup(dto);
   }
 
   @Post('login')
-  login(@Body() dto: LoginDto) {
+  async login(@Body() dto: LoginDto) {
     return this.authService.login(dto.email, dto.password);
   }
 
   @Post('request-reset')
   async requestReset(@Body('email') email: string) {
-    console.log('📥 E-Mail empfangen für Reset:', email);
-
     const user = await this.authService.findUserByEmail(email);
-    if (!user) throw new NotFoundException('Nutzer nicht gefunden');
-
-    const token = randomBytes(32).toString('hex');
-
-    await this.authService.setResetToken(email, token);
-
-    const link = `http://localhost:4200/reset-password?token=${token}`;
-    console.log('🔗 Reset-Link:', link);
-
-    await this.mailService.sendResetEmail(email, link);
-
-    return { message: 'Reset-Mail gesendet' };
+    if (!user) throw new NotFoundException(USER_NOT_FOUND_MSG);
+    const token = this.generateResetToken();
+    const resetLink = this.createResetLink(token);
+    await this.setTokenAndSendEmail(email, token, resetLink);
+    return { message: RESET_EMAIL_SENT_MSG };
   }
 
   @Post('reset-password')
-  async resetPassword(
-    @Body() body: { token: string; newPassword: string }
-  ) {
+  async resetPassword(@Body() body: { token: string; newPassword: string }) {
     return this.authService.resetPassword(body.token, body.newPassword);
   }
 
   @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {
-    // Leitet zu Google weiter
-  }
+  @UseGuards(GoogleAuthGuard)
+  googleAuth() {}
 
   @Get('google/redirect')
-  @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(
-    @Req() req: Request,
-    @Res({ passthrough: false }) res: Response
-  ) {
-    const user = req.user as any;
-    const token = user.token;
+  @UseGuards(GoogleAuthGuard)
+  googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const user = req.user as GoogleUser;
+    if (!user || !user.token) {
+      throw new NotFoundException('User token not found');
+    }
+    const redirectUrl = this.createGoogleRedirectUrl(user.token);
+    res.redirect(redirectUrl);
+  }
 
-    res.redirect(`http://localhost:4200/auth/callback?token=${token}`);
+  private generateResetToken(): string {
+    return randomBytes(32).toString('hex');
+  }
+
+  private createResetLink(token: string): string {
+    return `${FRONTEND_URL}/reset-password?token=${token}`;
+  }
+
+  private createGoogleRedirectUrl(token: string): string {
+    return `${FRONTEND_URL}/auth-callback?token=${token}`;
+  }
+
+  private async setTokenAndSendEmail(
+    email: string,
+    token: string,
+    link: string
+  ): Promise<void> {
+    await this.authService.setResetToken(email, token);
+    await this.mailService.sendResetEmail(email, link);
   }
 }

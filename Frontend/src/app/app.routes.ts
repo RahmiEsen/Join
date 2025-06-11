@@ -22,6 +22,11 @@ export const routes: Routes = [
         import('./features/reset-password/reset-password.routes').then(m => m.RESETPASSWORD_ROUTES)
     },
     {
+    path: 'auth-callback',
+    loadChildren: () => 
+        import('./features/auth-callback/auth-callback.routes').then(m => m.AUTHCALLBACK_ROUTES)
+    },
+    {
         path: '',
         redirectTo: 'login',
         pathMatch: 'full'
