@@ -70,16 +70,6 @@ export class MailService {
                 </p>
             </div>
             <div style="text-align:center; margin-top:30px; color:#777; font-size:12px;">
-                <div style="margin:10px 0;">
-                <a href="https://www.instagram.com/kendricklamar/" style="margin:0 8px;">
-                    <img
-                    src="https://raw.githubusercontent.com/RahmiEsen/Join/refs/heads/main/Frontend/src/assets/images/insta.svg"
-                    alt="Instagram"
-                    width="18"
-                    />
-                </a>
-                </div>
-                <div>+49 123 456 7890</div>
                 <div style="margin-top:8px;">
                 This link will expire in the next 1 hour.
                 </div>

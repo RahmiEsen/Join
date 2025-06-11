@@ -117,7 +117,8 @@ a {
     font-weight: 400;
 }
 
-app-signup, app-login, app-forgot-password {
+app-signup, app-login, app-forgot-password,
+app-reset-password {
     @include center;
     height: 100vh;
 }

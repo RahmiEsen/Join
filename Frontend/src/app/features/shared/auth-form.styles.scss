@@ -171,12 +171,12 @@ footer {
     .logo {
         width: 64px;
         height: 78px;
-        top: 37px;
+        top: 20px;
         left: 38px;
     }
     .card {
         width: auto;
-        padding: 32px;
+        padding: 25px 32px;
         form {
             .remember-wrapper {
                 margin-bottom: 24px;
@@ -192,7 +192,7 @@ footer {
     .singup-wrapper {
         top: unset;
         right: unset;
-        bottom: 115px;
+        bottom: 65px;
         button {
             width: 104px;
             padding: 15px 16px;
@@ -208,5 +208,8 @@ footer {
         width: 180px;
         height: 51px;
         padding: 4px;
+    }
+    footer {
+        bottom: 20px;
     }
 }

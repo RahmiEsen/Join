@@ -2,18 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormHelperService } from '../shared/form-helper.service';
+import { AuthService } from '../shared/auth.service';
 
 @Component({
-  selector: 'app-signup',
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
-  templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss'
+  selector: 'app-reset-password',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.scss'
 })
-
-export class SignupComponent {
-  @ViewChildren('passwordInput') passwordInputs!: QueryList<ElementRef>;
-
+export class ResetPasswordComponent {
+@ViewChildren('passwordInput') passwordInputs!: QueryList<ElementRef<HTMLInputElement>>;
   form!: FormGroup;
   submitted = false;
   ignoreNextBlur = false;
@@ -23,75 +22,33 @@ export class SignupComponent {
     confirmPassword: false
   };
   formFields = [
-    { type: 'text', placeholder: 'Name', icon: 'person.png', alt: 'Person' },
-    { type: 'email', placeholder: 'Email', icon: 'mail.png', alt: 'Mail' },
     { type: 'password', placeholder: 'Password', icon: 'lock.png', alt: 'Password' },
     { type: 'password', placeholder: 'Confirm Password', icon: 'lock.png', alt: 'Confirm Password' }
   ];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private formHelper: FormHelperService,
+    private authService: AuthService
   ) {
     this.form = this.createForm();
   }
 
   onSubmit(): void {
     this.submitted = true;
-    if (this.form.invalid) {
-      this.markAllAsTouched();
-      return;
-    }
-    const data = {
-      name: this.form.value.name.trim(),
-      email: this.form.value.email,
-      password: this.form.value.password
-    };
-    this.registerUser(data);
-  }
-
-  private registerUser(data: any): void {
-    this.http.post('http://localhost:3000/auth/signup', data).subscribe({
-      next: (res) => this.handleSuccess(res),
-      error: (err) => this.handleError(err),
-    });
-  }
-
-  private handleSuccess(response: any): void {
-    console.log('✅ Erfolgreich registriert', response);
-    this.resetForm();
-    this.router.navigate(['/login']);
-  }
-
-  private handleError(error: any): void {
-    console.error('Fehler bei der Registrierung', error);
   }
 
   private createForm(): FormGroup {
     return this.fb.group({
-      name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.pattern(/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/)]],
       password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/)]],
       confirmPassword: ['', Validators.required],
       privacyAccepted: [false, Validators.requiredTrue]
     });
   }
 
-  private resetForm(): void {
-    this.form.reset();
-    this.submitted = false;
-    this.blurredFields = {};
-    this.passwordVisibility = { password: false, confirmPassword: false };
-  }
-
-  private markAllAsTouched(): void {
-    Object.values(this.form.controls).forEach(c => c.markAsTouched());
-  }
-
   getControlName(label: string): string {
     return {
-      'Name': 'name',
-      'Email': 'email',
       'Password': 'password',
       'Confirm Password': 'confirmPassword'
     }[label] || '';
@@ -99,25 +56,10 @@ export class SignupComponent {
 
   getErrorMessage(controlName: string): string | null {
     switch (controlName) {
-      case 'name': return this.getNameError();
-      case 'email': return this.getEmailError();
       case 'password': return this.getPasswordError();
       case 'confirmPassword': return this.getConfirmPasswordError();
       default: return null;
     }
-  }
-
-  private getNameError(): string | null {
-    const control = this.form.get('name');
-    if (!control || (!control.touched && !this.submitted)) return null;
-    return control.hasError('required') ? 'Please enter your name.' : null;
-  }
-
-  private getEmailError(): string | null {
-    const control = this.form.get('email');
-    if (!control || (!control.touched && !this.submitted)) return null;
-    if (control.hasError('required')) return 'Please enter your email address.';
-    return control.hasError('pattern') ? 'Please enter a valid email address.' : null;
   }
 
   private getPasswordError(): string | null {
@@ -201,10 +143,5 @@ export class SignupComponent {
     const touched = this.submitted || this.blurredFields['confirmPassword'];
     const mismatch = password?.value && confirm?.value && password.value !== confirm.value;
     return touched && (!!confirm?.invalid || mismatch);
-  }
-
-  shouldShowPrivacyError(): boolean {
-    const control = this.form.get('privacyAccepted');
-    return (this.submitted || this.blurredFields['privacyAccepted']) && control?.invalid === true;
   }
 }
