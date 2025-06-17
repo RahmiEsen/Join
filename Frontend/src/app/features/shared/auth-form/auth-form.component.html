@@ -1,0 +1,122 @@
+<ng-container [ngSwitch]="formType">
+  
+  <form *ngSwitchCase="'login'" [formGroup]="form" (ngSubmit)="formSubmit.emit()" style="width: 100%;">
+    <app-form-field
+      [formFields]="formFields"
+      [form]="form"
+      [formHelper]="formHelper"
+      [submitted]="submitted"
+      [blurredFields]="blurredFields"
+      [passwordVisibility]="passwordVisibility"
+      [ignoreNextBlur]="ignoreNextBlur"
+      [customErrorMessages]="customErrorMessages">
+    </app-form-field>
+
+    <div class="forgot-wrapper" *ngIf="showForgotPassword && loginFailed">
+      <a (click)="goToForgotPassword.emit()">Forgotten your password?</a>
+    </div>
+
+    <div class="auth-wrapper" *ngIf="showGoogleLogin">
+      <div class="divider">OR</div>
+      <button type="button" class="auth-btn" (click)="googleLogin.emit()">
+        <div class="img-wrapper">
+          <img src="assets/images/google.png" alt="OAuth" />
+        </div>
+        Sign in with Google
+      </button>
+    </div>
+
+    <div class="pricacy-wrapper remember-wrapper" *ngIf="showRememberMe">
+      <div class="form-privacy">
+        <div class="checkbox-icon">
+          <input
+            class="custom-checkbox"
+            type="checkbox"
+            formControlName="remember"
+          />
+        </div>
+        <span>Remember me</span>
+      </div>
+    </div>
+
+    <div class="button-wrapper" [ngClass]="buttonWrapperClass">
+      <button type="submit">{{ submitButtonText }}</button>
+      <button
+        *ngIf="showGuestButton"
+        type="button"
+        class="secondary-btn"
+        (click)="guestLogin.emit()">
+        Guest Log in
+      </button>
+    </div>
+  </form>
+
+  <form *ngSwitchCase="'signup'" [formGroup]="form" (ngSubmit)="formSubmit.emit()" style="width: 100%;">
+    <app-form-field
+      [formFields]="formFields"
+      [form]="form"
+      [formHelper]="formHelper"
+      [submitted]="submitted"
+      [blurredFields]="blurredFields"
+      [passwordVisibility]="passwordVisibility"
+      [ignoreNextBlur]="ignoreNextBlur"
+      [customErrorMessages]="customErrorMessages">
+    </app-form-field>
+
+    <div class="pricacy-wrapper">
+      <div class="form-privacy">
+        <div class="checkbox-icon">
+          <input
+            class="custom-checkbox"
+            type="checkbox"
+            formControlName="privacyAccepted"
+          />
+        </div>
+        <span>
+          I accept the <a href="">Privacy policy</a>
+        </span>
+      </div>
+      <p class="error" *ngIf="form.get('privacyAccepted')?.invalid && submitted">
+        Please accept the privacy policy.
+      </p>
+    </div>
+
+    <div class="button-wrapper">
+      <button type="submit">Sign up</button>
+    </div>
+  </form>
+
+  <form *ngSwitchCase="'forgot'" [formGroup]="form" (ngSubmit)="formSubmit.emit()" style="width: 100%;">
+    <app-form-field
+      [formFields]="formFields"
+      [form]="form"
+      [formHelper]="formHelper"
+      [submitted]="submitted"
+      [blurredFields]="blurredFields"
+      [passwordVisibility]="passwordVisibility"
+      [ignoreNextBlur]="ignoreNextBlur"
+      [customErrorMessages]="customErrorMessages">
+    </app-form-field>
+    <div class="button-wrapper mail-wrapper">
+      <button type="submit" [disabled]="form.invalid && submitted">
+        Send E-Mail
+      </button>
+    </div>
+  </form>
+
+  <form *ngSwitchCase="'reset'" [formGroup]="form" (ngSubmit)="formSubmit.emit()" style="width: 100%;">
+    <app-form-field
+      [formFields]="formFields"
+      [form]="form"
+      [formHelper]="formHelper"
+      [submitted]="submitted"
+      [blurredFields]="blurredFields"
+      [passwordVisibility]="passwordVisibility"
+      [ignoreNextBlur]="ignoreNextBlur"
+      [customErrorMessages]="customErrorMessages">
+    </app-form-field>
+    <div class="button-wrapper">
+      <button type="submit">Log in</button>
+    </div>
+  </form>
+</ng-container>

@@ -1,0 +1,23 @@
+<app-auth-layout [showSignupLink]="true">
+    <app-auth-card [showBack]="false" [title]="'Log in'">
+        <app-auth-form
+            [formType]="'login'"
+            [form]="form"
+            [formFields]="formFields"
+            [formHelper]="formHelper"
+            [submitted]="submitted"
+            [blurredFields]="blurredFields"
+            [passwordVisibility]="passwordVisibility"
+            [ignoreNextBlur]="ignoreNextBlur"
+            [customErrorMessages]="{ password: loginErrorMessage }"
+            [loginFailed]="loginFailed"
+            [showGoogleLogin]="true"
+            [showRememberMe]="true"
+            [submitButtonText]="'Log in'"
+            (formSubmit)="onSubmit()"
+            (googleLogin)="loginWithGoogle()"
+            (goToForgotPassword)="goToForgotPassword()"
+            >
+        </app-auth-form>
+    </app-auth-card>
+</app-auth-layout>

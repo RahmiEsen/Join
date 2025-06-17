@@ -1,0 +1,12 @@
+<img class="logo"
+src="assets/images/logo-dark.png" 
+alt="Logo">
+<div  *ngIf="showSignupLink" class="singup-wrapper">
+    <span>Not a Join user?</span>
+    <button (click)="goToSignup()" class="btn-signup">Sign up</button>
+</div>
+<ng-content></ng-content>
+<footer>
+    <a href="">Privacy Policy</a>
+    <a href="">Legal notice</a>
+</footer>

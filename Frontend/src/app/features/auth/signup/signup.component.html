@@ -1,0 +1,16 @@
+<app-auth-layout [showSignupLink]="false">
+    <app-auth-card [showBack]="true" [title]="'Sign up'">
+        <app-auth-form
+        [formType]="'signup'"
+        [form]="form"
+        [formFields]="formFields"
+        [formHelper]="formHelper"
+        [submitted]="submitted"
+        [blurredFields]="blurredFields"
+        [passwordVisibility]="passwordVisibility"
+        [ignoreNextBlur]="ignoreNextBlur"
+        [submitButtonText]="'Sign up'"
+        (formSubmit)="onSubmit()"
+        ></app-auth-form>
+    </app-auth-card>
+</app-auth-layout>

@@ -39,13 +39,25 @@ export class AuthService {
         resetTokenExpiry: { gt: new Date() },
       },
     });
-    if (!user) throw new BadRequestException('Token ungültig oder abgelaufen');
+    
+    if (!user) throw new BadRequestException('Invalid or expired token');
+    
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      throw new BadRequestException('SAME_PASSWORD'); // Einheitlicher Fehlercode
+    }
+
     const hashed = await bcrypt.hash(newPassword, 10);
     await this.prisma.user.update({
       where: { id: user.id },
-      data: { password: hashed, resetToken: null, resetTokenExpiry: null },
+      data: { 
+        password: hashed, 
+        resetToken: null, 
+        resetTokenExpiry: null 
+      },
     });
-    return { message: 'Passwort erfolgreich geändert' };
+    
+    return { message: 'Password changed successfully' };
   }
 
   async forgotPassword(email: string) {

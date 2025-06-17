@@ -43,163 +43,6 @@ footer {
     }
 }
 
-.card {
-    position: relative;
-    @include column-center;
-    height: auto;
-    width: 598px;
-    background-color: #fff;
-    padding: 48px 88px;
-    border-radius: 30px;
-    box-shadow: 0px 0px 14px 3px #0000000A;
-    gap: 30px;
-    .back {
-        position: absolute;
-        @include center;
-        height: 32px;
-        width: 32px;
-        top: 10%;
-        left: 10%;
-        cursor: pointer;
-        &:hover {
-            border: 0;
-        }
-    }
-    .headline {
-        @include column-center;
-        gap: 16px;
-        .underline {
-            width: 150px;
-            height: 3px;
-            background-color: $hover;
-        }
-    }
-    .confirmation-wrapper {
-        @include column-center;
-        gap: 20px;
-        .message-wrapper {
-            @include column-center;
-            gap: 20px;
-            span {
-            text-align: center;
-            }
-        }
-    }
-    form {
-        @include column-center;
-        width: 100%;
-        .form-wrapper {
-            @include column;
-            width: 100%;
-            margin-bottom: 24px;
-            gap: 8px;
-            .form-group {
-                @include center;
-                width: 100%;
-                input {
-                    width: 100%;
-                    &.has-error {
-                        border-color: $error !important;
-                        box-shadow: none;
-                    }
-                    &.has-error:focus {
-                        border-color: $error !important;
-                    }
-                }
-                .form-icon {
-                    position: relative;
-                    @include center;
-                    height: 24px;
-                    width: 24px;
-                    right: 40px;
-                }
-            }
-            .errortext {
-                opacity: 0;
-                margin-left: 10px;
-                width: 90%;
-                &.visible {
-                    opacity: 1;
-                }
-            }
-        }
-        .mail-wrapper {
-            justify-content: end !important;
-            width: 100%;
-        }
-        .button-wrapper {
-            @include center;
-            gap: 30px;
-        }
-        .forgot-wrapper {
-            margin-bottom: 15px;
-            a {
-                cursor: pointer;
-            }
-        }
-        .auth-wrapper {
-            @include column-center;
-            width: 100%;
-            margin-bottom: 24px;
-            gap: 20px;
-            .divider {
-                @include center;
-                width: 100%;
-                &::before, 
-                &::after {
-                    flex: 1;
-                    content: "";
-                    padding: 1px;
-                    background-color: $hover;
-                    margin: 5px;
-                }
-            }
-            .auth-btn {
-                @include center;
-                padding: 10px 18px;
-                margin-top: 0px !important;
-                gap: 30px;
-                img {
-                    height: 30px;
-                    width: 30px;
-                }
-                &:hover {
-                    background-color: $primary;
-                    border: 1px solid $primary;
-                    box-shadow: none;
-                }
-            }
-        }
-        .pricacy-wrapper {
-            @include column-center;
-            gap: 8px;
-            .form-privacy {
-                @include center;
-                height: 24px;
-                margin-top: 11px;
-                .checkbox-icon {
-                    display: flex;
-                    justify-content: flex-end;
-                    width: 24px;
-                    cursor: pointer;
-                    .custom-checkbox {
-                        border: none;
-                        background: url('/assets/images/unchecked.png') no-repeat center center;
-                        appearance: none;
-                        cursor: pointer;
-                        &:checked {
-                            background-image: url('/assets/images/checked.png');
-                        }
-                    }
-                }
-            }
-        }
-        button {
-            margin-top: 30px;
-        }
-    }
-}
-
 @media (max-width: 1024px) {
     .logo {
         width: 64px;
@@ -208,7 +51,6 @@ footer {
         left: 38px;
     }
     .card {
-        width: auto;
         padding: 25px 32px;
         form {
             .remember-wrapper {
@@ -260,9 +102,21 @@ footer {
     }
 }
 
-@media (max-width: 768px) and (max-width: 1024px) {
+@media (max-width: 768px) and (max-width: 1024px) { 
     .card {
         width: 85%;
         padding: 25px 32px;
+    }
+    .singup-wrapper span {
+        font-size: 16px;
+    }
+    .headline span {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 370px) {
+    .headline h1 {
+        font-size: 35px;
     }
 }

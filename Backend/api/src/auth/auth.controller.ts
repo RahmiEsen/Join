@@ -1,6 +1,6 @@
 import {
   Controller, Post, Body, Get, Req, Res,
-  UseGuards, NotFoundException
+  UseGuards, NotFoundException, ConflictException 
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { randomBytes } from 'crypto';
@@ -48,7 +48,14 @@ export class AuthController {
 
   @Post('reset-password')
   async resetPassword(@Body() body: { token: string; newPassword: string }) {
-    return this.authService.resetPassword(body.token, body.newPassword);
+    try {
+      return await this.authService.resetPassword(body.token, body.newPassword);
+    } catch (error) {
+      if (error.message.includes('SAME_PASSWORD')) {
+        throw new ConflictException('You cannot use your previous password');
+      }
+      throw error;
+    }
   }
 
   @Get('google')

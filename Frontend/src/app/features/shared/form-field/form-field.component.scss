@@ -1,0 +1,44 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.form-wrapper {
+    @include column;
+    width: 100%;
+    margin-bottom: 24px;
+    gap: 8px;
+    .form-group {
+        @include center;
+        width: 100%;
+        input {
+            width: 100%;
+            &.has-error {
+                border-color: $error !important;
+                box-shadow: none;
+            }
+            &.has-error:focus {
+                border-color: $error !important;
+            }
+        }
+        .form-icon {
+            position: relative;
+            @include center;
+            height: 24px;
+            width: 24px;
+            right: 40px;
+        }
+    }
+    .errortext {
+        opacity: 0;
+        margin-left: 10px;
+        width: 90%;
+        &.visible {
+            opacity: 1;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    input {
+        font-size: 15px;
+    }
+}

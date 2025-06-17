@@ -117,12 +117,10 @@ a {
     font-weight: 400;
 }
 
-app-signup, app-login, app-forgot-password,
-app-reset-password {
+app-auth-layout {
     @include center;
     height: 100vh;
 }
-
 
 @media (max-width: 768px) {
     h1 {

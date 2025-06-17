@@ -1,0 +1,11 @@
+@use '../../shared/auth-form.styles.scss' as *;
+
+@media (max-width: 1024px) {
+    .card {
+        margin-top: 50px;
+    }
+    .card form .form-wrapper {
+    margin-bottom: 15px;
+    gap: 4px;
+    }
+}

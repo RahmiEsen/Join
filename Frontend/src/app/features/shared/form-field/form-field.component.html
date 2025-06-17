@@ -1,0 +1,73 @@
+<div [formGroup]="form">
+    <ng-container *ngFor="let field of formFields">
+        <div class="form-wrapper">
+            <div class="form-group">
+                <input
+                #passwordInput
+                [type]="formHelper.getInputType(field, passwordVisibility)"
+                [placeholder]="field.placeholder"
+                [formControlName]="field.placeholder ? formHelper.getControlName(field.placeholder) : null"
+                (blur)="field.placeholder && formHelper.onBlur(formHelper.getControlName(field.placeholder), ignoreNextBlur, blurredFields)"
+                [ngClass]="{
+                    'has-error': formHelper.hasError(formHelper.getControlName(field.placeholder), form, blurredFields, submitted) ||
+                                (formHelper.getControlName(field.placeholder) === 'password' && customErrorMessages['password'])
+                }"
+                />
+                <div
+                class="form-icon"
+                (mousedown)="$event.preventDefault()"
+                (click)="formHelper.togglePasswordVisibility(
+                    formHelper.getControlName(field.placeholder),
+                    passwordVisibility,
+                    passwordInput
+                    )"
+                [ngStyle]="{
+                    cursor: formHelper.isToggleablePasswordField(field, form) ? 'pointer' : 'default'
+                }"
+                >
+                <img
+                    [src]="'assets/images/' + formHelper.getFormIconSrc(field, form, passwordVisibility)"
+                    [alt]="field.alt"
+                />
+                </div>
+            </div>
+            <div
+                class="errortext"
+                *ngIf="formHelper.getControlName(field.placeholder) === 'name' && formHelper.getNameError(form, submitted)"
+                [class.visible]="formHelper.getNameError(form, submitted)"
+                >
+                <p class="error">
+                    {{ formHelper.getNameError(form, submitted) }}
+                </p>
+            </div>
+            <div
+                class="errortext"
+                *ngIf="formHelper.getControlName(field.placeholder) === 'email' && formHelper.getEmailError(form, submitted)"
+                [class.visible]="formHelper.getEmailError(form, submitted)"
+            >
+                <p class="error">
+                    {{ formHelper.getEmailError(form, submitted) }}
+                </p>
+            </div>
+            <div
+                class="errortext"
+                *ngIf="formHelper.getControlName(field.placeholder) === 'password' &&
+                    (formHelper.getPasswordError(form, submitted) || customErrorMessages['password'])"
+                [class.visible]="formHelper.getPasswordError(form, submitted) || customErrorMessages['password']"
+            >
+                <p class="error">
+                {{ customErrorMessages['password'] || formHelper.getPasswordError(form, submitted) }}
+                </p>
+            </div>
+            <div
+                class="errortext"
+                *ngIf="formHelper.getControlName(field.placeholder) === 'confirmPassword' && formHelper.getConfirmPasswordError(form, submitted)"
+                [class.visible]="formHelper.getConfirmPasswordError(form, submitted)"
+            >
+                <p class="error">
+                    {{ formHelper.getConfirmPasswordError(form, submitted) }}
+                </p>
+            </div>
+        </div>
+    </ng-container>
+</div>
