@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-summary',
@@ -7,6 +7,17 @@ import { Component } from '@angular/core';
   styleUrl: './summary.component.scss'
 })
 
-export class SummaryComponent {
+export class SummaryComponent implements OnInit {
+  role: string = 'unbekannt';
+  name: string = 'Unbekannt';
 
+  ngOnInit(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Token payload:', payload);
+      this.role = payload.role || 'unbekannt';
+      this.name = payload.name || 'Unbekannt';
+    }
+  }
 }

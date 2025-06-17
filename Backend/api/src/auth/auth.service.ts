@@ -1,14 +1,18 @@
 import {
-  Injectable, ForbiddenException, NotFoundException, BadRequestException
+  Injectable,
+  ForbiddenException,
+  NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { SignupDto } from './dto/signup.dto';
-import { randomBytes } from 'crypto';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import { MailService } from '../mail/mail.service';
 
 @Injectable()
+
 export class AuthService {
   constructor(
     private prisma: PrismaService,
@@ -16,14 +20,21 @@ export class AuthService {
     private mailService: MailService
   ) {}
 
+  // ✅ Registrierung: speichert User in DB
   async signup(dto: SignupDto) {
     const hash = await bcrypt.hash(dto.password, 10);
     const user = await this.prisma.user.create({
-      data: { email: dto.email, password: hash, name: dto.name },
+      data: {
+        email: dto.email,
+        password: hash,
+        name: dto.name,
+      },
     });
+
     return { message: 'User created', userId: user.id };
   }
 
+  // ✅ Login: prüft Passwort, generiert vollständigen Token
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
@@ -36,10 +47,38 @@ export class AuthService {
       throw new ForbiddenException('WRONG_PASSWORD');
     }
 
-    const token = await this.jwt.signAsync({ sub: user.id, email: user.email });
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      role: 'user',
+    };
+
+    const token = await this.jwt.signAsync(payload);
     return { access_token: token };
   }
 
+  // ✅ Gast-Login: generiert einfachen Token
+  async guestLogin(): Promise<{ access_token: string; user: any }> {
+    const guestId = `guest-${Math.random().toString(36).substring(2, 10)}`;
+
+    const payload = {
+      sub: guestId,
+      role: 'guest',
+      name: 'Gast',
+    };
+
+    const token = await this.jwt.signAsync(payload, { expiresIn: '24h' });
+    return {
+      access_token: token,
+      user: {
+        id: guestId,
+        role: 'guest',
+      },
+    };
+  }
+
+  // ✅ Passwort zurücksetzen
   async resetPassword(token: string, newPassword: string) {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -47,9 +86,9 @@ export class AuthService {
         resetTokenExpiry: { gt: new Date() },
       },
     });
-    
+
     if (!user) throw new BadRequestException('Invalid or expired token');
-    
+
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
       throw new BadRequestException('SAME_PASSWORD');
@@ -58,45 +97,37 @@ export class AuthService {
     const hashed = await bcrypt.hash(newPassword, 10);
     await this.prisma.user.update({
       where: { id: user.id },
-      data: { 
-        password: hashed, 
-        resetToken: null, 
-        resetTokenExpiry: null 
+      data: {
+        password: hashed,
+        resetToken: null,
+        resetTokenExpiry: null,
       },
     });
-    
+
     return { message: 'Password changed successfully' };
   }
 
+  // ✅ Passwort vergessen
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('Nutzer nicht gefunden');
+
     const token = randomBytes(32).toString('hex');
-    const expiry = new Date(Date.now() + 1000 * 60 * 60);
+    const expiry = new Date(Date.now() + 1000 * 60 * 60); // 1 Stunde
+
     await this.prisma.user.update({
       where: { email },
-      data: { resetToken: token, resetTokenExpiry: expiry },
+      data: {
+        resetToken: token,
+        resetTokenExpiry: expiry,
+      },
     });
+
     const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
     await this.mailService.sendResetEmail(email, resetLink);
   }
 
-  async findUserByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
-  }
-
-  async setResetToken(email: string, token: string) {
-    const expiry = new Date(Date.now() + 1000 * 60 * 60);
-    await this.prisma.user.update({
-      where: { email },
-      data: { resetToken: token, resetTokenExpiry: expiry },
-    });
-  }
-
-  async generateToken(payload: { sub: string; email: string }) {
-    return this.jwt.signAsync(payload);
-  }
-
+  // ✅ Für Social-Login (Google)
   async validateOAuthLogin(profile: {
     email: string;
     firstName: string;
@@ -123,17 +154,35 @@ export class AuthService {
         },
       });
 
-      console.log('🆕 Neuer User gespeichert:', user);
       return user;
     } catch (error) {
-      console.error('❌ Fehler beim Speichern des Google-Nutzers:', error);
+      console.error('❌ Fehler beim Google-Login:', error);
       throw error;
     }
   }
 
-  async guestLogin(): Promise<{ access_token: string }> {
-    const payload = { sub: 'guest', role: 'guest' };
-    const token = await this.jwt.signAsync(payload, { expiresIn: '24h' });
-    return { access_token: token };
+  // ✅ Token-Erzeugung (optional, falls du manuell brauchst)
+  async generateToken(payload: {
+  sub: string;
+  email: string;
+  name?: string;
+  role?: string;
+}): Promise<string> {
+  return this.jwt.signAsync(payload);
+}
+
+
+  // ✅ Findet Nutzer nach E-Mail
+  async findUserByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
+  // ✅ Setzt manuell Reset-Token
+  async setResetToken(email: string, token: string) {
+    const expiry = new Date(Date.now() + 1000 * 60 * 60);
+    await this.prisma.user.update({
+      where: { email },
+      data: { resetToken: token, resetTokenExpiry: expiry },
+    });
   }
 }

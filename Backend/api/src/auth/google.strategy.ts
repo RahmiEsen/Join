@@ -18,18 +18,39 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: any,
-    done: VerifyCallback
-  ) {
-    console.log('✅ Google-Profile:', profile);
-    const user = await this.createOrFindUser(profile);
-    const token = this.authService.generateToken({ sub: user.id, email: user.email });
-    console.log('📥 Nutzer erfolgreich erstellt oder gefunden:', user.email);
-    done(null, { ...user, token });
-  }
+async validate(
+  accessToken: string,
+  refreshToken: string,
+  profile: any,
+  done: VerifyCallback
+) {
+  const user = await this.userService.findOrCreate({
+    email: profile.emails?.[0]?.value,
+    firstName: profile.name?.givenName ?? '',
+    lastName: profile.name?.familyName ?? '',
+    picture: profile.photos?.[0]?.value ?? '',
+  });
+
+  const token = await this.authService.generateToken({
+    sub: user.id,
+    email: user.email,
+    name: `${user.firstName} ${user.lastName}`,
+    role: 'user',
+  });
+
+  // Diese zwei Zeilen müssen erscheinen!
+  console.log('🧪 Token-Typ:', typeof token);
+  console.log('🧪 Token:', token);
+
+  done(null, {
+    id: user.id,
+    email: user.email,
+    name: `${user.firstName} ${user.lastName}`,
+    token,
+  });
+}
+
+
 
   private async createOrFindUser(profile: any) {
     const { name, emails, photos } = profile;

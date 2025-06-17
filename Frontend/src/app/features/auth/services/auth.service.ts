@@ -34,8 +34,8 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
   }
   
-  guestLogin(): Observable<{ access_token: string }> {
-    return this.http.post<{ access_token: string }>(
+  guestLogin() {
+    return this.http.post<{ access_token: string, user: { id: string, role: string } }>(
       'http://localhost:3000/auth/guest-login',
       {}
     );

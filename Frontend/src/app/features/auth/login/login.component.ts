@@ -87,7 +87,16 @@ export class LoginComponent implements OnInit {
   
   private handleLoginSuccess(response: { access_token: string }): void {
     this.authService.saveToken(response.access_token);
-    console.log('Login successful');
+
+    const payload = JSON.parse(atob(response.access_token.split('.')[1]));
+    console.log('🎯 LOGIN PAYLOAD:', payload);
+
+    // 👉 Speichern
+    localStorage.setItem('token', response.access_token);
+    localStorage.setItem('role', payload.role);
+    localStorage.setItem('name', payload.name);
+    localStorage.setItem('isGuest', payload.role === 'guest' ? 'true' : 'false');
+
     this.router.navigate(['/summary']);
   }
   
@@ -134,13 +143,14 @@ export class LoginComponent implements OnInit {
   
   guestLogin(): void {
     this.authService.guestLogin().subscribe({
-      next: (res) => {
-        this.authService.saveToken(res.access_token);
-        this.router.navigate(['/summary']);
-      },
-      error: (err) => {
-        console.error('Guest login failed:', err);
-      }
+    next: (res) => {
+      localStorage.setItem('token', res.access_token);
+      localStorage.setItem('isGuest', res.user.role === 'guest' ? 'true' : 'false');
+      this.router.navigate(['/summary']);
+    },
+    error: (err) => {
+      console.error('Guest login failed', err);
+    }
     });
   }
 }
