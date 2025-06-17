@@ -22,7 +22,7 @@
         height: 32px;
         width: 32px;
         top: 10%;
-        left: 10%;
+        left: 15%;
         cursor: pointer;
         &:hover {
             border: 0;
@@ -40,22 +40,14 @@
             text-align: center;
         }
     }
-    .confirmation-wrapper {
-        @include column-center;
-        gap: 20px;
-        .message-wrapper {
-            @include column-center;
-            gap: 20px;
-            span {
-                text-align: center;
-            }
-        }
-    }
 }
 
 @media (max-width: 1024px) {
     .card {
         padding: 25px 32px;
+        .back {
+            left: 5%;
+        }
     }
     .underline {
         width: 88px !important;

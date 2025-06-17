@@ -78,7 +78,7 @@ export class AuthController {
   }
 
   private createResetLink(token: string): string {
-    return `${FRONTEND_URL}/reset-password?token=${token}`;
+    return `${FRONTEND_URL}/auth/reset-password?token=${token}`;
   }
 
   private createGoogleRedirectUrl(token: string): string {

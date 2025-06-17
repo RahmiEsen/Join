@@ -56,16 +56,17 @@
                 [class.visible]="formHelper.getPasswordError(form, submitted) || customErrorMessages['password']"
             >
                 <p class="error">
-                {{ customErrorMessages['password'] || formHelper.getPasswordError(form, submitted) }}
+                    {{ customErrorMessages['password'] || formHelper.getPasswordError(form, submitted) }}
                 </p>
             </div>
             <div
                 class="errortext"
-                *ngIf="formHelper.getControlName(field.placeholder) === 'confirmPassword' && formHelper.getConfirmPasswordError(form, submitted)"
-                [class.visible]="formHelper.getConfirmPasswordError(form, submitted)"
+                *ngIf="formHelper.getControlName(field.placeholder) === 'confirmPassword' && 
+                    (formHelper.getConfirmPasswordError(form, submitted) || customErrorMessages['confirmPassword'])"
+                [class.visible]="formHelper.getConfirmPasswordError(form, submitted) || customErrorMessages['confirmPassword']"
             >
                 <p class="error">
-                    {{ formHelper.getConfirmPasswordError(form, submitted) }}
+                    {{  customErrorMessages['confirmPassword'] || formHelper.getConfirmPasswordError(form, submitted) }}
                 </p>
             </div>
         </div>

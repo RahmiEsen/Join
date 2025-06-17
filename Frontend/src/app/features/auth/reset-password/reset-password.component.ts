@@ -51,7 +51,9 @@ export class ResetPasswordComponent {
       ['password', 'confirmPassword'],
       true 
     );
-    this.token = this.route.snapshot.queryParamMap.get('token') || '';
+    this.route.queryParamMap.subscribe((params) => {
+      this.token = params.get('token') || '';
+    });
   }
   
   public onSubmit(): void {
@@ -96,7 +98,7 @@ export class ResetPasswordComponent {
   }
   
   private handleResetSuccess(): void {
-    this.router.navigate(['/login'], {
+    this.router.navigate(['/auth/login'], {
       queryParams: { passwordReset: 'success' }
     });
   }

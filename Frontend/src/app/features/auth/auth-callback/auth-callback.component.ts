@@ -7,7 +7,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 
 export class AuthCallbackComponent implements OnInit {
+  
   constructor(private route: ActivatedRoute, private router: Router) {}
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const token = params['token'];
@@ -15,7 +17,7 @@ export class AuthCallbackComponent implements OnInit {
         localStorage.setItem('accessToken', token);
         this.router.navigate(['/']);
       } else {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       }
     });
   }

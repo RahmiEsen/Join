@@ -26,8 +26,16 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user || !(await bcrypt.compare(password, user.password)))
-      throw new ForbiddenException('Login fehlgeschlagen');
+
+    if (!user) {
+      throw new ForbiddenException('EMAIL_NOT_FOUND');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new ForbiddenException('WRONG_PASSWORD');
+    }
+
     const token = await this.jwt.signAsync({ sub: user.id, email: user.email });
     return { access_token: token };
   }
@@ -44,7 +52,7 @@ export class AuthService {
     
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
-      throw new BadRequestException('SAME_PASSWORD'); // Einheitlicher Fehlercode
+      throw new BadRequestException('SAME_PASSWORD');
     }
 
     const hashed = await bcrypt.hash(newPassword, 10);
@@ -69,7 +77,7 @@ export class AuthService {
       where: { email },
       data: { resetToken: token, resetTokenExpiry: expiry },
     });
-    const resetLink = `http://localhost:4200/reset-password?token=${token}`;
+    const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
     await this.mailService.sendResetEmail(email, resetLink);
   }
 
@@ -107,7 +115,7 @@ export class AuthService {
       const user = await this.prisma.user.create({
         data: {
           email: profile.email,
-          name: fullName || profile.email, // Falls name leer ist
+          name: fullName || profile.email,
           firstName: profile.firstName ?? '',
           lastName: profile.lastName ?? '',
           picture: profile.picture ?? '',

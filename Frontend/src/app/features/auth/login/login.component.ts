@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
   passwordVisibility: Record<string, boolean> = { password: false };
   loginErrorMessage: string | null = null;
   loginFailed = false;
+  emailNotFound = false;
   formFields = [
     { type: 'email', placeholder: 'Email', icon: 'mail.png', alt: 'Mail', controlName: 'email' },
     { type: 'password', placeholder: 'Password', icon: 'lock.png', alt: 'Password', controlName: 'password' }
@@ -89,11 +90,29 @@ export class LoginComponent implements OnInit {
     console.log('Login successful');
   }
   
-  private handleLoginError(): void {
+  private handleLoginError(error: any): void {
     this.loginFailed = true;
     this.submitted = true;
-    this.loginErrorMessage = 'Check your email and password. Please try again.';
+    const msg = error?.error?.message;
+    if (msg === 'EMAIL_NOT_FOUND') {
+      this.setErrorState(
+        'We couldn’t find an account with this email. Would you like to sign up',
+        true
+      );
+    } else if (msg === 'WRONG_PASSWORD') {
+      this.setErrorState(
+        'The password you entered is incorrect.',
+        false
+      );
+    } else {
+      this.setErrorState('Login failed. Please try again.', false);
+    }
     this.markControlAsFailed();
+  }
+  
+  private setErrorState(message: string, emailMissing: boolean): void {
+    this.loginErrorMessage = message;
+    this.emailNotFound = emailMissing;
   }
   
   private markControlAsFailed(): void {
@@ -109,6 +128,6 @@ export class LoginComponent implements OnInit {
   }
   
   goToForgotPassword(): void {
-    this.router.navigate(['/forgot-password']);
+    this.router.navigate(['/auth/forgot-password']);
   }
 }

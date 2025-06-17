@@ -11,11 +11,9 @@
       [ignoreNextBlur]="ignoreNextBlur"
       [customErrorMessages]="customErrorMessages">
     </app-form-field>
-
     <div class="forgot-wrapper" *ngIf="showForgotPassword && loginFailed">
       <a (click)="goToForgotPassword.emit()">Forgotten your password?</a>
     </div>
-
     <div class="auth-wrapper" *ngIf="showGoogleLogin">
       <div class="divider">OR</div>
       <button type="button" class="auth-btn" (click)="googleLogin.emit()">
@@ -25,7 +23,6 @@
         Sign in with Google
       </button>
     </div>
-
     <div class="pricacy-wrapper remember-wrapper" *ngIf="showRememberMe">
       <div class="form-privacy">
         <div class="checkbox-icon">
@@ -38,9 +35,8 @@
         <span>Remember me</span>
       </div>
     </div>
-
     <div class="button-wrapper" [ngClass]="buttonWrapperClass">
-      <button type="submit">{{ submitButtonText }}</button>
+      <button type="submit">Log In</button>
       <button
         *ngIf="showGuestButton"
         type="button"
@@ -115,8 +111,8 @@
       [ignoreNextBlur]="ignoreNextBlur"
       [customErrorMessages]="customErrorMessages">
     </app-form-field>
-    <div class="button-wrapper">
-      <button type="submit">Log in</button>
+    <div class="button-wrapper  mail-wrapper">
+      <button type="submit">Reset</button>
     </div>
   </form>
 </ng-container>

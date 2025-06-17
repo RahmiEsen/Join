@@ -81,7 +81,7 @@ export class SignupComponent implements OnInit {
   private handleSuccess(response: any): void {
     console.log('✅ Erfolgreich registriert', response);
     this.resetForm();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   private handleError(error: any): void {

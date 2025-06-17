@@ -57,7 +57,6 @@ form {
         .form-privacy {
             @include center;
             height: 24px;
-            margin-top: 11px;
             .checkbox-icon {
                 display: flex;
                 justify-content: flex-end;
@@ -82,14 +81,8 @@ form {
 
 @media (max-width: 1024px) {
     form {
-        .remember-wrapper {
-            margin-bottom: 24px;
-        }
         .button-wrapper {
             @include column-center;
-            button {
-                margin-top: 0;
-            }
         }
         .mail-wrapper {
             justify-content: end !important;
@@ -97,7 +90,6 @@ form {
             width: 100%;
         }
         .auth-wrapper {
-            margin-bottom: 0;
             .auth-btn {
                 width: 100%;
                 img {
