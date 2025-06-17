@@ -130,4 +130,10 @@ export class AuthService {
       throw error;
     }
   }
+
+  async guestLogin(): Promise<{ access_token: string }> {
+    const payload = { sub: 'guest', role: 'guest' };
+    const token = await this.jwt.signAsync(payload, { expiresIn: '24h' });
+    return { access_token: token };
+  }
 }

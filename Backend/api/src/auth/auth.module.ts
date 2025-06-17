@@ -41,4 +41,5 @@ const moduleProviders = [
   controllers: [AuthController],
   providers: moduleProviders,
 })
+
 export class AuthModule {}

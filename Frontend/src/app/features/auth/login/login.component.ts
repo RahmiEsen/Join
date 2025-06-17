@@ -88,6 +88,7 @@ export class LoginComponent implements OnInit {
   private handleLoginSuccess(response: { access_token: string }): void {
     this.authService.saveToken(response.access_token);
     console.log('Login successful');
+    this.router.navigate(['/summary']);
   }
   
   private handleLoginError(error: any): void {
@@ -129,5 +130,17 @@ export class LoginComponent implements OnInit {
   
   goToForgotPassword(): void {
     this.router.navigate(['/auth/forgot-password']);
+  }
+  
+  guestLogin(): void {
+    this.authService.guestLogin().subscribe({
+      next: (res) => {
+        this.authService.saveToken(res.access_token);
+        this.router.navigate(['/summary']);
+      },
+      error: (err) => {
+        console.error('Guest login failed:', err);
+      }
+    });
   }
 }

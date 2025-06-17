@@ -9,6 +9,7 @@ import { MailService } from '../mail/mail.service';
 import { GoogleAuthGuard } from './guard/google-auth.guard';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
+import { Public } from './guard/public.decorator';
 
 const FRONTEND_URL = 'http://localhost:4200';
 const RESET_EMAIL_SENT_MSG = 'Reset-Mail gesendet';
@@ -21,6 +22,7 @@ interface GoogleUser {
 
 @Controller('auth')
 export class AuthController {
+  [x: string]: any;
   constructor(
     private readonly authService: AuthService,
     private readonly mailService: MailService,
@@ -92,5 +94,11 @@ export class AuthController {
   ): Promise<void> {
     await this.authService.setResetToken(email, token);
     await this.mailService.sendResetEmail(email, link);
+  }
+
+  @Public()
+  @Post('guest-login')
+  guestLogin() {
+    return this.authService.guestLogin();
   }
 }

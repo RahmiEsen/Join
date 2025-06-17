@@ -7,6 +7,11 @@ export const routes: Routes = [
         children: AUTH_ROUTES
     },
     {
+        path: 'summary',
+        loadChildren: () =>
+            import('./features/summary/summary.routes').then(m => m.SUMMARY_ROUTES)
+    },
+    {
         path: '',
         redirectTo: 'auth/login',
         pathMatch: 'full'

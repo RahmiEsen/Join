@@ -81,9 +81,6 @@ form {
 
 @media (max-width: 1024px) {
     form {
-        .button-wrapper {
-            @include column-center;
-        }
         .mail-wrapper {
             justify-content: end !important;
             flex-direction: unset !important;

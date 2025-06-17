@@ -37,11 +37,7 @@
     </div>
     <div class="button-wrapper" [ngClass]="buttonWrapperClass">
       <button type="submit">Log In</button>
-      <button
-        *ngIf="showGuestButton"
-        type="button"
-        class="secondary-btn"
-        (click)="guestLogin.emit()">
+      <button type="button" class="secondary-btn" (click)="guestLogin.emit()">
         Guest Log in
       </button>
     </div>
