@@ -2,9 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ViewChildren, ElementRef, QueryList  } from '@angular/core';
-import { FormHelperService } from '../../shared/form-helper.service';
+import { FormHelperService } from '../../services/form-utils.service';
 import { FormFieldComponent } from '../form-field/form-field.component';
-
 
 @Component({
   selector: 'app-auth-form',

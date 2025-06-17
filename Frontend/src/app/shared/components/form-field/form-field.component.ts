@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChildren, ElementRef, QueryList, HostBinding  } from '@angular/core';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { FormHelperService } from '../../shared/form-helper.service';
+import { FormHelperService } from '../../services/form-utils.service';
 
 @Component({
   selector: 'app-form-field',

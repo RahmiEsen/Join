@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AuthCallbackComponent implements OnInit {
   
   constructor(private route: ActivatedRoute, private router: Router) {}
-
+  
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const token = params['token'];

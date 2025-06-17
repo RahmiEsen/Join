@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormHelperService } from '../../shared/form-helper.service';
-import { AuthService } from '../../shared/auth.service';
-import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
-import { AuthFormComponent } from '../../shared/auth-form/auth-form.component';
-import { AuthCardComponent } from '../../shared/auth-card/auth-card.component';
+import { AuthService } from '../../auth/services/auth.service';
+import { FormHelperService } from '../../../shared/services/form-utils.service';
+import { AuthLayoutComponent } from '../../../shared/components/auth-layout/auth-layout.component';
+import { AuthFormComponent } from '../../../shared/components/auth-form/auth-form.component';
+import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 
 @Component({
   selector: 'app-reset-password',
