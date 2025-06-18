@@ -1,1 +1,15 @@
-<p>sidebar works!</p>
+<aside>
+    <div class="logo">
+        <img src="./assets/images/logo.png" alt="">
+    </div>
+    <nav>
+        <a [routerLink]="item.route" *ngFor="let item of navItems">
+        <img [src]="'./assets/images/' + (hoveredItem === item.label ? item.iconHover : item.icon)" [alt]="item.label" />
+        <p>{{ item.label }}</p>
+        </a>
+    </nav>
+    <footer>
+        <a href="">Privacy Policy</a>
+        <a href="">Legal notice</a>
+    </footer>
+</aside>

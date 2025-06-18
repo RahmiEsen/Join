@@ -11,6 +11,13 @@
     flex-direction: column;
 }
 
+@mixin column-space {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
 @mixin column {
     display: flex;
     justify-content: center;
@@ -33,4 +40,10 @@
     display: flex;
     justify-content: start;
     align-items: start;
+}
+
+@mixin center-start {
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
