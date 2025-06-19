@@ -27,7 +27,10 @@ export class AuthService {
   }
   
   logout(): void {
-    localStorage.removeItem('access_token');
+  localStorage.removeItem('token');
+  localStorage.removeItem('isGuest');
+  localStorage.removeItem('role');
+  localStorage.removeItem('name');
   }
   
   resetPassword(token: string, newPassword: string): Observable<any> {

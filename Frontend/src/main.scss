@@ -13,7 +13,7 @@ body {
 }
 
 h1 {
-    color: #000;
+    color: $black;
     font-size: 61px;
     font-weight: 700;
     line-height: 1.2;
@@ -26,7 +26,7 @@ span {
 
 input {
     @include space-between;
-    color: #000;
+    color: $black;
     font-size: 20px;
     font-weight: 400;
     line-height: 1.2;
@@ -73,7 +73,7 @@ button {
 }
 
 textarea {
-    color: #000;
+    color: $black;
     font-size: 20px;
     font-weight: 400;
     border: $border;
@@ -102,7 +102,7 @@ header {
     width: calc(100vw - 232px);
     top: 0;
     right: 0;
-    background-color: #fff;
+    background-color: $white;
     padding: 20px 40px;
     box-shadow: $shadow;
 }
@@ -124,11 +124,11 @@ nav {
         @include center-start;
         height: 46px;
         width: 100%;
-        color: #cdcdcd;
+        color: $text;
         padding: 8px 58px;
         gap: 8px;
         &:hover {
-            background-color: #2A3D59;
+            background-color: $primary-hover;
             border: none;
         }
         img {
@@ -148,7 +148,7 @@ main {
 
 .active {
     background-color: $primary;
-    color: #fff;
+    color: $white;
 }
 
 .secondary-btn {

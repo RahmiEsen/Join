@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, QueryList, ViewChildren, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth/services/auth.service';
-import { FormHelperService } from '../../../shared/services/form-utils.service';
 import { AuthLayoutComponent } from '../../../shared/components/auth-layout/auth-layout.component';
 import { AuthFormComponent } from '../../../shared/components/auth-form/auth-form.component';
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
+import { FormHelperService } from '../services/form-utils.service';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-login',

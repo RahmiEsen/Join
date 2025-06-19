@@ -4,6 +4,11 @@ import { LAYOUT_ROUTES } from './core/layout/layout.routes';
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'auth/login',
+    pathMatch: 'full'
+  },
+  {
     path: 'auth-callback',
     component: AuthCallbackComponent,
   },
@@ -18,6 +23,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'summary',
+    redirectTo: 'auth/login',
   }
 ];
