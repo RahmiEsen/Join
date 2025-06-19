@@ -108,37 +108,53 @@ header {
 }
 
 aside {
+    position: absolute;
     @include column-space;
     height: 100vh;
     width: 232px;
+    left: 0;
     background-color: $primary;
     padding: 64px 0;
     box-shadow: $shadow;
-}
-
-nav {
-    @include column-center;
-    width: 100%;
-    gap: 15px;
-    a {
-        @include center-start;
-        height: 46px;
+    nav {
+        @include column-center;
         width: 100%;
-        color: $text;
-        padding: 8px 58px;
-        gap: 8px;
-        &:hover {
-            background-color: $primary-hover;
-            border: none;
+        gap: 15px;
+        a {
+            @include center-start;
+            height: 46px;
+            width: 100%;
+            color: $text;
+            padding: 8px 58px;
+            gap: 8px;
+            &:hover {
+                background-color: $primary-hover;
+                border: none;
+            }
+            &.active {
+                background-color: $secondary;
+                color: $white;
+            }
+            .img-wrapper {
+                @include center;
+                height: 30px;
+                width: 30px;
+            }
         }
-        &.active {
-            background-color: $secondary;
-            color: $white;
-        }
-        .img-wrapper {
-            @include center;
-            height: 30px;
-            width: 30px;
+    }
+    footer {
+        @include column;
+        width: 100%;
+        padding: 243px 0 0 52px;
+        a {
+            color: $footer-text;
+            font-size: 16px;
+            padding: 8px;
+            &:hover {
+                border: none;
+                color: $hover;
+                font-weight: 700;
+            }
         }
     }
 }
@@ -189,6 +205,10 @@ main {
     font-weight: 400;
 }
 
+.hide {
+    display: none;
+}
+
 app-auth-layout {
     @include center;
     height: 100vh;
@@ -200,5 +220,51 @@ app-auth-layout {
     }
     button {
         font-size: 16px;
+    }
+    header {
+        position: unset;
+        width: 100%;
+        padding: 20px 16px;
+    }
+    main {
+        position: unset;
+        min-height: calc(100vh - 80px - 80px);
+        height: auto;
+        width: 100%;
+    }
+    aside {
+        position: unset;
+        height: 80px;
+        width: 100%;
+        padding: 0 16px;
+        footer {
+            display: none;
+        }
+        nav {
+            @include space-between;
+            height: 100%;
+            flex-direction: unset;
+            a {
+                @include column-center;
+                width: 80px;
+                height: 76px;
+                padding: 8px 1px;
+                gap: 10px;
+                &:hover, &.active {
+                    border-radius: 16px;
+                }
+                .img-wrapper {
+                    height: 24px;
+                    width: 24px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                p {
+                    font-size: 14px;
+                }
+            }
+        }
     }
 } 

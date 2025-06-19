@@ -1,7 +1,8 @@
 <header>
+    <img class="logo hide" src="./assets/images/logo-dark.png" alt="Join Logo" />
     <span>Kanban Project Management Tool</span>
     <div class="user-section">
-        <button class="info-btn">
+        <button (click)="navigateTo('/help')" class="info-btn">
             <img src="./assets/images/help.png" alt="">
         </button>
         <div class="user-avatar" (click)="toggleDropdown()">
@@ -14,7 +15,7 @@
         </div>
     </div>
     <div class="dropdown-menu" *ngIf="showDropdown" @dropdownAnimation>
-        <a (click)="navigateTo('/help')">Help</a>
+        <a (click)="navigateTo('/help')" class="hide">Help</a>
         <a (click)="navigateTo('/legal-notice')">Legal Notice</a>
         <a (click)="navigateTo('/privacy-policy')">Privacy Policy</a>
         <a (click)="logout()">Log out</a>

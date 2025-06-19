@@ -1,6 +1,11 @@
 @use '../../../../styles/mixins' as *;
 @use '../../../../styles/variables' as *;
 
+.logo {
+    width: 32px;
+    height: auto;
+}
+
 .user-section {
     @include center;
     color: $hover;
@@ -44,7 +49,7 @@
     .hide {
         display: none;
     }
-    a , button {
+    a {
         @include align-center;
         height: 46px;
         color: $text;
@@ -54,5 +59,22 @@
             border: none;
             background-color: $primary-hover;
         }
+    }
+}
+
+@media (max-width: 767px) {
+    .hide {
+        display: block !important;
+    }
+    .user-section .info-btn, span  {
+        display: none;
+    }
+    .user-avatar {
+        height: 40px !important;
+        width: 40px !important;
+    }
+    .dropdown-menu {
+        top: 90px;
+        right: 16px;
     }
 }
