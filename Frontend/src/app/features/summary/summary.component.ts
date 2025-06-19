@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 export class SummaryComponent implements OnInit {
   role: string = 'unbekannt';
   name: string = 'Unbekannt';
-
+  
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (token) {
