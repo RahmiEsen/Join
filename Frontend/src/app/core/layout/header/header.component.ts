@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Component, ElementRef, HostListener } from '@angular/core';
 import { dropdownAnimation } from '../../../shared/animations/dropdown.animation';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
@@ -16,11 +16,23 @@ import { AuthService } from '../../../shared/services/auth.service';
 
 export class HeaderComponent {
   showDropdown = false;
+  userImageUrl: string | null = null;
+  
   constructor(
     private authService: AuthService, 
     private router: Router,
     private eRef: ElementRef
   ) {}
+
+  ngOnInit(): void {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  this.userImageUrl = user?.picture ?? null;
+  console.log('PB URL:', this.userImageUrl); // debug
+}
+  
+get initials() {
+  return this.authService.getUserInitials();
+}
   
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
@@ -36,5 +48,10 @@ export class HeaderComponent {
     if (!this.eRef.nativeElement.contains(event.target)) {
       this.showDropdown = false;
     }
+  }
+  
+  navigateTo(path: string): void {
+    this.showDropdown = false;
+    this.router.navigate([path]);
   }
 }

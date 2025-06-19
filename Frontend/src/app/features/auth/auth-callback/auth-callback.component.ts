@@ -1,33 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { jwtDecode } from 'jwt-decode';
 @Component({
   selector: 'app-auth-callback',
-  template: `<p>Logging in with Google...</p>`,
+  template: ``,
 })
+
 export class AuthCallbackComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {}
-
+  
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       const token = params['token'];
-
-      if (!token || token.includes('Promise')) {
-        console.error('❌ Ungültiger Token:', token);
+      if (!token || typeof token !== 'string' || token.split('.').length !== 3) {
+        console.error('Ungültiger Token:', token);
         return;
       }
-
-      localStorage.setItem('token', token);
-      console.log('✅ Token gespeichert:', token);
-
       try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log('📦 Token Payload:', payload);
+        const payload: any = jwtDecode(token);
+        console.log('Token Payload:', payload);
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(payload));
 
-        // ✅ Weiterleitung nach erfolgreichem Login
         this.router.navigate(['/summary']);
       } catch (e) {
-        console.error('❌ Fehler beim Decodieren:', e);
+        console.error('Fehler beim Decodieren:', e);
       }
     });
   }

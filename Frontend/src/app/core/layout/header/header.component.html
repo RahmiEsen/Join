@@ -1,15 +1,22 @@
 <header>
     <span>Kanban Project Management Tool</span>
-    <div class="user-section" >
+    <div class="user-section">
         <button class="info-btn">
             <img src="./assets/images/help.png" alt="">
         </button>
-        <div class="user-avatar" (click)="toggleDropdown()">SM</div>
+        <div class="user-avatar" (click)="toggleDropdown()">
+            <ng-container *ngIf="userImageUrl; else initialsTemplate">
+                <img [src]="userImageUrl" alt="User Avatar" referrerpolicy="no-referrer" />
+            </ng-container>
+            <ng-template #initialsTemplate>
+                {{ initials }}
+            </ng-template>
+        </div>
     </div>
     <div class="dropdown-menu" *ngIf="showDropdown" @dropdownAnimation>
-        <a href="" class="hide">Help</a>
-        <a href="">Legal Notice</a>
-        <a href="">Privacy Policy</a>
+        <a (click)="navigateTo('/help')">Help</a>
+        <a (click)="navigateTo('/legal-notice')">Legal Notice</a>
+        <a (click)="navigateTo('/privacy-policy')">Privacy Policy</a>
         <a (click)="logout()">Log out</a>
     </div>
 </header>

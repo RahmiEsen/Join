@@ -131,7 +131,12 @@ nav {
             background-color: $primary-hover;
             border: none;
         }
-        img {
+        &.active {
+            background-color: $secondary;
+            color: $white;
+        }
+        .img-wrapper {
+            @include center;
             height: 30px;
             width: 30px;
         }
@@ -144,11 +149,6 @@ main {
     width: calc(100vw - 232px);
     top: 96px;
     right: 0;
-}
-
-.active {
-    background-color: $primary;
-    color: $white;
 }
 
 .secondary-btn {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,31 +11,16 @@ import { RouterModule } from '@angular/router';
 })
 
 export class SidebarComponent {
+  constructor(private router: Router) {}
+  
   navItems = [
-    {
-      label: 'Summary',
-      route: '/summary',
-      icon: 'summary.png',
-      iconHover: 'summary-hover.png'
-    },
-    {
-      label: 'Add Task',
-      route: '/add-task',
-      icon: 'add-task.png',
-      iconHover: 'add-task-hover.png'
-    },
-    {
-      label: 'Board',
-      route: '/board',
-      icon: 'board.png',
-      iconHover: 'board-hover.png'
-    },
-    {
-      label: 'Contacts',
-      route: '/contacts',
-      icon: 'contacts.png',
-      iconHover: 'contacts-hover.png'
-    }
+    { label: 'Summary', route: '/summary', icon: 'summary.png', iconActive: 'summary-active.png' },
+    { label: 'Add Task', route: '/add-task', icon: 'add-task.png', iconActive: 'add-task-active.png' },
+    { label: 'Board', route: '/board', icon: 'board.png', iconActive: 'board-active.png' },
+    { label: 'Contacts', route: '/contacts', icon: 'contacts.png', iconActive: 'contacts-active.png' }
   ];
-  hoveredItem: string | null = null;
+  
+  isActive(path: string): boolean {
+    return this.router.url === path;
+  }
 }

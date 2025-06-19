@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-legal-notice',
-  imports: [],
   templateUrl: './legal-notice.component.html',
-  styleUrl: './legal-notice.component.scss'
+  styleUrls: ['./legal-notice.component.scss'],
+  imports: [CommonModule]
 })
-export class LegalNoticeComponent {
 
-}
+export class LegalNoticeComponent {}

@@ -10,6 +10,8 @@ import { SignupDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { MailService } from '../mail/mail.service';
+import { JwtPayload } from './types/jwt-payload.interface';
+
 
 @Injectable()
 
@@ -162,12 +164,7 @@ export class AuthService {
   }
 
   // ✅ Token-Erzeugung (optional, falls du manuell brauchst)
-  async generateToken(payload: {
-  sub: string;
-  email: string;
-  name?: string;
-  role?: string;
-}): Promise<string> {
+  async generateToken(payload: JwtPayload): Promise<string> {
   return this.jwt.signAsync(payload);
 }
 

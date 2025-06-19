@@ -1,15 +1,25 @@
 <aside>
     <div class="logo">
-        <img src="./assets/images/logo.png" alt="">
+        <img src="./assets/images/logo.png" alt="Join Logo" />
     </div>
     <nav>
-        <a [routerLink]="item.route" *ngFor="let item of navItems">
-        <img [src]="'./assets/images/' + (hoveredItem === item.label ? item.iconHover : item.icon)" [alt]="item.label" />
+        <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >
+        <div class="img-wrapper">
+            <img
+                [src]="'./assets/images/' + (isActive(item.route) ? item.iconActive : item.icon)"
+                [alt]="item.label"
+            />
+        </div>
         <p>{{ item.label }}</p>
         </a>
     </nav>
     <footer>
-        <a href="">Privacy Policy</a>
-        <a href="">Legal notice</a>
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/legal-notice">Legal Notice</a>
     </footer>
 </aside>
