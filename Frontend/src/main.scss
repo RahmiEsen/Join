@@ -214,6 +214,11 @@ app-auth-layout {
     height: 100vh;
 }
 
+app-success-popup {
+    position: absolute;
+    @include center;
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 47px;
@@ -267,4 +272,4 @@ app-auth-layout {
             }
         }
     }
-} 
+}

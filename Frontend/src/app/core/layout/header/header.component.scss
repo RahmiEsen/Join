@@ -44,8 +44,16 @@
     border-top-left-radius: 20px;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(40px);
     transition: all 0.3s ease;
-    z-index: 5;
+    z-index: 1;
+    &.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+    }
     .hide {
         display: none;
     }
@@ -76,5 +84,6 @@
     .dropdown-menu {
         top: 90px;
         right: 16px;
+        transform: translateX(16px);
     }
 }

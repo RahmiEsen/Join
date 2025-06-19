@@ -11,5 +11,9 @@
         [ignoreNextBlur]="ignoreNextBlur"
         (formSubmit)="onSubmit()"
         ></app-auth-form>
+        <app-success-popup
+        [visible]="isSignedUp"
+        message="You Signed Up successfully">
+        </app-success-popup>
     </app-auth-card>
 </app-auth-layout>

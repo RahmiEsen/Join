@@ -1,0 +1,41 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.overlay {
+    position: fixed;
+    @include center;
+    height: 100vh;
+    width: 100vw;
+    background-color: $overlay;
+    z-index: 1;
+    .success-popup {
+        @include center;
+        height: 74px;
+        color: $white;
+        border-radius: 20px;
+        background-color: $primary;
+        padding: 0 25px;
+        box-shadow: $shadow-success;
+        animation: fadeInPopup 0.8s ease forwards;
+        cursor: pointer;
+        &.visible {
+            opacity: 1;
+            animation: fadeInPopup 0.4s ease forwards;
+        }
+        span {
+            width: 262px;
+            height: 24px;
+        }
+    }
+}
+
+@keyframes fadeInPopup {
+    0% {
+        opacity: 0;
+        transform: translateY(450px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

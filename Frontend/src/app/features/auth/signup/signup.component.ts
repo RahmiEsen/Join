@@ -7,6 +7,7 @@ import { AuthLayoutComponent } from '../../../shared/components/auth-layout/auth
 import { AuthFormComponent } from '../../../shared/components/auth-form/auth-form.component';
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 import { FormHelperService } from '../services/form-utils.service';
+import { SuccessPopupComponent } from '../../../shared/components/success-popup/success-popup.component';
 
 
 @Component({
@@ -17,7 +18,8 @@ import { FormHelperService } from '../services/form-utils.service';
     ReactiveFormsModule,
     AuthFormComponent,
     AuthLayoutComponent,
-    AuthCardComponent
+    AuthCardComponent,
+    SuccessPopupComponent 
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
@@ -39,6 +41,7 @@ export class SignupComponent implements OnInit {
     { type: 'password', placeholder: 'Password', icon: 'lock.png', alt: 'Password' },
     { type: 'password', placeholder: 'Confirm Password', icon: 'lock.png', alt: 'Confirm Password' }
   ];
+  isSignedUp = false;
 
   constructor(
     public formHelper: FormHelperService,
@@ -81,7 +84,11 @@ export class SignupComponent implements OnInit {
   private handleSuccess(response: any): void {
     console.log('✅ Erfolgreich registriert', response);
     this.resetForm();
-    this.router.navigate(['/auth/login']);
+    this.isSignedUp = true;
+    setTimeout(() => {
+      this.isSignedUp = false;
+      this.router.navigate(['/auth/login']);
+    }, 2000);
   }
 
   private handleError(error: any): void {

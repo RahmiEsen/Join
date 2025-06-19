@@ -14,7 +14,7 @@
             </ng-template>
         </div>
     </div>
-    <div class="dropdown-menu" *ngIf="showDropdown" @dropdownAnimation>
+    <div class="dropdown-menu animate-in" [class.visible]="showDropdown">
         <a (click)="navigateTo('/help')" class="hide">Help</a>
         <a (click)="navigateTo('/legal-notice')">Legal Notice</a>
         <a (click)="navigateTo('/privacy-policy')">Privacy Policy</a>

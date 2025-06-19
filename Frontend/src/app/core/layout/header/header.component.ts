@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener } from '@angular/core';
-import { dropdownAnimation } from '../../../shared/animations/dropdown.animation';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth.service';
 
@@ -9,7 +8,6 @@ import { AuthService } from '../../../shared/services/auth.service';
   selector: 'app-header',
   standalone: true,
   imports: [CommonModule],
-  animations: [dropdownAnimation],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -27,12 +25,12 @@ export class HeaderComponent {
   ngOnInit(): void {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   this.userImageUrl = user?.picture ?? null;
-  console.log('PB URL:', this.userImageUrl); // debug
+  console.log('PB URL:', this.userImageUrl);
 }
   
-get initials() {
-  return this.authService.getUserInitials();
-}
+  get initials() {
+    return this.authService.getUserInitials();
+  }
   
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
