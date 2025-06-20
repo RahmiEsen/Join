@@ -1,43 +1,17 @@
-<div class="contacts-wrapper">
+<!-- <div class="contacts-wrapper">
     <div class="button-wrapper">
         <button>
         Add new contact
         <img src="assets/images/person-add.png" alt="">
         </button>
     </div>
-    <div class="contacts-list">
-        <ng-container *ngFor="let group of groupedContacts | keyvalue">
-        <div class="sort">
-            <div class="initial-letter">
-            <span>{{ group.key }}</span>
-            </div>
-            <div class="underline"></div>
-            <app-contact-item
-            *ngFor="let contact of group.value"
-            [contact]="contact"
-            [isActive]="selectedContact?.id === contact.id"
-            [getInitials]="getInitials"
-            (contactClicked)="onSelectContact(contact)">
-            </app-contact-item>
-            <!-- <div class="contact" 
-            *ngFor="let contact of group.value"
-            (click)="onSelectContact(contact)"
-            [ngClass]="{ active: selectedContact?.id === contact.id }"
-            >
-            <div class="avatar">
-                {{ getInitials(contact.firstName, contact.lastName) }}
-            </div>
-            <div class="info-wrapper">
-                <span class="contact-name">
-                {{ contact.firstName }} {{ contact.lastName }}
-                </span>
-                <a class="contact-mail">{{ contact.email }}</a>
-            </div>
-            </div> -->
-        </div>
-        </ng-container>
-    </div>
-</div>
+</div> -->
+<app-contact-list
+[groupedContacts]="groupedContacts"
+[selectedContact]="selectedContact"
+[getInitials]="getInitials"
+(select)="onSelectContact($event)">
+</app-contact-list>
 <section>
     <div class="title">
         <h1>Contacts</h1>
