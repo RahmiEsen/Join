@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model User {
   id               String   @id @default(uuid())
   email            String   @unique
   password         String?  // optional für Google
@@ -20,4 +20,19 @@ model user {
   resetToken       String?
   resetTokenExpiry DateTime?
   createdAt        DateTime @default(now())
+
+  contacts         Contact[]   // Relation zu Contact
+
+  @@map("user")  // ← ganz wichtig: mappt Prisma auf deine echte DB-Tabelle "user"
+}
+
+model Contact {
+  id             String   @id @default(uuid())
+  firstName      String
+  lastName       String
+  email          String
+  phoneNumber    String?
+  isGuestVisible Boolean  @default(false)
+  ownerId        String?
+  owner          User?    @relation(fields: [ownerId], references: [id])
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { user } from '@prisma/client';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -9,7 +9,7 @@ export class UserService {
   /**
    * Findet User anhand der E-Mail oder erstellt einen neuen Google-User
    */
-  async findOrCreate(userData: OAuthUserData): Promise<user> {
+  async findOrCreate(userData: OAuthUserData): Promise<User> {
     const existingUser = await this.findByEmail(userData.email);
     if (existingUser) return existingUser;
     return this.createGoogleUser(userData);
@@ -18,14 +18,14 @@ export class UserService {
   /**
    * Sucht Benutzer anhand der E-Mail-Adresse
    */
-  private async findByEmail(email: string): Promise<user | null> {
+  private async findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
   /**
    * Erstellt einen neuen Benutzer mit Google-Daten
    */
-  private async createGoogleUser(data: OAuthUserData): Promise<user> {
+  private async createGoogleUser(data: OAuthUserData): Promise<User> {
     return this.prisma.user.create({
       data: {
         email: data.email,
