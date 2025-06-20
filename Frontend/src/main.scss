@@ -22,8 +22,8 @@ h1 {
 
 h2 {
     color: $black;
-    font-size: 24px;
-    font-weight: 400;
+    font-size: 47px;
+    font-weight: 500;
     line-height: 1.2;
     text-align: center;
 }
@@ -98,7 +98,7 @@ textarea {
 
 a {
     text-decoration: none;
-    color: $hover;
+    color: $link;
     &:hover {
         border-bottom: 1px solid $hover;
     }
@@ -220,10 +220,7 @@ main {
 }
 
 .title {
-    position: absolute;
     @include space-between;
-    left: calc(743px - 232px);
-    top: calc(206px - 96px);
     height: 73px;
     gap: 30px;
     .separate {
@@ -233,6 +230,13 @@ main {
     }
 }
 
+.avatar {
+    @include center;
+    color: $white;
+    background-color: #ff7a00;
+    border-radius: 50%;
+    cursor: pointer;
+}
 
 app-auth-layout {
     @include center;
@@ -242,6 +246,11 @@ app-auth-layout {
 app-success-popup {
     position: absolute;
     @include center;
+}
+
+app-contacts {
+    display: flex;
+    height: 100%;
 }
 
 @media (max-width: 768px) {

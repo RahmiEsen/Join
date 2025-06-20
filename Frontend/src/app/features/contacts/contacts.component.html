@@ -12,7 +12,11 @@
             <span>{{ group.key }}</span>
             </div>
             <div class="underline"></div>
-            <div class="contact" *ngFor="let contact of group.value">
+            <div class="contact" 
+            *ngFor="let contact of group.value"
+            (click)="onSelectContact(contact)"
+            [ngClass]="{ active: selectedContact?.id === contact.id }"
+            >
             <div class="avatar">
                 {{ getInitials(contact.firstName, contact.lastName) }}
             </div>
@@ -27,8 +31,53 @@
         </ng-container>
     </div>
 </div>
-<div class="title">
-  <h1>Contacts</h1>
-  <div class="separate"></div>
-  <span>Better with a team</span>
-</div>
+<section>
+    <div class="title">
+        <h1>Contacts</h1>
+        <div class="separate"></div>
+        <span>Better with a team</span>
+    </div>
+    <div 
+    class="contact-card" 
+    *ngIf="selectedContact"
+    [ngClass]="{ 'slide-out': isSlidingOut }"
+    >
+        <div class="contact-header">
+            <div class="avatar">
+                {{ getInitials(selectedContact.firstName, selectedContact.lastName) }}
+            </div>
+            <div class="contact-headline">
+                <h2>{{ selectedContact.firstName }} {{ selectedContact.lastName }}</h2>
+                <div class="contact-actions">
+                    <button class="option-btn">
+                        <div class="img-wrapper">
+                            <img src="assets/images/edit.png" alt="Edit" class="icon-default" />
+                            <img src="assets/images/edit-hover.png" alt="Edit Hover" class="icon-hover" />
+                        </div>
+                        Edit
+                    </button>
+                    <button class="option-btn">
+                        <div class="img-wrapper">
+                            <img src="assets/images/delete.png" alt="Delete" class="icon-default" />
+                            <img src="assets/images/delete-hover.png" alt="Delete Hover" class="icon-hover" />
+                        </div>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="contact-info">
+            <span class="info-title">Contact Information</span>
+            <div class="info-wrapper">
+                <div class="info-entry">
+                    <span class="label">Email</span>
+                    <a [href]="'mailto:' + selectedContact.email">{{ selectedContact.email }}</a>
+                </div>
+                <div class="info-entry">
+                    <span class="label">Phone</span>
+                    <span>{{ selectedContact.phoneNumber }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

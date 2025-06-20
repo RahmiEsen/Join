@@ -17,23 +17,41 @@ interface Contact {
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss',
 })
+
 export class ContactsComponent implements OnInit {
   contacts: Contact[] = [];
   groupedContacts: { [key: string]: Contact[] } = {};
-
+  selectedContact: Contact | null = null;
+  isSlidingOut = false;
+  
   constructor(private contactService: ContactService) {}
-
+  
   ngOnInit(): void {
     this.contactService.getGuestContacts().subscribe((contacts: Contact[]) => {
       this.contacts = contacts;
       this.groupedContacts = this.groupByInitial(contacts);
     });
   }
-
+  
+  onSelectContact(contact: Contact) {
+    if (this.selectedContact?.id === contact.id) {
+      // Toggle (schließen)
+      this.isSlidingOut = true;
+      setTimeout(() => {
+        this.selectedContact = null;
+        this.isSlidingOut = false;
+      }, 400); // Dauer = Animationszeit
+    } else {
+      // Anderen Kontakt auswählen
+      this.selectedContact = contact;
+      this.isSlidingOut = false;
+    }
+  }
+  
   getInitials(firstName: string, lastName: string): string {
     return (firstName[0] + lastName[0]).toUpperCase();
   }
-
+  
   private groupByInitial(contacts: Contact[]): { [key: string]: Contact[] } {
     const sorted = contacts.sort((a, b) =>
       (a.firstName + a.lastName).localeCompare(b.firstName + b.lastName)

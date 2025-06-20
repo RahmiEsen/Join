@@ -44,15 +44,10 @@
                 padding: 15px 24px;
                 gap: 35px;
                 .avatar {
-                    @include center;
                     width: 42px;
                     height: 42px;
                     font-size: 12px;
-                    color: $white;
-                    background-color: #ff7a00;
-                    border-radius: 50%;
-                    border: 1px solid $white;
-                    cursor: pointer;
+                    border: 2px solid $white;
                 }
                 .info-wrapper {
                     @include column;
@@ -64,6 +59,14 @@
                 &:hover {
                     background: $contacts-hover;
                 }
+                &.active {
+                    background-color: $secondary;
+                    color: $white;
+                    &:hover {
+                        background: none;
+                        background-color: $secondary;
+                    }
+                }
             }
         }
     }
@@ -74,5 +77,137 @@
         height: 53px;
         background-color: $footer-text; 
         border-radius: 3px;
+    }
+}
+
+section {
+    position: relative;
+    @include column;
+    width: auto;
+    height: fit-content;
+    top: 110px;
+    left: 65px;
+    gap: 30px;
+    .title {
+        width: 569px;
+    }
+    .contact-card {
+        position: fixed;
+        @include column;
+        width: 452px;
+        height: 364px;
+        top: 311px;
+        gap: 21px;
+        animation: slideIn 0.4s ease forwards;
+        &.slide-out {
+            animation: slideOut 0.4s ease forwards;
+        }
+        .contact-header {
+            @include space-between;
+            .avatar {
+                height: 120px;
+                width: 120px;
+                font-size: 47px;
+                border: 3px solid $white;
+                box-shadow: $shadow
+            }
+            .contact-headline {
+                @include column;
+                gap: 8px;
+            }
+            .contact-actions {
+                @include space-between;
+                width: 159px;
+                .option-btn {
+                    display: flex;
+                    align-items: center;
+                    background-color: unset;
+                    color: black;
+                    font-size: 16px;
+                    font-weight: 400;
+                    border: none;
+                    border-radius: unset;
+                    padding: unset;
+                    transition: color 0.2s ease-in-out;
+                    gap: 8px;
+                    cursor: pointer;
+                    .img-wrapper {
+                        @include center;
+                        height: 24px;
+                        width: 24px;
+                        position: relative;
+                        img {
+                            position: absolute;
+                            transition: opacity 0.3s ease-in-out;
+                        }
+                        .icon-default {
+                            opacity: 1;
+                        }
+                        .icon-hover {
+                            opacity: 0;
+                        }
+                    }
+                    &:hover {
+                        color: $hover;
+                        box-shadow: none;
+                        .img-wrapper {
+                            .icon-default {
+                                opacity: 0;
+                            }
+                            .icon-hover {
+                                opacity: 1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .contact-info {
+            @include column;
+            .info-title {
+                @include center-start;
+                height: 74px;
+            }
+            .info-wrapper {
+                @include column;
+                width: fit-content;
+                gap: 22px;
+                .info-entry {
+                    @include column;
+                    gap: 15px;
+                    .label {
+                        font-weight: 700;
+                    }
+                    span {
+                        font-size: 16px;
+                    }
+                    a:hover {
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
     }
 }
