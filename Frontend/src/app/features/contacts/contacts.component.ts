@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ContactService } from '../../shared/services/contact.service';
 import { ContactListComponent } from './contact-list/contact-list.component';
+import { ContactDetailsComponent } from './contact-details/contact-details.component';
 import { Contact, getInitials } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contacts',
   standalone: true,
-  imports: [CommonModule, ContactListComponent],
+  imports: [CommonModule, ContactListComponent, ContactDetailsComponent],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss',
 })
@@ -30,14 +31,12 @@ export class ContactsComponent implements OnInit {
   
   onSelectContact(contact: Contact) {
     if (this.selectedContact?.id === contact.id) {
-      // Toggle (schließen)
       this.isSlidingOut = true;
       setTimeout(() => {
         this.selectedContact = null;
         this.isSlidingOut = false;
-      }, 400); // Dauer = Animationszeit
+      }, 400);
     } else {
-      // Anderen Kontakt auswählen
       this.selectedContact = contact;
       this.isSlidingOut = false;
     }

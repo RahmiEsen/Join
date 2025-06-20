@@ -1,0 +1,39 @@
+<div class="contact-card" [ngClass]="{ 'slide-out': isSlidingOut }">
+    <div class="contact-header">
+        <div class="avatar">
+            {{ getInitials(contact.firstName, contact.lastName) }}
+        </div>
+        <div class="contact-headline">
+            <h2>{{ contact.firstName }} {{ contact.lastName }}</h2>
+            <div class="contact-actions">
+                <button class="option-btn" (click)="edit.emit()">
+                    <div class="img-wrapper">
+                        <img src="assets/images/edit.png" alt="Edit" class="icon-default" />
+                        <img src="assets/images/edit-hover.png" alt="Edit Hover" class="icon-hover" />
+                    </div>
+                    Edit
+                </button>
+                <button class="option-btn" (click)="delete.emit()">
+                    <div class="img-wrapper">
+                        <img src="assets/images/delete.png" alt="Delete" class="icon-default" />
+                        <img src="assets/images/delete-hover.png" alt="Delete Hover" class="icon-hover" />
+                    </div>
+                    Delete
+                </button>
+        </div>
+        </div>
+    </div>
+    <div class="contact-info">
+        <span class="info-title">Contact Information</span>
+        <div class="info-wrapper">
+            <div class="info-entry">
+                <span class="label">Email</span>
+                <a [href]="'mailto:' + contact.email">{{ contact.email }}</a>
+            </div>
+            <div class="info-entry">
+                <span class="label">Phone</span>
+                <span>{{ contact.phoneNumber }}</span>
+            </div>
+        </div>
+    </div>
+</div>
