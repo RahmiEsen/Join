@@ -1,17 +1,17 @@
-<!-- <div class="contacts-wrapper">
+<div class="contacts-wrapper">
     <div class="button-wrapper">
         <button>
         Add new contact
         <img src="assets/images/person-add.png" alt="">
         </button>
     </div>
-</div> -->
-<app-contact-list
-[groupedContacts]="groupedContacts"
-[selectedContact]="selectedContact"
-[getInitials]="getInitials"
-(select)="onSelectContact($event)">
-</app-contact-list>
+    <app-contact-list
+    [groupedContacts]="groupedContacts"
+    [selectedContact]="selectedContact"
+    [getInitials]="getInitials"
+    (select)="onSelectContact($event)">
+    </app-contact-list>
+</div>
 <section>
     <div class="title">
         <h1>Contacts</h1>

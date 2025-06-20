@@ -1,14 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContactItemComponent } from "../contact-item/contact-item.component";
-
-interface Contact {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-}
+import { Contact } from '../../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-list',

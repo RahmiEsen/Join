@@ -1,13 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Contact {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-}
+import { Contact } from '../../../shared/models/contact.model';
 
 @Component({
   standalone: true,

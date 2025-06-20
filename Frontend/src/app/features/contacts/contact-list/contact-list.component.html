@@ -1,25 +1,17 @@
-<div class="contacts-wrapper">
-    <div class="button-wrapper">
-        <button>
-        Add new contact
-        <img src="assets/images/person-add.png" alt="">
-        </button>
-    </div>
-    <div class="contacts-list">
-        <ng-container *ngFor="let group of groupedContacts | keyvalue">
-            <div class="sort">
-            <div class="initial-letter">
-                <span>{{ group.key }}</span>
-            </div>
-            <div class="underline"></div>
-                <app-contact-item
-                *ngFor="let contact of group.value"
-                [contact]="contact"
-                [isActive]="selectedContact?.id === contact.id"
-                [getInitials]="getInitials"
-                (contactClicked)="onSelectContact(contact)"
-                ></app-contact-item>
-            </div>
-        </ng-container>
-    </div>
+<div class="contacts-list">
+    <ng-container *ngFor="let group of groupedContacts | keyvalue">
+        <div class="sort">
+        <div class="initial-letter">
+            <span>{{ group.key }}</span>
+        </div>
+        <div class="underline"></div>
+            <app-contact-item
+            *ngFor="let contact of group.value"
+            [contact]="contact"
+            [isActive]="selectedContact?.id === contact.id"
+            [getInitials]="getInitials"
+            (contactClicked)="onSelectContact(contact)"
+            ></app-contact-item>
+        </div>
+    </ng-container>
 </div>

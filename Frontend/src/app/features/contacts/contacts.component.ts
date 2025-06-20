@@ -2,14 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ContactService } from '../../shared/services/contact.service';
 import { ContactListComponent } from './contact-list/contact-list.component';
-
-interface Contact {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-}
+import { Contact, getInitials } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contacts',
@@ -24,6 +17,7 @@ export class ContactsComponent implements OnInit {
   groupedContacts: { [key: string]: Contact[] } = {};
   selectedContact: Contact | null = null;
   isSlidingOut = false;
+  getInitials = getInitials;
   
   constructor(private contactService: ContactService) {}
   
@@ -47,10 +41,6 @@ export class ContactsComponent implements OnInit {
       this.selectedContact = contact;
       this.isSlidingOut = false;
     }
-  }
-  
-  getInitials(firstName: string, lastName: string): string {
-    return (firstName[0] + lastName[0]).toUpperCase();
   }
   
   private groupByInitial(contacts: Contact[]): { [key: string]: Contact[] } {

@@ -1,51 +1,25 @@
 @use '../../../../styles/mixins' as *;
 @use '../../../../styles/variables' as *;
 
-.contacts-wrapper {
+.contacts-list {
     @include column-align;
-    width: 456px;
+    width: 100%;
     height: 100%;
-    background-color: $white;
-    box-shadow: $shadow-contacts;
-    .button-wrapper {
-        @include center;
+    padding: 0px 25px 32px;
+    cursor: pointer;
+    .sort {
+        @include column-center;
         width: 100%;
-        height: 101px;
-        button {
-            width: 352px;
-            padding: 12px 0;
-            gap: 16px;
-        }
-    }
-    .contacts-list {
-        @include column-align;
-        width: 100%;
-        height: 100%;
-        padding: 0px 25px 32px;
-        overflow-y: scroll;
-        cursor: pointer;
-        .sort {
-            @include column-center;
+        .initial-letter {
             width: 100%;
-            .initial-letter {
-                width: 100%;
-                padding: 17px 36px;
-            }
-            .underline {
-                background-color: $border-color;
-                width: 100%;
-                height: 2px;
-                margin: 8px 0;
-            }
-            
+            padding: 17px 36px;
         }
-    }
-    ::-webkit-scrollbar {
-        width: 6px;
-    }
-    ::-webkit-scrollbar-thumb {
-        height: 53px;
-        background-color: $footer-text; 
-        border-radius: 3px;
+        .underline {
+            background-color: $border-color;
+            width: 100%;
+            height: 2px;
+            margin: 8px 0;
+        }
+        
     }
 }
