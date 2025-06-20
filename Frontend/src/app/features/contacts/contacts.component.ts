@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ContactService } from '../../shared/services/contact.service';
+import { ContactItemComponent } from './contact-item/contact-item.component';
 
 interface Contact {
   id: string;
@@ -13,7 +14,7 @@ interface Contact {
 @Component({
   selector: 'app-contacts',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ContactItemComponent],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss',
 })

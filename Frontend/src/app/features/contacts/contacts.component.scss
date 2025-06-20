@@ -37,37 +37,7 @@
                 height: 2px;
                 margin: 8px 0;
             }
-            .contact {
-                @include start;
-                width: 352px;
-                border-radius: 10px;
-                padding: 15px 24px;
-                gap: 35px;
-                .avatar {
-                    width: 42px;
-                    height: 42px;
-                    font-size: 12px;
-                    border: 2px solid $white;
-                }
-                .info-wrapper {
-                    @include column;
-                    gap: 5px;
-                    a:hover {
-                        border: none;
-                    }
-                }
-                &:hover {
-                    background: $contacts-hover;
-                }
-                &.active {
-                    background-color: $secondary;
-                    color: $white;
-                    &:hover {
-                        background: none;
-                        background-color: $secondary;
-                    }
-                }
-            }
+            
         }
     }
     ::-webkit-scrollbar {
