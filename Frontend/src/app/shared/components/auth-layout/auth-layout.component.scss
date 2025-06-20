@@ -1,3 +1,76 @@
 @use '../../styles/form-styles.scss' as *;
 @use '../../../../styles/mixins' as *;
 @use '../../../../styles/variables' as *;
+
+.logo-intro {
+    position: fixed;
+    @include center;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    pointer-events: none;
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: $body;
+        animation: fadeOutBackground 0.8s ease-in-out 0.3s forwards;
+        z-index: 1;
+    }
+    .logo-animation {
+        position: absolute;
+        z-index: 2;
+        animation: shrinkToCorner 0.8s ease-in-out forwards;
+    }
+}
+
+@keyframes fadeOutBackground {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes shrinkToCorner {
+    0% {
+        top: 50%;
+        left: 50%;
+        width: 274px;
+        height: 334px;
+    }
+    100% {
+        width: 100px;
+        height: 120px;
+        top: 80px;
+        left: 77px;
+    }
+}
+
+@keyframes shrinkToCornerMobile {
+    0% {
+        top: 50%;
+        left: 50%;
+    }
+    100% {
+        width: 64px;
+        height: 78px;
+        top: 20px;
+        left: 38px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .logo-intro {
+        &::before {
+            background-color: $primary;
+            animation: fadeOutBackground 0.8s ease-in-out 0.3s forwards;
+        }
+        .logo-animation {
+            animation: shrinkToCornerMobile 0.8s ease-in-out forwards;
+        }
+    }
+}

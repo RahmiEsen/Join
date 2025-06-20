@@ -16,7 +16,7 @@ import { AuthService } from '../../../shared/services/auth.service';
     ReactiveFormsModule,
     AuthFormComponent,
     AuthLayoutComponent,
-    AuthCardComponent
+    AuthCardComponent,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
     { type: 'email', placeholder: 'Email', icon: 'mail.png', alt: 'Mail', controlName: 'email' },
     { type: 'password', placeholder: 'Password', icon: 'lock.png', alt: 'Password', controlName: 'password' }
   ];
+  showLogoIntro = true;
   
   constructor(
     public formHelper: FormHelperService,
@@ -87,16 +88,12 @@ export class LoginComponent implements OnInit {
   
   private handleLoginSuccess(response: { access_token: string }): void {
     this.authService.saveToken(response.access_token);
-
     const payload = JSON.parse(atob(response.access_token.split('.')[1]));
     console.log('🎯 LOGIN PAYLOAD:', payload);
-
-    // 👉 Speichern
     localStorage.setItem('token', response.access_token);
     localStorage.setItem('role', payload.role);
     localStorage.setItem('name', payload.name);
     localStorage.setItem('isGuest', payload.role === 'guest' ? 'true' : 'false');
-
     this.router.navigate(['/summary']);
   }
   

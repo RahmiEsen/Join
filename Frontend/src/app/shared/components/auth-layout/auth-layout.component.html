@@ -1,6 +1,7 @@
-<img class="logo"
-src="assets/images/logo-dark.png" 
-alt="Logo">
+<div class="logo-intro" *ngIf="showIntroAnimation">
+    <img #logoEl class="logo-animation" [src]="logoSrc" alt="Logo" />
+</div>
+<img class="logo" src="assets/images/logo-dark.png" alt="Logo" *ngIf="showLoginLogo" />
 <div  *ngIf="showSignupLink" class="singup-wrapper">
     <span>Not a Join user?</span>
     <button (click)="goToSignup()" class="btn-signup">Sign up</button>
