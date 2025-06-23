@@ -1,6 +1,6 @@
 <div class="contacts-wrapper">
     <div class="button-wrapper">
-        <button>
+        <button (click)="addContact()">
         Add new contact
         <img src="assets/images/person-add.png" alt="">
         </button>
@@ -26,6 +26,55 @@
     </app-contact-details>
 </section>
 
-<div class="add-contact">
-    
+<div class="overlay" *ngIf="showOverlay">
+    <div class="overlay-card" [ngClass]="{ 'slide-out': isOverlaySlidingOut }">
+        <div class="overlay-left">
+            <img src="assets/images/logo.png" alt="Join Logo"/>
+            <div class="headline">
+                <h1>Add contact</h1>
+                <span>Tasks are better with a team!</span>
+                <div class="underline"></div>
+            </div>
+        </div>
+        <div class="overlay-right">
+            <div class="close" (click)="closeOverlay()">
+                <img src="assets/images/close.png" alt="">
+            </div>
+            <div class="contact-wrapper">
+                <div class="avatar">
+                    <img src="assets/images/person-hover.png" alt="Avatar"/>
+                </div>
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+                    <app-form-field
+                        [form]="contactForm"
+                        [formFields]="formFields"
+                        [formHelper]="formHelper"
+                        [blurredFields]="{}"
+                        [passwordVisibility]="{}"
+                        [ignoreNextBlur]="{ value: false }"
+                        [customErrorMessages]="{}"
+                        [submitted]="submitted"
+                    ></app-form-field>
+                    <div class="button-wrapper">
+                        <button 
+                        (click)="closeOverlay()"
+                        type="button" 
+                        class="secondary-btn">
+                            Cancel
+                            <div class="img-wrapper">
+                                <img class="icon-default" src="assets/images/close.png" alt="Submit">
+                                <img class="icon-hover" src="assets/images/close-hover.png" alt="Submit">
+                            </div>
+                        </button>
+                        <button type="submit">
+                            Create contact
+                            <div class="img">
+                                <img src="assets/images/check-hover.png" alt="Submit">
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

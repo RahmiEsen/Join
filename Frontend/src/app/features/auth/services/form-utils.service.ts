@@ -183,6 +183,18 @@ export class FormHelperService {
     return null;
   }
   
+  getPhoneError(form: FormGroup, submitted: boolean): string | null {
+    const control = form.get('phone');
+    if (!control || (!control.touched && !submitted)) return null;
+    if (control.hasError('required')) {
+      return 'Please enter your phone number.';
+    }
+    if (control.hasError('pattern')) {
+      return 'Please enter a valid phone number. Only digits, spaces, +, -, and () are allowed.';
+    }
+    return null;
+  }
+  
   markControlsAsFailed(
     form: FormGroup, 
     controlNames: string | string[], 
@@ -211,7 +223,7 @@ export class FormHelperService {
       }
     });
   }
-
+  
   passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;

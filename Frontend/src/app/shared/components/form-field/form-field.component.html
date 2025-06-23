@@ -8,6 +8,7 @@
                 [placeholder]="field.placeholder"
                 [formControlName]="field.placeholder ? formHelper.getControlName(field.placeholder) : null"
                 (blur)="field.placeholder && formHelper.onBlur(formHelper.getControlName(field.placeholder), ignoreNextBlur, blurredFields)"
+                (input)="onInputChange($event, field)"
                 [ngClass]="{
                     'has-error': formHelper.hasError(formHelper.getControlName(field.placeholder), form, blurredFields, submitted) ||
                                 (formHelper.getControlName(field.placeholder) === 'password' && customErrorMessages['password'])
@@ -47,6 +48,14 @@
             >
                 <p class="error">
                     {{ formHelper.getEmailError(form, submitted) }}
+                </p>
+            </div>
+            <div
+            class="errortext"
+            *ngIf="formHelper.getControlName(field.placeholder) === 'phone' && formHelper.getPhoneError(form, submitted)"
+            [class.visible]="formHelper.getPhoneError(form, submitted)">
+                <p class="error">
+                    {{ formHelper.getPhoneError(form, submitted) }}
                 </p>
             </div>
             <div
