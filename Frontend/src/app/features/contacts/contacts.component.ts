@@ -3,13 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from '../../shared/services/contact.service';
 import { ContactListComponent } from './contact-list/contact-list.component';
-import { FormFieldComponent } from '../../shared/components/form-field/form-field.component';
 import { ContactDetailsComponent } from './contact-details/contact-details.component';
 import { Contact, getInitials } from '../../shared/models/contact.model';
 import { FormHelperService } from '../../features/auth/services/form-utils.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { SuccessSlideComponent } from '../../shared/ui/success-slide/success-slide.component';
-
+import { AddContactComponent } from './add-contact/add-contact.component';
 
 @Component({
   selector: 'app-contacts',
@@ -18,9 +17,9 @@ import { SuccessSlideComponent } from '../../shared/ui/success-slide/success-sli
     CommonModule,
     ContactListComponent,
     ContactDetailsComponent,
-    FormFieldComponent,
     ReactiveFormsModule,
-    SuccessSlideComponent
+    SuccessSlideComponent,
+    AddContactComponent
   ],
   providers: [FormHelperService],
   templateUrl: './contacts.component.html',
@@ -50,6 +49,7 @@ export class ContactsComponent implements OnInit {
   visible = true;
   slideOutSuccess = false;
   successMessage = '';
+  isSubmitting = false;
   
   constructor(
     private contactService: ContactService,
@@ -78,14 +78,25 @@ export class ContactsComponent implements OnInit {
   }
   
   onSubmit() {
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
     this.submitted = true;
-    if (this.contactForm.invalid) return;
+    if (this.contactForm.invalid) {
+      this.isSubmitting = false;
+      return;
+    }
     const formData = this.contactForm.value;
     const { firstName, lastName } = this.splitName(formData.name);
     const payload = this.buildPayload(firstName, lastName, formData);
     this.contactService.createContact(payload).subscribe({
-      next: (newContact) => this.handleSuccess(newContact),
-      error: () => alert('Kontakt konnte nicht erstellt werden.')
+      next: (newContact) => {
+        this.handleSuccess(newContact);
+        this.isSubmitting = false;
+      },
+      error: () => {
+        alert('Kontakt konnte nicht erstellt werden.');
+        this.isSubmitting = false;
+      }
     });
   }
   
@@ -107,8 +118,13 @@ export class ContactsComponent implements OnInit {
   }
   
   private handleSuccess(contact: Contact) {
-    this.contacts.push(contact);
-    this.groupedContacts = this.groupByInitial(this.contacts);
+    const loadContacts = this.isGuest
+      ? this.contactService.getGuestContacts()
+      : this.contactService.getUserContacts(this.userId!);
+    loadContacts.subscribe((contacts: Contact[]) => {
+      this.contacts = contacts;
+      this.groupedContacts = this.groupByInitial(this.contacts);
+    });
     this.closeOverlay();
     this.contactForm.reset();
     this.submitted = false;

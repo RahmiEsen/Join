@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Contact } from '../../../shared/models/contact.model';
 
 @Component({
-  standalone: true,
   selector: 'app-contact-item',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './contact-item.component.html',
   styleUrls: ['./contact-item.component.scss'],
