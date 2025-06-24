@@ -27,7 +27,7 @@ export class ContactService {
   
   async getGuestContacts() {
     return this.prisma.contact.findMany({
-      where: { isGuest: true },
+      where: { ownerId: 'guest' },
     });
   }
   

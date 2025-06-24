@@ -8,6 +8,13 @@ export interface Contact {
 
 export type NewContact = Omit<Contact, 'id'>;
 
-export function getInitials(firstName: string, lastName: string): string {
-  return (firstName[0] + lastName[0]).toUpperCase();
+export function getInitials(firstName: string, lastName?: string): string {
+  const fullName = [firstName, lastName].filter(Boolean).join(' ').trim();
+  if (!fullName) return '?';
+  const parts = fullName.split(' ').filter(Boolean);
+  const firstInitial = parts[0]?.[0]?.toUpperCase() || '';
+  const lastInitial = parts.length > 1
+    ? parts[parts.length - 1][0]?.toUpperCase()
+    : '';
+  return (firstInitial + lastInitial) || '?';
 }

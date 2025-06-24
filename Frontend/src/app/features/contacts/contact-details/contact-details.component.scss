@@ -8,9 +8,9 @@
     height: 364px;
     top: 311px;
     gap: 21px;
-    animation: slideIn 0.4s ease forwards;
+    animation: slideIn 0.3s ease forwards;
     &.slide-out {
-        animation: slideOut 0.4s ease forwards;
+        animation: slideOut 0.3s ease forwards;
     }
     .contact-header {
         @include space-between;

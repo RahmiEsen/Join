@@ -12,6 +12,11 @@
     (select)="onSelectContact($event)">
     </app-contact-list>
 </div>
+<app-success-slide 
+    *ngIf="showSuccess" 
+    [visible]="showSuccess" 
+    [message]="successMessage">
+</app-success-slide>
 <section>
     <div class="title">
         <h1>Contacts</h1>

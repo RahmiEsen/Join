@@ -1,0 +1,35 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.success-popup {
+  position: absolute;
+  bottom: 115px;
+  left: calc(456px + 65px);
+  animation: slideIn 0.8s ease forwards;
+
+  &.slide-out {
+    animation: slideOut 0.4s ease forwards;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}

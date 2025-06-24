@@ -8,6 +8,7 @@ import { ContactDetailsComponent } from './contact-details/contact-details.compo
 import { Contact, getInitials } from '../../shared/models/contact.model';
 import { FormHelperService } from '../../features/auth/services/form-utils.service';
 import { AuthService } from '../../shared/services/auth.service';
+import { SuccessSlideComponent } from '../../shared/ui/success-slide/success-slide.component';
 
 
 @Component({
@@ -19,6 +20,7 @@ import { AuthService } from '../../shared/services/auth.service';
     ContactDetailsComponent,
     FormFieldComponent,
     ReactiveFormsModule,
+    SuccessSlideComponent
   ],
   providers: [FormHelperService],
   templateUrl: './contacts.component.html',
@@ -44,6 +46,10 @@ export class ContactsComponent implements OnInit {
   userId: string | null = null;
   isGuest = true;
   guestContacts: Contact[] = [];
+  showSuccess = false;
+  visible = true;
+  slideOutSuccess = false;
+  successMessage = '';
   
   constructor(
     private contactService: ContactService,
@@ -52,27 +58,24 @@ export class ContactsComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-  const user = this.authService.getUser();
-
-  if (user && user.id && user.id !== 'guest') {
-    this.userId = user.id;
-    this.isGuest = false;
-    this.contactService.getUserContacts(user.id).subscribe((contacts: Contact[]) => {
-      this.contacts = contacts;
-      this.groupedContacts = this.groupByInitial(contacts);
-    });
-  } else {
-    this.isGuest = true;
-    this.userId = 'guest'; // 🟢 Setze es fest!
-    this.contactService.getGuestContacts().subscribe((contacts: Contact[]) => {
-      this.contacts = contacts;
-      this.groupedContacts = this.groupByInitial(contacts);
-    });
+    const user = this.authService.getUser();
+    if (user && user.id && user.id !== 'guest') {
+      this.userId = user.id;
+      this.isGuest = false;
+      this.contactService.getUserContacts(user.id).subscribe((contacts: Contact[]) => {
+        this.contacts = contacts;
+        this.groupedContacts = this.groupByInitial(contacts);
+      });
+    } else {
+      this.isGuest = true;
+      this.userId = 'guest';
+      this.contactService.getGuestContacts().subscribe((contacts: Contact[]) => {
+        this.contacts = contacts;
+        this.groupedContacts = this.groupByInitial(contacts);
+      });
+    }
+    this.initContactForm();
   }
-
-  this.initContactForm();
-}
-
   
   onSubmit() {
     this.submitted = true;
@@ -109,6 +112,7 @@ export class ContactsComponent implements OnInit {
     this.closeOverlay();
     this.contactForm.reset();
     this.submitted = false;
+    this.closeOverlayAndShowSuccess('Contact successfully created', contact);
   }
   
   initContactForm() {
@@ -160,6 +164,28 @@ export class ContactsComponent implements OnInit {
     setTimeout(() => {
       this.showOverlay = false;
       this.isOverlaySlidingOut = false;
-    }, 400);
+    }, 300);
+  }
+  
+  private closeOverlayAndShowSuccess(message: string, contact: Contact): void {
+    this.closeOverlay();
+    setTimeout(() => {
+      this.selectedContact = contact;
+      this.showSuccessSlide(message);
+    }, 300);
+  }
+  
+  showSuccessSlide(message: string): void {
+    this.successMessage = message;
+    this.showSuccess = true;
+    this.slideOutSuccess = false;
+    setTimeout(() => {
+      this.slideOutSuccess = true;
+      setTimeout(() => {
+        this.showSuccess = false;
+        this.successMessage = '';
+        this.slideOutSuccess = false;
+      }, 400);
+    }, 2600);
   }
 }

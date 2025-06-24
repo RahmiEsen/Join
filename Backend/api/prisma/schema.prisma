@@ -10,8 +10,8 @@ datasource db {
 model User {
   id               String   @id @default(uuid())
   email            String   @unique
-  password         String?  // optional für Google oder Gast
-  name             String?  // z. B. Gastname oder regulär
+  password         String?
+  name             String?
   firstName        String?
   lastName         String?
   picture          String?
@@ -20,13 +20,9 @@ model User {
   resetToken       String?
   resetTokenExpiry DateTime?
   createdAt        DateTime @default(now())
-
-  // 🟢 NEU:
-  role             String   @default("user") // "user", "guest", "admin", ...
-
+  role             String   @default("user")
   contacts         Contact[]
-
-  @@map("user")
+  @@map("User")
 }
 
 model Contact {
@@ -35,8 +31,8 @@ model Contact {
   lastName       String
   email          String
   phoneNumber    String?
-  isGuest        Boolean  @default(false)         // ← statt isGuestVisible
-  ownerId        String?                          // ← null = Gastkontakt
+  isGuest        Boolean  @default(false)
+  ownerId        String?
   owner          User?    @relation(fields: [ownerId], references: [id])
-  createdAt      DateTime @default(now())         // ← optional aber nützlich
+  createdAt      DateTime @default(now())
 }
