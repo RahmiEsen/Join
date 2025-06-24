@@ -64,30 +64,19 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   googleAuth() {}
 
-  /* @Get('google/redirect')
+  @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-    const user = req.user as GoogleUser;
+  async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    const user = req.user as { token: string };
+
     if (!user || !user.token) {
       throw new NotFoundException('User token not found');
     }
-    const redirectUrl = this.createGoogleRedirectUrl(user.token);
+
+    const redirectUrl = `http://localhost:4200/auth-callback?token=${user.token}`;
+    console.log('🔁 Weiterleitung an Frontend mit Token:', user.token);
     res.redirect(redirectUrl);
-  } */
-
-@Get('google/redirect')
-@UseGuards(GoogleAuthGuard)
-async googleAuthRedirect(@Req() req: Request, @Res() res: Response) {
-  const user = req.user as { token: string };
-
-  if (!user || !user.token) {
-    throw new NotFoundException('User token not found');
   }
-
-  const redirectUrl = `http://localhost:4200/auth-callback?token=${user.token}`;
-  console.log('🔁 Weiterleitung an Frontend mit Token:', user.token);
-  res.redirect(redirectUrl);
-}
 
   private generateResetToken(): string {
     return randomBytes(32).toString('hex');

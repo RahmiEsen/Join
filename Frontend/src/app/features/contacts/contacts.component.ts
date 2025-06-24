@@ -7,6 +7,8 @@ import { FormFieldComponent } from '../../shared/components/form-field/form-fiel
 import { ContactDetailsComponent } from './contact-details/contact-details.component';
 import { Contact, getInitials } from '../../shared/models/contact.model';
 import { FormHelperService } from '../../features/auth/services/form-utils.service';
+import { AuthService } from '../../shared/services/auth.service';
+
 
 @Component({
   selector: 'app-contacts',
@@ -39,18 +41,74 @@ export class ContactsComponent implements OnInit {
   ];
   submitted = false;
   formHelper = new FormHelperService();
+  userId: string | null = null;
+  isGuest = true;
+  guestContacts: Contact[] = [];
   
   constructor(
     private contactService: ContactService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) {}
   
   ngOnInit(): void {
+  const user = this.authService.getUser();
+
+  if (user && user.id && user.id !== 'guest') {
+    this.userId = user.id;
+    this.isGuest = false;
+    this.contactService.getUserContacts(user.id).subscribe((contacts: Contact[]) => {
+      this.contacts = contacts;
+      this.groupedContacts = this.groupByInitial(contacts);
+    });
+  } else {
+    this.isGuest = true;
+    this.userId = 'guest'; // 🟢 Setze es fest!
     this.contactService.getGuestContacts().subscribe((contacts: Contact[]) => {
       this.contacts = contacts;
       this.groupedContacts = this.groupByInitial(contacts);
     });
-    this.initContactForm();
+  }
+
+  this.initContactForm();
+}
+
+  
+  onSubmit() {
+    this.submitted = true;
+    if (this.contactForm.invalid) return;
+    const formData = this.contactForm.value;
+    const { firstName, lastName } = this.splitName(formData.name);
+    const payload = this.buildPayload(firstName, lastName, formData);
+    this.contactService.createContact(payload).subscribe({
+      next: (newContact) => this.handleSuccess(newContact),
+      error: () => alert('Kontakt konnte nicht erstellt werden.')
+    });
+  }
+  
+  private splitName(fullName: string) {
+    const [first, ...rest] = fullName.trim().split(' ');
+    return { firstName: first, lastName: rest.join(' ') || '' };
+  }
+  
+  private buildPayload(firstName: string, lastName: string, data: any) {
+    const payload: any = {
+      firstName,
+      lastName,
+      email: data.email,
+      phoneNumber: data.phone,
+      isGuest: this.isGuest
+    };
+    payload.ownerId = this.isGuest ? 'guest' : this.userId;
+    return payload;
+  }
+  
+  private handleSuccess(contact: Contact) {
+    this.contacts.push(contact);
+    this.groupedContacts = this.groupByInitial(this.contacts);
+    this.closeOverlay();
+    this.contactForm.reset();
+    this.submitted = false;
   }
   
   initContactForm() {
@@ -65,18 +123,6 @@ export class ContactsComponent implements OnInit {
         Validators.pattern(/^\+?[0-9\s\-()]{6,}$/)
       ]]
     });
-  }
-  
-  onSubmit() {
-    this.submitted = true;
-    if (this.contactForm.valid) {
-      const data = this.contactForm.value;
-      console.log('Kontakt-Daten:', data);
-      // Speichern oder verwenden
-      this.closeOverlay();
-      this.contactForm.reset();
-      this.submitted = false;
-    }
   }
   
   onSelectContact(contact: Contact) {

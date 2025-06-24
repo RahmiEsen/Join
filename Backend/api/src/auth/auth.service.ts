@@ -12,7 +12,6 @@ import { randomBytes } from 'crypto';
 import { MailService } from '../mail/mail.service';
 import { JwtPayload } from './types/jwt-payload.interface';
 
-
 @Injectable()
 
 export class AuthService {
@@ -21,8 +20,7 @@ export class AuthService {
     private jwt: JwtService,
     private mailService: MailService
   ) {}
-
-  // ✅ Registrierung: speichert User in DB
+  
   async signup(dto: SignupDto) {
     const hash = await bcrypt.hash(dto.password, 10);
     const user = await this.prisma.user.create({
@@ -35,8 +33,7 @@ export class AuthService {
 
     return { message: 'User created', userId: user.id };
   }
-
-  // ✅ Login: prüft Passwort, generiert vollständigen Token
+  
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
@@ -59,28 +56,34 @@ export class AuthService {
     const token = await this.jwt.signAsync(payload);
     return { access_token: token };
   }
-
-  // ✅ Gast-Login: generiert einfachen Token
+  
   async guestLogin(): Promise<{ access_token: string; user: any }> {
-    const guestId = `guest-${Math.random().toString(36).substring(2, 10)}`;
-
+    const guestId = 'guest';
+    let guest = await this.prisma.user.findUnique({
+      where: { id: guestId },
+    });
+    if (!guest) {
+      guest = await this.prisma.user.create({
+        data: {
+          id: guestId,
+          name: 'Gast',
+          email: 'gast@example.com',
+          role: 'guest',
+        },
+      });
+    }
     const payload = {
-      sub: guestId,
-      role: 'guest',
-      name: 'Gast',
+      sub: guest.id,
+      role: guest.role,
+      name: guest.name,
     };
-
-    const token = await this.jwt.signAsync(payload, { expiresIn: '24h' });
+    const access_token = await this.jwt.signAsync(payload, { expiresIn: '24h' });
     return {
-      access_token: token,
-      user: {
-        id: guestId,
-        role: 'guest',
-      },
+      access_token,
+      user: guest,
     };
   }
-
-  // ✅ Passwort zurücksetzen
+  
   async resetPassword(token: string, newPassword: string) {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -108,8 +111,7 @@ export class AuthService {
 
     return { message: 'Password changed successfully' };
   }
-
-  // ✅ Passwort vergessen
+  
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('Nutzer nicht gefunden');
@@ -128,8 +130,7 @@ export class AuthService {
     const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
     await this.mailService.sendResetEmail(email, resetLink);
   }
-
-  // ✅ Für Social-Login (Google)
+  
   async validateOAuthLogin(profile: {
     email: string;
     firstName: string;
@@ -162,19 +163,15 @@ export class AuthService {
       throw error;
     }
   }
-
-  // ✅ Token-Erzeugung (optional, falls du manuell brauchst)
+  
   async generateToken(payload: JwtPayload): Promise<string> {
-  return this.jwt.signAsync(payload);
-}
-
-
-  // ✅ Findet Nutzer nach E-Mail
+    return this.jwt.signAsync(payload);
+  }
+  
   async findUserByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
-
-  // ✅ Setzt manuell Reset-Token
+  
   async setResetToken(email: string, token: string) {
     const expiry = new Date(Date.now() + 1000 * 60 * 60);
     await this.prisma.user.update({

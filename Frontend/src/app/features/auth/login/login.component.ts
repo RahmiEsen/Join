@@ -144,6 +144,13 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('token', res.access_token);
       localStorage.setItem('isGuest', res.user.role === 'guest' ? 'true' : 'false');
       this.router.navigate(['/summary']);
+      console.clear();
+      console.log('%c✅ Guest Login erfolgreich', 'color: green; font-weight: bold;');
+      console.table(res.user);
+      console.log('%cToken:', 'color: cyan;', res.access_token);
+      console.log('%cisGuest:', 'color: orange;', res.user.role === 'guest');
+      console.log('User-ID:', res.user.id);
+      console.log('Role:', res.user.role);
     },
     error: (err) => {
       console.error('Guest login failed', err);

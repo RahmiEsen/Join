@@ -1,23 +1,29 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
-export interface Contact {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string;
-}
+import { Contact } from '../models/contact.model';
+import { CreateContactDto } from '../models/contact.dto';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 
 export class ContactService {
-    constructor(private http: HttpClient) {}
-    
-    getGuestContacts(): Observable<Contact[]> {
-        return this.http.get<Contact[]>('http://localhost:3000/contacts/guest');
-    }
+  private apiUrl = 'http://localhost:3000/contacts';
+  
+  constructor(private http: HttpClient) {}
+  
+  getGuestContacts(): Observable<Contact[]> {
+    return this.http.get<Contact[]>(`${this.apiUrl}/guest`);
+  }
+  
+  getUserContacts(userId: string): Observable<Contact[]> {
+    return this.http.get<Contact[]>(`${this.apiUrl}/user/${userId}`);
+  }
+  
+  createContact(contact: CreateContactDto): Observable<Contact> {
+    const payload = { ...contact };
+    if (!payload.ownerId) delete payload.ownerId;
+    return this.http.post<Contact>(this.apiUrl, payload);
+  }
 }

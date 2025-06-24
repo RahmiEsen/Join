@@ -10,20 +10,23 @@ datasource db {
 model User {
   id               String   @id @default(uuid())
   email            String   @unique
-  password         String?  // optional für Google
-  name             String?  // für normalen Login
+  password         String?  // optional für Google oder Gast
+  name             String?  // z. B. Gastname oder regulär
   firstName        String?
   lastName         String?
-  picture          String?  // Profilbild-URL
-  provider         String?  // z. B. "google"
-  googleId         String?  // Google OAuth ID
+  picture          String?
+  provider         String?
+  googleId         String?
   resetToken       String?
   resetTokenExpiry DateTime?
   createdAt        DateTime @default(now())
 
-  contacts         Contact[]   // Relation zu Contact
+  // 🟢 NEU:
+  role             String   @default("user") // "user", "guest", "admin", ...
 
-  @@map("user")  // ← ganz wichtig: mappt Prisma auf deine echte DB-Tabelle "user"
+  contacts         Contact[]
+
+  @@map("user")
 }
 
 model Contact {
@@ -32,7 +35,8 @@ model Contact {
   lastName       String
   email          String
   phoneNumber    String?
-  isGuestVisible Boolean  @default(false)
-  ownerId        String?
+  isGuest        Boolean  @default(false)         // ← statt isGuestVisible
+  ownerId        String?                          // ← null = Gastkontakt
   owner          User?    @relation(fields: [ownerId], references: [id])
+  createdAt      DateTime @default(now())         // ← optional aber nützlich
 }

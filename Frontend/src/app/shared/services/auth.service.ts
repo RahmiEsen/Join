@@ -31,27 +31,24 @@ export class AuthService {
   } = { name: '', role: '' };
   
   private extractUserInfo(token: string): void {
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    this.user = {
-      name: payload.name || '',
-      role: payload.role || '',
-      id: payload.sub || payload.id,
-      picture: payload.picture || '', // ✅ Bild wird übernommen
-    };
-
-    localStorage.setItem('user', JSON.stringify(this.user)); // ✅ für globale Nutzung
-  } catch (e) {
-    console.error('Token parsing failed:', e);
-    this.user = { name: '', role: '' };
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      this.user = {
+        name: payload.name || '',
+        role: payload.role || '',
+        id: payload.sub || payload.id,
+        picture: payload.picture || '',
+      };
+      localStorage.setItem('user', JSON.stringify(this.user));
+    } catch (e) {
+      console.error('Token parsing failed:', e);
+      this.user = { name: '', role: '' };
+    }
   }
-}
-
-
-getUserPicture(): string | null {
-  return this.getUser().picture ?? null;
-}
-
+  
+  getUserPicture(): string | null {
+    return this.getUser().picture ?? null;
+  }
   
   getUser() {
     if (!this.user.name && this.getToken()) {
