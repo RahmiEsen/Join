@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Contact } from '../../../shared/models/contact.model';
+import { getRandomColor } from '../../../shared/utils/color.util';
+
 
 @Component({
   selector: 'app-contact-item',
@@ -15,4 +17,5 @@ export class ContactItemComponent {
   @Input() isActive: boolean = false;
   @Input() getInitials!: (first: string, last: string) => string;
   @Output() contactClicked = new EventEmitter<void>();
+  newContactColor = getRandomColor();
 }

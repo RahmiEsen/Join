@@ -4,23 +4,27 @@ export class CreateContactDto {
   @IsNotEmpty()
   @IsString()
   firstName: string;
-
- @IsOptional()
+  
+  @IsOptional()
   @IsString()
   lastName?: string;
-
+  
   @IsNotEmpty()
   @IsEmail()
   email: string;
-
+  
   @IsOptional()
   @IsString()
   phoneNumber?: string;
-
+  
   @IsOptional()
   @IsString()
   ownerId?: string;
-
+  
   @IsOptional()
   isGuest?: boolean;
+  
+  @IsOptional()
+  @IsString()
+  color?: string;
 }

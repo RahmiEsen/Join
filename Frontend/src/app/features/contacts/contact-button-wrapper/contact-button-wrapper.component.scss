@@ -1,0 +1,11 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.button-wrapper {
+    @include center-start;
+    width: 364px;
+    gap: 24px;
+    button {
+        padding: 16px;
+    }
+}

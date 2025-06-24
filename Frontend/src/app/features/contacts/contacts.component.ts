@@ -9,6 +9,7 @@ import { FormHelperService } from '../../features/auth/services/form-utils.servi
 import { AuthService } from '../../shared/services/auth.service';
 import { SuccessSlideComponent } from '../../shared/ui/success-slide/success-slide.component';
 import { AddContactComponent } from './add-contact/add-contact.component';
+import { getRandomColor } from '../../shared/utils/color.util';
 
 @Component({
   selector: 'app-contacts',
@@ -50,6 +51,8 @@ export class ContactsComponent implements OnInit {
   slideOutSuccess = false;
   successMessage = '';
   isSubmitting = false;
+  isEditMode = false;
+  contactToEdit?: Contact;
   
   constructor(
     private contactService: ContactService,
@@ -111,7 +114,8 @@ export class ContactsComponent implements OnInit {
       lastName,
       email: data.email,
       phoneNumber: data.phone,
-      isGuest: this.isGuest
+      isGuest: this.isGuest,
+      color: getRandomColor()
     };
     payload.ownerId = this.isGuest ? 'guest' : this.userId;
     return payload;
@@ -171,6 +175,7 @@ export class ContactsComponent implements OnInit {
   }
   
   addContact() {
+    this.resetContactFormState();
     this.showOverlay = true;
     this.isOverlaySlidingOut = false;
   }
@@ -205,17 +210,69 @@ export class ContactsComponent implements OnInit {
     }, 2600);
   }
   
-  onDeleteContact() {
+  onEditContact() {
     if (!this.selectedContact) return;
-    this.contactService.deleteContact(this.selectedContact.id).subscribe({
+    this.isEditMode = true;
+    this.contactToEdit = this.selectedContact;
+    this.contactForm.patchValue({
+      name: `${this.selectedContact.firstName} ${this.selectedContact.lastName}`,
+      email: this.selectedContact.email,
+      phone: this.selectedContact.phoneNumber,
+    });
+    this.showOverlay = true;
+  }
+  
+  deleteContact(contact: Contact) {
+    this.contactService.deleteContact(contact.id).subscribe({
       next: () => {
-        this.contacts = this.contacts.filter(c => c.id !== this.selectedContact!.id);
+        this.contacts = this.contacts.filter(c => c.id !== contact.id);
         this.groupedContacts = this.groupByInitial(this.contacts);
-        this.selectedContact = null; // Detailansicht schließen
+
+        if (this.selectedContact?.id === contact.id) this.selectedContact = null;
+        if (this.contactToEdit?.id === contact.id) {
+          this.closeOverlay();
+          this.resetContactFormState();
+        }
       },
       error: (err) => {
         console.error('Fehler beim Löschen:', err);
       },
     });
+  }
+  
+  private resetContactFormState(): void {
+    this.isEditMode = false;
+    this.contactToEdit = undefined;
+    this.contactForm.reset();
+    this.submitted = false;
+    this.isSubmitting = false;
+  }
+  
+  editContact() {
+    if (!this.contactToEdit) return;
+    const formData = this.contactForm.value;
+    const { firstName, lastName } = this.splitName(formData.name);
+    const payload = {
+      firstName,
+      lastName,
+      email: formData.email,
+      phoneNumber: formData.phone,
+      color: this.contactToEdit.color,
+      ownerId: this.contactToEdit.ownerId
+    };
+    this.contactService.editContact(this.contactToEdit.id, payload).subscribe({
+      next: (editContact) => {
+        const index = this.contacts.findIndex(c => c.id === editContact.id);
+        if (index !== -1) this.contacts[index] = editContact;
+        this.groupedContacts = this.groupByInitial(this.contacts);
+        this.closeOverlay();
+        this.resetContactFormState();
+      },
+      error: () => alert('Kontakt konnte nicht aktualisiert werden.')
+    });
+  }
+  
+  createContact() {
+    this.onSubmit();
   }
 }

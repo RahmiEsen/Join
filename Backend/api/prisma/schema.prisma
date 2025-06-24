@@ -35,4 +35,5 @@ model Contact {
   ownerId        String?
   owner          User?    @relation(fields: [ownerId], references: [id])
   createdAt      DateTime @default(now())
+  color          String?
 }

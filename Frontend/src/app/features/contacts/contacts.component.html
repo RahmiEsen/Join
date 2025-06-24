@@ -28,16 +28,21 @@
         [contact]="selectedContact!"
         [isSlidingOut]="isSlidingOut"
         [getInitials]="getInitials"
-        (delete)="onDeleteContact()">
+        (edit)="onEditContact()"
+        (delete)="selectedContact && deleteContact(selectedContact)">
     </app-contact-details>
 </section>
 <app-add-contact
-    [showOverlay]="showOverlay"
-    [isOverlaySlidingOut]="isOverlaySlidingOut"
-    [contactForm]="contactForm"
-    [formFields]="formFields"
-    [formHelper]="formHelper"
-    [submitted]="submitted"
-    (close)="closeOverlay()"
-    (submit)="onSubmit()"
-></app-add-contact>
+  [showOverlay]="showOverlay"
+  [isOverlaySlidingOut]="isOverlaySlidingOut"
+  [contactForm]="contactForm"
+  [formFields]="formFields"
+  [formHelper]="formHelper"
+  [submitted]="submitted"
+  (close)="closeOverlay()"
+  (delete)="contactToEdit && deleteContact(contactToEdit)"
+  (edit)="editContact()"
+  (create)="createContact()"
+  [isEditMode]="isEditMode"
+  [contactToEdit]="contactToEdit">
+</app-add-contact>

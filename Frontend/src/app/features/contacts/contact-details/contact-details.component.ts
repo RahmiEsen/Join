@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact, getInitials } from '../../../shared/models/contact.model';
+import { getRandomColor } from '../../../shared/utils/color.util';
 
 @Component({
   selector: 'app-contact-details',
@@ -16,4 +17,5 @@ export class ContactDetailsComponent {
   @Input() getInitials = getInitials;
   @Output() edit = new EventEmitter<void>();
   @Output() delete = new EventEmitter<void>();
+  newContactColor = getRandomColor();
 }

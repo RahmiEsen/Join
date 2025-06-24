@@ -1,6 +1,7 @@
 <div class="contact-card" [ngClass]="{ 'slide-out': isSlidingOut }">
     <div class="contact-header">
-        <div class="avatar">
+        <div class="avatar" 
+        [ngStyle]="{ 'background-color': contact.color }">
             {{ getInitials(contact.firstName, contact.lastName) }}
         </div>
         <div class="contact-headline">

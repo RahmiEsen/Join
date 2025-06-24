@@ -9,7 +9,7 @@
     top: 0;
     left: 0;
     background-color: $overlay;
-    z-index: 1;
+    z-index: 2;
     .overlay-card {
         @include center-start;
         width: 1212px;
@@ -71,23 +71,27 @@
                 .avatar {
                     height: 120px;
                     width: 120px;
+                    font-size: 47px;
                     background-color: $border-color;
                     border: 3px solid $white;
                     box-shadow: $shadow;
                 }
                 .contact-form {
-                    @include column;
-                    width: 422px;
-                    gap: 32px;
-                    input {
-                        width: 100%;
-                    }
-                    .button-wrapper {
-                        @include center-start;
-                        width: 364px;
-                        gap: 24px;
-                        button {
-                            padding: 16px;
+                    @include center;
+                    gap: 54px;
+                    .contact-section {
+                        @include column;
+                        width: 422px;
+                        input {
+                            width: 100%;
+                        }
+                        .button-wrapper {
+                            @include center-start;
+                            width: 364px;
+                            gap: 24px;
+                            button {
+                                padding: 16px;
+                            }
                         }
                     }
                 }

@@ -49,11 +49,4 @@ export class FormFieldComponent {
       input.value = formatted;
     }
   }
-  
-  blockNumbers(event: KeyboardEvent) {
-    const forbidden = /[0-9]/;
-    if (forbidden.test(event.key)) {
-      event.preventDefault();
-    }
-  }
 }

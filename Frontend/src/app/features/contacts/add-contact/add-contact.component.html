@@ -3,8 +3,8 @@
         <div class="overlay-left">
             <img src="assets/images/logo.png" alt="Join Logo"/>
             <div class="headline">
-                <h1>Add contact</h1>
-                <span>Tasks are better with a team!</span>
+                <h1>{{ isEditMode ? 'Edit contact' : 'Add contact' }}</h1>
+                <span *ngIf="!isEditMode">Tasks are better with a team!</span>
                 <div class="underline"></div>
             </div>
         </div>
@@ -13,37 +13,38 @@
                 <img src="assets/images/close.png" alt="">
             </div>
             <div class="contact-wrapper">
-                <div class="avatar">
-                    <img src="assets/images/person-hover.png" alt="Avatar"/>
-                </div>
-                <form [formGroup]="contactForm" (ngSubmit)="emitSubmit()" class="contact-form">
-                    <app-form-field
-                        [form]="contactForm"
-                        [formFields]="formFields"
-                        [formHelper]="formHelper"
-                        [blurredFields]="{}"
-                        [passwordVisibility]="{}"
-                        [ignoreNextBlur]="{ value: false }"
-                        [customErrorMessages]="{}"
-                        [submitted]="submitted"
-                    ></app-form-field>
-                    <div class="button-wrapper">
-                        <button 
-                        (click)="closeOverlay()"
-                        type="button" 
-                        class="secondary-btn">
-                            Cancel
-                            <div class="img-wrapper">
-                                <img class="icon-default" src="assets/images/close.png" alt="Submit">
-                                <img class="icon-hover" src="assets/images/close-hover.png" alt="Submit">
+                <form [formGroup]="contactForm" 
+                (ngSubmit)="isEditMode ? updateContact() : createContact()" 
+                class="contact-form">
+                    <div class="avatar"
+                    [ngStyle]="isEditMode && contactToEdit ? { 'background-color': contactToEdit.color || '#ccc' } : {}">
+                        <ng-container *ngIf="isEditMode && contactToEdit">
+                            <div class="avatar-initials">
+                            {{ getInitials(contactToEdit.firstName, contactToEdit.lastName) }}
                             </div>
-                        </button>
-                        <button type="submit">
-                            Create contact
-                            <div class="img">
-                                <img src="assets/images/check-hover.png" alt="Submit">
-                            </div>
-                        </button>
+                        </ng-container>
+                        <ng-container *ngIf="!isEditMode">
+                            <img src="assets/images/person-hover.png" alt="Avatar" />
+                        </ng-container>
+                    </div>
+                    <div class="contact-section">
+                        <app-form-field
+                            [form]="contactForm"
+                            [formFields]="formFields"
+                            [formHelper]="formHelper"
+                            [blurredFields]="{}"
+                            [passwordVisibility]="{}"
+                            [ignoreNextBlur]="{ value: false }"
+                            [customErrorMessages]="{}"
+                            [submitted]="submitted"
+                        ></app-form-field>
+                        <app-contact-button-wrapper
+                            [isEditMode]="isEditMode"
+                            (cancel)="closeOverlay()"
+                            (edit)="updateContact()"
+                            (delete)="emitDelete()"
+                            (create)="createContact()">
+                        </app-contact-button-wrapper>
                     </div>
                 </form>
             </div>

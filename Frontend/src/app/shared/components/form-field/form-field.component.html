@@ -6,7 +6,6 @@
                 #passwordInput
                 [type]="formHelper.getInputType(field, passwordVisibility)"
                 [placeholder]="field.placeholder"
-                (keydown)="blockNumbers($event)"
                 [formControlName]="field.placeholder ? formHelper.getControlName(field.placeholder) : null"
                 (blur)="field.placeholder && formHelper.onBlur(formHelper.getControlName(field.placeholder), ignoreNextBlur, blurredFields)"
                 (input)="onInputChange($event, field)"

@@ -1,7 +1,15 @@
-<div class="contact" [ngClass]="{ active: isActive }" (click)="contactClicked.emit()">
-  <div class="avatar">{{ getInitials(contact.firstName, contact.lastName) }}</div>
+<div class="contact" 
+[ngClass]="{ active: isActive }" 
+(click)="contactClicked.emit()">
+  <div class="avatar" [ngStyle]="{ 'background-color': contact.color }">
+    {{ getInitials(contact.firstName, contact.lastName) }}
+  </div>
   <div class="info-wrapper">
-    <span class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</span>
-    <a class="contact-mail">{{ contact.email }}</a>
+    <span class="contact-name">
+      {{ contact.firstName }} {{ contact.lastName }}
+    </span>
+    <a class="contact-mail">
+      {{ contact.email }}
+    </a>
   </div>
 </div>

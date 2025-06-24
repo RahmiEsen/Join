@@ -4,6 +4,9 @@ export interface Contact {
   lastName: string;
   email: string;
   phoneNumber: string;
+  color?: string;
+  isGuest: boolean;
+  ownerId: string;
 }
 
 export type NewContact = Omit<Contact, 'id'>;
