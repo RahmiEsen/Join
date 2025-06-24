@@ -26,4 +26,8 @@ export class ContactService {
     if (!payload.ownerId) delete payload.ownerId;
     return this.http.post<Contact>(this.apiUrl, payload);
   }
+
+  deleteContact(id: string) {
+    return this.http.delete(`http://localhost:3000/contacts/${id}`);
+  }
 }

@@ -204,4 +204,18 @@ export class ContactsComponent implements OnInit {
       }, 400);
     }, 2600);
   }
+  
+  onDeleteContact() {
+    if (!this.selectedContact) return;
+    this.contactService.deleteContact(this.selectedContact.id).subscribe({
+      next: () => {
+        this.contacts = this.contacts.filter(c => c.id !== this.selectedContact!.id);
+        this.groupedContacts = this.groupByInitial(this.contacts);
+        this.selectedContact = null; // Detailansicht schließen
+      },
+      error: (err) => {
+        console.error('Fehler beim Löschen:', err);
+      },
+    });
+  }
 }

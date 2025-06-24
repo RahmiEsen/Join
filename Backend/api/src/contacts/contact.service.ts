@@ -36,4 +36,10 @@ export class ContactService {
       where: { ownerId: userId },
     });
   }
+  
+  async deleteContact(id: string) {
+    return this.prisma.contact.delete({
+      where: { id },
+    });
+  }
 }

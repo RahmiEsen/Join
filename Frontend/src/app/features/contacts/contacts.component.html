@@ -27,7 +27,8 @@
         *ngIf="selectedContact || isSlidingOut"
         [contact]="selectedContact!"
         [isSlidingOut]="isSlidingOut"
-        [getInitials]="getInitials">
+        [getInitials]="getInitials"
+        (delete)="onDeleteContact()">
     </app-contact-details>
 </section>
 <app-add-contact

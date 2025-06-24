@@ -13,7 +13,9 @@
         animation: slideOut 0.3s ease forwards;
     }
     .contact-header {
-        @include space-between;
+        @include center;
+        width: fit-content;
+        gap: 54px;
         .avatar {
             height: 120px;
             width: 120px;
@@ -24,6 +26,9 @@
         .contact-headline {
             @include column;
             gap: 8px;
+            h2 {
+                width: max-content;
+            }
         }
         .contact-actions {
             @include space-between;
