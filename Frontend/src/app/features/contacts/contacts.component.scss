@@ -144,72 +144,72 @@ section {
             }
         }
         .dropdown-menu {
-        position: absolute;
-        @include column;
-        right: 25px;
-        bottom: 20px;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        border-bottom-left-radius: 20px;
-        padding: 10px;
-        background-color: $white;
-        box-shadow: $shadow-hover;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateX(40px);
-        transition: all 0.3s ease;
-        z-index: 1;
-        &.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(0);
-        }
-        .hide {
-            display: none;
-        }
-        .option-btn {
-            @include center-start;
-            background-color: unset;
-            color: black;
-            font-size: 16px;
-            font-weight: 400;
-            width: 96px;
-            height: 40px;
-            border: none;
-            border-radius: unset;
-            padding: unset;
-            transition: color 0.2s ease-in-out;
-            gap: 8px;
-            cursor: pointer;
-            .img-wrapper {
-                @include center;
-                height: 24px;
-                width: 24px;
-                position: relative;
-                img {
-                    position: absolute;
-                    transition: opacity 0.3s ease-in-out;
-                }
-                .icon-default {
-                    opacity: 1;
-                }
-                .icon-hover {
-                    opacity: 0;
-                }
+            position: absolute;
+            @include column;
+            right: 25px;
+            bottom: 20px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            padding: 10px;
+            background-color: $white;
+            box-shadow: $shadow-hover;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(40px);
+            transition: all 0.3s ease;
+            z-index: 1;
+            &.visible {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0);
             }
-            &:hover {
-                color: $hover;
-                box-shadow: none;
+            .hide {
+                display: none;
+            }
+            .option-btn {
+                @include center-start;
+                background-color: unset;
+                color: black;
+                font-size: 16px;
+                font-weight: 400;
+                width: 96px;
+                height: 40px;
+                border: none;
+                border-radius: unset;
+                padding: unset;
+                transition: color 0.2s ease-in-out;
+                gap: 8px;
+                cursor: pointer;
                 .img-wrapper {
-                    .icon-default {
-                        opacity: 0;
+                    @include center;
+                    height: 24px;
+                    width: 24px;
+                    position: relative;
+                    img {
+                        position: absolute;
+                        transition: opacity 0.3s ease-in-out;
                     }
-                    .icon-hover {
+                    .icon-default {
                         opacity: 1;
                     }
+                    .icon-hover {
+                        opacity: 0;
+                    }
+                }
+                &:hover {
+                    color: $hover;
+                    box-shadow: none;
+                    .img-wrapper {
+                        .icon-default {
+                            opacity: 0;
+                        }
+                        .icon-hover {
+                            opacity: 1;
+                        }
+                    }
                 }
             }
-        }
         }
     }
 }

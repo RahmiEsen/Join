@@ -7,7 +7,7 @@ import { Contact, getInitials } from '../../../shared/models/contact.model';
 import { getRandomColor } from '../../../shared/utils/color.util';
 
 @Component({
-  selector: 'app-add-contact',
+  selector: 'app-contact-card',
   standalone: true,
   imports: [
     CommonModule,
@@ -15,11 +15,11 @@ import { getRandomColor } from '../../../shared/utils/color.util';
     FormFieldComponent,
     ContactButtonWrapperComponent,
   ],
-  templateUrl: './add-contact.component.html',
-  styleUrls: ['./add-contact.component.scss']
+  templateUrl: './contact-card.component.html',
+  styleUrls: ['./contact-card.component.scss']
 })
 
-export class AddContactComponent {
+export class ContactCardComponent {
   @Input() showOverlay = false;
   @Input() isOverlaySlidingOut = false;
   @Input() contactForm!: FormGroup;

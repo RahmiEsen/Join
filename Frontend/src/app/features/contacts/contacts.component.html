@@ -44,7 +44,8 @@
             <img src="assets/images/more.png" alt="show-more">
         </div>
     </button>
-    <div class="dropdown-menu" 
+    <div class="dropdown-menu"
+    *ngIf="isMobileView"
     [class.visible]="showDropdown">
         <button class="option-btn" (click)="onEditContact()">
             <div class="img-wrapper">
@@ -62,7 +63,7 @@
         </button>
     </div>
 </section>
-<app-add-contact
+<app-contact-card
     [showOverlay]="showOverlay"
     [isOverlaySlidingOut]="isOverlaySlidingOut"
     [contactForm]="contactForm"
@@ -75,7 +76,7 @@
     (create)="createContact()"
     [isEditMode]="isEditMode"
     [contactToEdit]="contactToEdit">
-</app-add-contact>
+</app-contact-card>
 <app-success-slide 
     *ngIf="showSuccess" 
     [visible]="showSuccess" 

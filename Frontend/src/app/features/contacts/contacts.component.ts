@@ -8,7 +8,7 @@ import { Contact, getInitials } from '../../shared/models/contact.model';
 import { FormHelperService } from '../../features/auth/services/form-utils.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { SuccessSlideComponent } from '../../shared/ui/success-slide/success-slide.component';
-import { AddContactComponent } from './add-contact/add-contact.component';
+import { ContactCardComponent } from './contact-card/contact-card.component';
 import { getRandomColor } from '../../shared/utils/color.util';
 
 @Component({
@@ -20,7 +20,7 @@ import { getRandomColor } from '../../shared/utils/color.util';
     ContactDetailsComponent,
     ReactiveFormsModule,
     SuccessSlideComponent,
-    AddContactComponent
+    ContactCardComponent
   ],
   providers: [FormHelperService],
   templateUrl: './contacts.component.html',
@@ -46,9 +46,9 @@ export class ContactsComponent implements OnInit {
   userId: string | null = null;
   isGuest = true;
   guestContacts: Contact[] = [];
-  showSuccess = true;
+  showSuccess = false;
   visible = true;
-  slideOutSuccess = true;
+  slideOutSuccess = false;
   successMessage = '';
   isSubmitting = false;
   isEditMode = false;
@@ -134,11 +134,27 @@ export class ContactsComponent implements OnInit {
     loadContacts.subscribe((contacts: Contact[]) => {
       this.contacts = contacts;
       this.groupedContacts = this.groupByInitial(this.contacts);
+      if (this.isMobileView) {
+        this.afterContactCreationMobile(contact);
+      } else {
+        this.afterContactCreationDesktop(contact);
+      }
     });
+  }
+  
+  private afterContactCreationDesktop(contact: Contact) {
     this.closeOverlay();
-    this.contactForm.reset();
-    this.submitted = false;
-    this.closeOverlayAndShowSuccess('Contact successfully created', contact);
+    this.selectedContact = contact;
+    this.showSuccessSlide('Contact successfully created');
+    this.resetContactFormState();
+  }
+  
+  private afterContactCreationMobile(contact: Contact) {
+    this.closeOverlay();
+    this.selectedContact = contact;
+    this.showDetails = true;
+    this.showSuccessSlide('Contact successfully created');
+    this.resetContactFormState();
   }
   
   initContactForm() {
@@ -200,14 +216,6 @@ export class ContactsComponent implements OnInit {
     }, 300);
   }
   
-  private closeOverlayAndShowSuccess(message: string, contact: Contact): void {
-    this.closeOverlay();
-    setTimeout(() => {
-      this.selectedContact = contact;
-      this.showSuccessSlide(message);
-    }, 300);
-  }
-  
   showSuccessSlide(message: string): void {
     this.successMessage = message;
     this.showSuccess = true;
@@ -236,20 +244,43 @@ export class ContactsComponent implements OnInit {
   
   deleteContact(contact: Contact) {
     this.contactService.deleteContact(contact.id).subscribe({
-      next: () => {
-        this.contacts = this.contacts.filter(c => c.id !== contact.id);
-        this.groupedContacts = this.groupByInitial(this.contacts);
-
-        if (this.selectedContact?.id === contact.id) this.selectedContact = null;
-        if (this.contactToEdit?.id === contact.id) {
-          this.closeOverlay();
-          this.resetContactFormState();
-        }
-      },
-      error: (err) => {
-        console.error('Fehler beim Löschen:', err);
-      },
+      next: () => this.handleSuccessfulDeletion(contact),
+      error: (err) => this.handleDeletionError(err),
     });
+  }
+  
+  private handleSuccessfulDeletion(contact: Contact) {
+    this.removeContactFromList(contact);
+    this.updateGroupedContacts();
+    this.handleSelectionAfterDeletion(contact);
+  }
+  
+  private removeContactFromList(contact: Contact) {
+    this.contacts = this.contacts.filter(c => c.id !== contact.id);
+  }
+  
+  private updateGroupedContacts() {
+    this.groupedContacts = this.groupByInitial(this.contacts);
+  }
+  
+  private handleSelectionAfterDeletion(contact: Contact) {
+    const isSelectedContact = this.selectedContact?.id === contact.id;
+    const isEditedContact = this.contactToEdit?.id === contact.id;
+    if (isSelectedContact) {
+      this.selectedContact = null;
+      if (this.isMobileView) {
+        this.showDetails = false;
+      }
+    }
+    if (isEditedContact) {
+      this.closeOverlay();
+      this.resetContactFormState();
+    }
+  }
+  
+  private handleDeletionError(error: any) {
+    console.error('Fehler beim Löschen:', error);
+    alert('Kontakt konnte nicht gelöscht werden.');
   }
   
   private resetContactFormState(): void {
