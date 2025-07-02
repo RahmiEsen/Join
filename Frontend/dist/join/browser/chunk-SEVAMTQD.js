@@ -1,0 +1,1 @@
+import{Fa as n,Ua as p,Va as m,hb as l}from"./chunk-FEZ47UCW.js";import"./chunk-7CGTOI24.js";var e=class o{static \u0275fac=function(t){return new(t||o)};static \u0275cmp=n({type:o,selectors:[["app-help"]],decls:2,vars:0,template:function(t,i){t&1&&(p(0,"p"),l(1,"help works!"),m())},encapsulation:2})};var u=[{path:"",component:e,title:"Help"}];export{u as HELP_ROUTES};

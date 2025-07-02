@@ -25,7 +25,7 @@ export class SidebarComponent implements OnInit {
   }
   
   private updateNavItems(): void {
-    const mobile = window.innerWidth <= 768;
+    const mobile = window.innerWidth <= 1024;
     const base = [
       this.item('Summary', '/summary', 'summary'),
       this.item('Add Task', '/add-task', 'add-task'),

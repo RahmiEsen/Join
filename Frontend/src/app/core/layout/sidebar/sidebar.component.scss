@@ -1,7 +1,7 @@
 @use '../../../../styles/mixins' as *;
 @use '../../../../styles/variables' as *;
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .logo {
         display: none;
     }

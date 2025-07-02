@@ -1,0 +1,1 @@
+import{Fa as o,Ua as n,Va as a,hb as r}from"./chunk-FEZ47UCW.js";import"./chunk-7CGTOI24.js";var e=class m{static \u0275fac=function(t){return new(t||m)};static \u0275cmp=o({type:m,selectors:[["app-summary"]],decls:2,vars:0,template:function(t,s){t&1&&(n(0,"p"),r(1,"summary works!"),a())},encapsulation:2})};var l=[{path:"",component:e}];export{l as SUMMARY_ROUTES};

@@ -3,7 +3,8 @@
 
 .contact {
     @include start;
-    width: 352px;
+    width: 100%;
+    min-width: 0;
     border-radius: 10px;
     padding: 15px 24px;
     gap: 35px;
@@ -12,12 +13,21 @@
         height: 42px;
         font-size: 12px;
         border: 2px solid $white;
+        flex-shrink: 0
     }
     .info-wrapper {
         @include column;
+        width: 100%;
         gap: 5px;
-        a:hover {
+        overflow: hidden;
+        a {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            &:hover {
             border: none;
+            }
         }
     }
     &:hover {
@@ -32,3 +42,9 @@
         }
     }
 }
+
+@media (max-width: 1024px) {
+    .contact {
+        width: 100%;
+    }
+} 

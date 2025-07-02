@@ -21,12 +21,12 @@ export class HeaderComponent {
     private router: Router,
     private eRef: ElementRef
   ) {}
-
+  
   ngOnInit(): void {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  this.userImageUrl = user?.picture ?? null;
-  console.log('PB URL:', this.userImageUrl);
-}
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.userImageUrl = user?.picture ?? null;
+    console.log('PB URL:', this.userImageUrl);
+  }
   
   get initials() {
     return this.authService.getUserInitials();

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from '../../shared/services/contact.service';
 import { ContactListComponent } from './contact-list/contact-list.component';
@@ -46,21 +46,27 @@ export class ContactsComponent implements OnInit {
   userId: string | null = null;
   isGuest = true;
   guestContacts: Contact[] = [];
-  showSuccess = false;
+  showSuccess = true;
   visible = true;
-  slideOutSuccess = false;
+  slideOutSuccess = true;
   successMessage = '';
   isSubmitting = false;
   isEditMode = false;
   contactToEdit?: Contact;
+  isMobileView = false;
+  showDetails = false;
+  showDropdown = false;
   
   constructor(
     private contactService: ContactService,
     private fb: FormBuilder,
+    private eRef: ElementRef,
     private authService: AuthService
   ) {}
   
   ngOnInit(): void {
+    this.checkScreenSize();
+    window.addEventListener('resize', () => this.checkScreenSize());
     const user = this.authService.getUser();
     if (user && user.id && user.id !== 'guest') {
       this.userId = user.id;
@@ -155,10 +161,16 @@ export class ContactsComponent implements OnInit {
       setTimeout(() => {
         this.selectedContact = null;
         this.isSlidingOut = false;
+        if (this.isMobileView) {
+          this.showDetails = false;
+        }
       }, 400);
     } else {
       this.selectedContact = contact;
       this.isSlidingOut = false;
+      if (this.isMobileView) {
+        this.showDetails = true;
+      }
     }
   }
   
@@ -274,5 +286,32 @@ export class ContactsComponent implements OnInit {
   
   createContact() {
     this.onSubmit();
+  }
+  
+  checkScreenSize() {
+    this.isMobileView = window.innerWidth <= 1024;
+  }
+  
+  closeDetails() {
+    this.showDetails = false;
+  }
+  
+  backToContacts(): void {
+    this.showDetails = false;
+    this.selectedContact = null;
+  }
+  
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+  
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const isDropdown = target.closest('.dropdown-menu');
+    const isButton = target.closest('.options-btn');
+    if (!isDropdown && !isButton) {
+      this.showDropdown = false;
+    }
   }
 }

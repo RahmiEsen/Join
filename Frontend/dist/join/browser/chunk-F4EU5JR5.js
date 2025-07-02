@@ -1,0 +1,1 @@
+import{Fa as n,Ua as a,Va as r,hb as p}from"./chunk-FEZ47UCW.js";import"./chunk-7CGTOI24.js";var e=class t{static \u0275fac=function(o){return new(o||t)};static \u0275cmp=n({type:t,selectors:[["app-board"]],decls:2,vars:0,template:function(o,s){o&1&&(a(0,"p"),p(1,"board works!"),r())},encapsulation:2})};var l=[{path:"",component:e,title:"Board"}];export{l as BOARD_ROUTES};

@@ -1,5 +1,7 @@
 <header>
-    <img class="logo hide" src="./assets/images/logo-dark.png" alt="Join Logo" />
+    <img class="logo hide" 
+    src="./assets/images/logo-dark.png" 
+    alt="Join Logo"/>
     <span>Kanban Project Management Tool</span>
     <div class="user-section">
         <button (click)="navigateTo('/help')" class="info-btn">
@@ -14,7 +16,7 @@
             </ng-template>
         </div>
     </div>
-    <div class="dropdown-menu animate-in" [class.visible]="showDropdown">
+    <div class="dropdown-menu" [class.visible]="showDropdown">
         <a (click)="navigateTo('/help')" class="hide">Help</a>
         <a (click)="navigateTo('/legal-notice')">Legal Notice</a>
         <a (click)="navigateTo('/privacy-policy')">Privacy Policy</a>

@@ -1,0 +1,1 @@
+import{a as o}from"./chunk-VDCO64PF.js";import"./chunk-CCDX7ID7.js";import"./chunk-TP22Q6XX.js";import"./chunk-5F73IP5B.js";import"./chunk-FEZ47UCW.js";import"./chunk-7CGTOI24.js";var m=[{path:"",component:o}];export{m as AUTHCALLBACK_ROUTES};

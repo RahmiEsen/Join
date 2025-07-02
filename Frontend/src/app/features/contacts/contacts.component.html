@@ -1,7 +1,8 @@
-<div class="contacts-wrapper">
+<div class="contacts-wrapper"
+*ngIf="!isMobileView || (isMobileView && !showDetails)">
     <div class="button-wrapper">
         <button (click)="addContact()">
-        Add new contact
+        <span>Add new contact</span>
         <img src="assets/images/person-add.png" alt="">
         </button>
     </div>
@@ -12,16 +13,20 @@
     (select)="onSelectContact($event)">
     </app-contact-list>
 </div>
-<app-success-slide 
-    *ngIf="showSuccess" 
-    [visible]="showSuccess" 
-    [message]="successMessage">
-</app-success-slide>
-<section>
-    <div class="title">
-        <h1>Contacts</h1>
-        <div class="separate"></div>
-        <span>Better with a team</span>
+<section
+*ngIf="!isMobileView || (isMobileView && showDetails)">
+    <div class="header-section">
+        <div class="title">
+            <h1>Contacts</h1>
+            <div class="separate"></div>
+            <span>Better with a team</span>
+            <div class="underline"></div>
+        </div>
+        <div class="back" 
+        (click)="backToContacts()"
+        *ngIf="isMobileView">
+            <img src="assets/images/back.png" alt="">
+        </div>
     </div>
     <app-contact-details
         *ngIf="selectedContact || isSlidingOut"
@@ -31,18 +36,48 @@
         (edit)="onEditContact()"
         (delete)="selectedContact && deleteContact(selectedContact)">
     </app-contact-details>
+    <button
+    class="options-btn"
+    *ngIf="isMobileView"
+    (click)="toggleDropdown()">
+        <div class="img-wrapper">
+            <img src="assets/images/more.png" alt="show-more">
+        </div>
+    </button>
+    <div class="dropdown-menu" 
+    [class.visible]="showDropdown">
+        <button class="option-btn" (click)="onEditContact()">
+            <div class="img-wrapper">
+                <img src="assets/images/edit.png" alt="Edit" class="icon-default" />
+                <img src="assets/images/edit-hover.png" alt="Edit Hover" class="icon-hover" />
+            </div>
+            Edit
+        </button>
+        <button class="option-btn" (click)="deleteContact(selectedContact!)">
+            <div class="img-wrapper">
+                <img src="assets/images/delete.png" alt="Delete" class="icon-default" />
+                <img src="assets/images/delete-hover.png" alt="Delete Hover" class="icon-hover" />
+            </div>
+            Delete
+        </button>
+    </div>
 </section>
 <app-add-contact
-  [showOverlay]="showOverlay"
-  [isOverlaySlidingOut]="isOverlaySlidingOut"
-  [contactForm]="contactForm"
-  [formFields]="formFields"
-  [formHelper]="formHelper"
-  [submitted]="submitted"
-  (close)="closeOverlay()"
-  (delete)="contactToEdit && deleteContact(contactToEdit)"
-  (edit)="editContact()"
-  (create)="createContact()"
-  [isEditMode]="isEditMode"
-  [contactToEdit]="contactToEdit">
+    [showOverlay]="showOverlay"
+    [isOverlaySlidingOut]="isOverlaySlidingOut"
+    [contactForm]="contactForm"
+    [formFields]="formFields"
+    [formHelper]="formHelper"
+    [submitted]="submitted"
+    (close)="closeOverlay()"
+    (delete)="contactToEdit && deleteContact(contactToEdit)"
+    (edit)="editContact()"
+    (create)="createContact()"
+    [isEditMode]="isEditMode"
+    [contactToEdit]="contactToEdit">
 </app-add-contact>
+<app-success-slide 
+    *ngIf="showSuccess" 
+    [visible]="showSuccess" 
+    [message]="successMessage">
+</app-success-slide>

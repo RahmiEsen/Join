@@ -2,11 +2,9 @@
 @use '../../../../styles/variables' as *;
 
 .contacts-list {
-    position: relative;
     @include column-align;
     width: 100%;
     height: 100%;
-    top: 101px;
     padding: 0px 25px 32px;
     cursor: pointer;
     .sort {
@@ -25,3 +23,10 @@
         
     }
 }
+
+@media (max-width: 1024px) {
+    .contacts-list {
+        position: unset;
+        padding: 24px;
+    }
+} 

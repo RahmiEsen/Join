@@ -12,7 +12,7 @@ export class SuccessSlideComponent implements OnChanges {
   @Input() message = '';
   @Input() visible = false;
   slideOut = false;
-
+  
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['visible']?.currentValue === true) {
       this.slideOut = false;

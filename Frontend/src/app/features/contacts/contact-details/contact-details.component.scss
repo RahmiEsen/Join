@@ -4,9 +4,6 @@
 .contact-card {
     position: fixed;
     @include column;
-    width: 452px;
-    height: 364px;
-    top: 311px;
     gap: 21px;
     animation: slideIn 0.3s ease forwards;
     &.slide-out {
@@ -28,6 +25,7 @@
             gap: 8px;
             h2 {
                 width: max-content;
+                font-size: clamp(26px, 3.5vw, 47px);
             }
         }
         .contact-actions {
@@ -123,5 +121,27 @@
     to {
         opacity: 0;
         transform: translateX(100%);
+    }
+}
+
+@media (max-width: 1024px) {
+    .contact-card {
+        width: unset;
+        .contact-header {
+            gap: 20px;
+            .avatar {
+                height: 80px;
+                width: 80px;
+                font-size: 27px;
+                font-weight: 400;
+            }
+            .contact-headline h2 {
+                font-size: 36px;
+                font-weight: 700;
+            }
+            .contact-actions {
+                display: none;
+            }
+        }
     }
 }

@@ -1,7 +1,10 @@
 <div class="overlay" *ngIf="showOverlay">
     <div class="overlay-card" [ngClass]="{ 'slide-out': isOverlaySlidingOut }">
         <div class="overlay-left">
-            <img src="assets/images/logo.png" alt="Join Logo"/>
+            <div class="close" (click)="closeOverlay()">
+                <img src="assets/images/close-white.png" alt="">
+            </div>
+            <img class="logo" src="assets/images/logo.png" alt="Join Logo"/>
             <div class="headline">
                 <h1>{{ isEditMode ? 'Edit contact' : 'Add contact' }}</h1>
                 <span *ngIf="!isEditMode">Tasks are better with a team!</span>

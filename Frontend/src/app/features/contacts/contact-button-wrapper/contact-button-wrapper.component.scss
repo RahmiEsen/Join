@@ -9,3 +9,17 @@
         padding: 16px;
     }
 }
+
+
+@media (max-width: 1024px) {
+    .button-wrapper {
+        @include center;
+        width: auto;
+        button {
+            font-size: 21px;
+        }
+        .mobile-none {
+            display: none;
+        }
+    }
+}

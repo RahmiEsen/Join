@@ -241,17 +241,6 @@ main {
     display: none;
 }
 
-.title {
-    @include space-between;
-    height: 73px;
-    gap: 30px;
-    .separate {
-        background-color: $hover;
-        width: 3px;
-        height: 100%
-    }
-}
-
 .avatar {
     @include center;
     color: $white;
@@ -287,12 +276,16 @@ app-success-popup {
     @include center;
 }
 
+app-contact-item, app-contact-list, app-contact-details {
+    width: 100%;
+}
+
 app-contacts {
     display: flex;
     height: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     h1 {
         font-size: 47px;
     }
@@ -300,20 +293,20 @@ app-contacts {
         font-size: 16px;
     }
     header {
-        position: unset;
+        position: fixed;
         width: 100%;
         padding: 20px 16px;
     }
     main {
-        position: unset;
-        min-height: calc(100vh - 80px - 80px);
-        height: auto;
+        top: 80px;
+        height: calc(100vh - 160px);
         width: 100%;
     }
     aside {
-        position: unset;
+        position: fixed;
         height: 80px;
         width: 100%;
+        bottom: 0;
         padding: 0 16px;
         footer {
             display: none;
@@ -344,5 +337,8 @@ app-contacts {
                 }
             }
         }
+    }
+    app-contact-item, app-contact-list {
+        width: 100%;
     }
 }
