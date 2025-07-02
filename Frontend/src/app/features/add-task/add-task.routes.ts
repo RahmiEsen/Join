@@ -5,5 +5,6 @@ export const ADD_TASK_ROUTES: Routes = [
     {
         path: '',
         component: AddTaskComponent,
+        title: 'Join | Add Task'
     }
 ];

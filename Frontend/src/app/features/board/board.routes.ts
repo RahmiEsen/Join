@@ -5,6 +5,6 @@ export const BOARD_ROUTES: Routes = [
     {
         path: '',
         component: BoardComponent,
-        title: 'Board'
+        title: 'Join | Board'
     }
 ];

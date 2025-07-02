@@ -5,6 +5,6 @@ export const HELP_ROUTES: Routes = [
     {
         path: '',
         component: HelpComponent,
-        title: 'Help'
+        title: 'Join | Help'
     }
 ];

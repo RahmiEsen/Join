@@ -5,6 +5,6 @@ export const LEGAL_NOTICE_ROUTES: Routes = [
     {
         path: '',
         component: LegalNoticeComponent,
-        title: 'Legal Notice'
+        title: 'Join | Legal Notice'
     }
 ];

@@ -4,6 +4,7 @@ import { ForgotPasswordComponent  } from './forgot-password.component';
 export const FORGOTPASSWORD_ROUTES: Routes = [
     {
         path: '',
-        component: ForgotPasswordComponent 
+        component: ForgotPasswordComponent,
+        title: 'Join | Forgot Password'
     }
 ];

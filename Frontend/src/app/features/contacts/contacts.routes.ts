@@ -5,6 +5,6 @@ export const CONTACTS_ROUTES: Routes = [
     {
         path: '',
         component: ContactsComponent,
-        title: 'Contacts'
+        title: 'Join | Contacts'
     }
 ];

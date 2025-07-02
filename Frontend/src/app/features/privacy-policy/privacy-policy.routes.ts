@@ -5,6 +5,6 @@ export const PRIVACY_POLICY_ROUTES: Routes = [
     {
         path: '',
         component: PrivacyPolicyComponent,
-        title: 'Privacy Policy'
+        title: 'Join | Privacy Policy'
     }
 ];
