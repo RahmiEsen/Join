@@ -58,13 +58,9 @@
             background-color: $white;
             padding: 66px 48px;
             .close {
+                position: absolute;
                 top: 48px;
                 right: 80px;
-                transition: all 100ms ease-in-out;
-                &:hover {
-                    background-color: $icon-hover;
-                    border-radius: 50%;
-                }
             }
             .contact-wrapper {
                 @include space-between;
@@ -99,14 +95,6 @@
             }
         }
     }
-}
-
-.close {
-    position: absolute;
-    @include center;
-    height: 32px;
-    width: 32px;
-    cursor: pointer;
 }
 
 @keyframes slideIn {

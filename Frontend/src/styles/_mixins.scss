@@ -71,3 +71,10 @@
     justify-content: start;
     align-items: center;
 }
+
+@mixin row-space {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}

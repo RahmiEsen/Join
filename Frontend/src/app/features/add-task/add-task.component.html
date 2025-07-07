@@ -1,1 +1,115 @@
-<p>add-task works!</p>
+<h1>Add Task</h1>
+<div class="task-form">
+    <div class="header"
+        [ngClass]="{
+            'has-cover-color': !!selectedColor,
+            'has-cover-img': !!selectedCoverImageForHeader
+        }"
+        [ngStyle]="{
+            'background-image': selectedCoverImageForHeader ? 'url(' + selectedCoverImageForHeader + ')' : 'none',
+            'background-color': !selectedCoverImageForHeader && selectedColor ? selectedColor.base : 'transparent'
+        }"
+        >
+        <div class="title">Test</div>
+        <div class="header-options">
+            <button class="add-cover"
+            #toggleButton 
+            type="button"
+            (click)="toggleMenu()"
+            [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
+            [style.--hover-color]="selectedColor?.hover">
+                <img src="assets/images/background-img.png" alt="">
+            </button>
+            <button class="close"
+            type="button"
+            [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
+            [style.--hover-color]="selectedColor?.hover">
+                <img src="assets/images/close.png" alt="">
+            </button>
+            <div class="cover-menu"
+            #coverMenuContainer
+            *ngIf="isMenuOpen"
+            [@fadeInOut]>
+                <div class="menu-header">
+                    <p>Cover picture</p>
+                    <button 
+                    type="button" 
+                    class="close" 
+                    (click)="closeMenu()">
+                        <img src="assets/images/close.png" alt="">
+                    </button>
+                </div>
+                <div class="options-wrapper">
+                    <div class="option">
+                        <p>Colors</p>
+                        <div class="colors">
+                            <button *ngFor="let color of colors; trackBy: trackByColor"
+                                (click)="selectColor(color)"
+                                [ngClass]="{'selected': color === selectedColor}"
+                                [style.--base-color]="color.base"
+                                [style.--hover-color]="color.hover">
+                            </button>
+                        </div>
+                    </div>
+                    <div class="option">
+                        <p>Attachments</p>
+                        <div class="choosen-img" 
+                            *ngIf="selectedCoverImages.length > 0">
+                            <button class="image-button"
+                                *ngFor="let image of displayedCoverImages" 
+                                [ngClass]="{'selected': selectedCoverImageForHeader === image.dataUrl}"
+                                [style.backgroundImage]="'url(' + image.dataUrl + ')'"
+                                (click)="selectCoverImage(image)">
+                            </button>
+                        </div>
+                        <div class="loading">
+                            <div class="spinner-border"
+                                *ngIf="isImageLoading" 
+                                role="status">
+                            </div>
+                        </div>
+                        <button class="show-more"
+                            *ngIf="selectedCoverImages.length > imageDisplayLimit"
+                            (click)="toggleImageDisplay()"
+                            type="button">
+                            {{ showAllImages ? 'Show Less' : 'Show More' }}
+                        </button>
+                        <div class="own-img"
+                        *ngIf="!isImageLoading">
+                            <label  class="upload-label" 
+                            for="coverUpload">
+                                Upload Cover Image
+                                <input
+                                    type="file"
+                                    id="coverUpload"
+                                    accept="image/*"
+                                    (change)="onCoverImageSelected($event)"
+                                    hidden
+                                />
+                            </label>
+                        </div>
+                        <p class="tip">
+                            Tip: To upload a picture, drag it onto the card.
+                        </p>
+                    </div>
+                    <div class="option">
+                        <p>Photos from Join</p>
+                        <div class="choosen-img">
+                            <button class="image-button"
+                                *ngFor="let img of predefinedImages"
+                                [ngClass]="{'selected': selectedCoverImageForHeader === img.url}"
+                                [style.backgroundImage]="'url(' + img.url + ')'"
+                                (click)="selectPredefinedImage(img.url)">
+                            </button>
+                        </div>
+                        <p class="tip">
+                            By using images from Join, you agree to our 
+                            <a [routerLink]="'/privacy-policy'">Privacy Policy</a> and 
+                            <a [routerLink]="'/legal-notice'">Legal Notice</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
