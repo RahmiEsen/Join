@@ -195,3 +195,43 @@
         }
     }
 }
+
+
+
+
+
+
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 8px;
+
+  button {
+    padding: 6px 10px;
+    border: none;
+    background: #f4f5f7;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background: #dfe1e6;
+    }
+  }
+}
+
+.editor-content {
+  border: 1px solid #ccc;
+  padding: 12px;
+  border-radius: 6px;
+  background: white;
+  min-height: 160px;
+}
+.editor-content .ProseMirror {
+  min-height: 150px;
+  outline: none;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.5;
+}

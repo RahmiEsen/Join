@@ -1,7 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, HostListener, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { trigger, transition, style, animate } from '@angular/animations';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+  OnInit,
+  OnDestroy,
+  AfterViewInit
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { trigger, transition, style, animate } from '@angular/animations';
+import { Editor } from '@tiptap/core';
+import StarterKit from '@tiptap/starter-kit';
 
 interface Color {
   base: string;
@@ -15,30 +27,23 @@ interface CoverImage {
 
 @Component({
   selector: 'app-add-task',
+  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('fadeInOut', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('200ms ease-in', style({ opacity: 1 }))
-      ]),
-      transition(':leave', [
-        animate('200ms ease-out', style({ opacity: 0 }))
-      ])
+      transition(':enter', [style({ opacity: 0 }), animate('200ms ease-in', style({ opacity: 1 }))]),
+      transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))])
     ])
   ]
 })
 
-export class AddTaskComponent {
-  isMenuOpen = false;
-  selectedColor: Color | null = null;
-  selectedCoverImage: string | null = null;
-  selectedCoverImages: CoverImage[] = [];
-  isImageLoading: boolean = false;
-  selectedCoverImageForHeader: string | null = null;
+export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('editorContainer', { static: true }) editorContainerRef!: ElementRef;
+  @ViewChild('toggleButton') toggleButtonRef!: ElementRef;
+  @ViewChild('coverMenuContainer') menuElementRef!: ElementRef;
   
   readonly colors: Color[] = [
     { base: '#4bce97', hover: '#7ee2b8' },
@@ -50,39 +55,56 @@ export class AddTaskComponent {
     { base: '#6cc3e0', hover: '#9dd9ee' },
     { base: '#94c748', hover: '#b3df72' },
     { base: '#e774bb', hover: '#f797d2' },
-    { base: '#8590a2', hover: '#b3b9c4' },
+    { base: '#8590a2', hover: '#b3b9c4' }
   ];
   
   readonly imageDisplayLimit = 6;
-  displayedCoverImages: CoverImage[] = [];
+  readonly predefinedImages = [
+    { url: 'assets/images/city.avif' },
+    { url: 'assets/images/cloud.avif' },
+    { url: 'assets/images/la.avif' },
+    { url: 'assets/images/miami.avif' },
+    { url: 'assets/images/stars.avif' },
+    { url: 'assets/images/tokio.avif' }
+  ];
+  
+  editor!: Editor;
+  isMenuOpen = false;
   showAllImages = false;
+  isImageLoading = false;
+  selectedColor: Color | null = null;
+  selectedCoverImageForHeader: string | null = null;
+  selectedCoverImages: CoverImage[] = [];
+  displayedCoverImages: CoverImage[] = [];
   
   constructor(private cdr: ChangeDetectorRef) {}
   
   ngOnInit(): void {
     this.updateDisplayedImages();
+    this.editor = new Editor({ extensions: [StarterKit], content: '' });
   }
   
-  @ViewChild('toggleButton') toggleButtonRef!: ElementRef;
-  @ViewChild('coverMenuContainer') menuElementRef!: ElementRef;
+  ngAfterViewInit(): void {
+    const el = this.editorContainerRef?.nativeElement;
+    if (el && this.editor) {
+      const dom = this.editor.view.dom;
+      dom.setAttribute('contenteditable', 'true');
+      dom.classList.add('ProseMirror');
+      dom.style.minHeight = '150px';
+      dom.style.outline = 'none';
+      el.appendChild(dom);
+    }
+  }
   
-  trackByColor(index: number, color: Color): string {
-    return color.base;
+  ngOnDestroy(): void {
+    this.editor?.destroy();
   }
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (!this.isMenuOpen) {
-      return;
-    }
-    const clickedOnToggleButton = this.toggleButtonRef?.nativeElement.contains(event.target);
-    if (clickedOnToggleButton) {
-      return;
-    }
-    const clickedInsideMenu = this.menuElementRef?.nativeElement.contains(event.target);
-    if (!clickedInsideMenu) {
-      this.closeMenu();
-    }
+    if (!this.isMenuOpen) return;
+    if (this.toggleButtonRef?.nativeElement.contains(event.target)) return;
+    if (!this.menuElementRef?.nativeElement.contains(event.target)) this.closeMenu();
   }
   
   toggleMenu(): void {
@@ -94,36 +116,32 @@ export class AddTaskComponent {
   }
   
   selectColor(color: Color): void {
-    if (this.selectedColor === color) {
-      this.selectedColor = null;
-    } else {
-      this.selectedColor = color;
-      this.selectedCoverImageForHeader = null;
-    }
+    this.selectedColor = this.selectedColor === color ? null : color;
+    if (this.selectedColor) this.selectedCoverImageForHeader = null;
   }
   
-  selectCoverImage(image: CoverImage) {
-    if (this.selectedCoverImageForHeader === image.dataUrl) {
-      this.selectedCoverImageForHeader = null;
-    } else {
-      this.selectedCoverImageForHeader = image.dataUrl;
-      this.selectedColor = null;
-    }
+  selectPredefinedImage(imageUrl: string): void {
+    this.selectedCoverImageForHeader = this.selectedCoverImageForHeader === imageUrl ? null : imageUrl;
+    if (this.selectedCoverImageForHeader) this.selectedColor = null;
+  }
+  
+  selectCoverImage(image: CoverImage): void {
+    this.selectedCoverImageForHeader = this.selectedCoverImageForHeader === image.dataUrl ? null : image.dataUrl;
+    if (this.selectedCoverImageForHeader) this.selectedColor = null;
   }
   
   onCoverImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files) return;
-    this.isImageLoading = true;
     const files = Array.from(input.files);
     let loaded = 0;
     const checkDone = () => {
-      loaded++;
-      if (loaded === files.length) {
+      if (++loaded === files.length) {
         this.isImageLoading = false;
         this.cdr.detectChanges();
       }
     };
+    this.isImageLoading = true;
     files.forEach((file) => this.readImage(file, checkDone));
   }
   
@@ -134,7 +152,7 @@ export class AddTaskComponent {
       this.selectedCoverImages.push(image);
       this.selectedCoverImageForHeader = image.dataUrl;
       this.selectedColor = null;
-      this.updateDisplayedImages(); 
+      this.updateDisplayedImages();
       this.isImageLoading = false;
       this.cdr.detectChanges();
       onDone();
@@ -148,28 +166,10 @@ export class AddTaskComponent {
   }
   
   private updateDisplayedImages(): void {
-    if (this.showAllImages) {
-      this.displayedCoverImages = [...this.selectedCoverImages];
-    } else {
-      this.displayedCoverImages = this.selectedCoverImages.slice(0, this.imageDisplayLimit);
-    }
+    this.displayedCoverImages = this.showAllImages
+      ? [...this.selectedCoverImages]
+      : this.selectedCoverImages.slice(0, this.imageDisplayLimit);
   }
   
-  predefinedImages: { url: string; }[] = [
-    { url: 'assets/images/city.avif' },
-    { url: 'assets/images/cloud.avif' },
-    { url: 'assets/images/la.avif' },
-    { url: 'assets/images/miami.avif' },
-    { url: 'assets/images/stars.avif' },
-    { url: 'assets/images/tokio.avif' }
-  ];
-  
-  selectPredefinedImage(imageUrl: string): void {
-    if (this.selectedCoverImageForHeader === imageUrl) {
-      this.selectedCoverImageForHeader = null;
-    } else {
-      this.selectedCoverImageForHeader = imageUrl;
-      this.selectedColor = null;
-    }
-  }
+  trackByColor = (_: number, color: Color) => color.base;
 }

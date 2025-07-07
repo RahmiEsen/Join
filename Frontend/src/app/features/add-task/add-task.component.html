@@ -112,4 +112,17 @@
             </div>
         </div>
     </div>
+<div class="editor-toolbar">
+  <button (click)="editor.chain().focus().toggleBold().run()">B</button>
+  <button (click)="editor.chain().focus().toggleItalic().run()"><i>I</i></button>
+  <button (click)="editor.chain().focus().toggleBulletList().run()">•</button>
+  <button (click)="editor.chain().focus().toggleOrderedList().run()">1.</button>
+  <button (click)="editor.chain().focus().setHorizontalRule().run()">―</button>
+  <button (click)="editor.chain().focus().undo().run()">↶</button>
+  <button (click)="editor.chain().focus().redo().run()">↷</button>
+</div>
+
+<!-- Hier wird der Editor dynamisch eingefügt -->
+<div class="editor-content" #editorContainer></div>
+
 </div>
