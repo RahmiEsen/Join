@@ -319,6 +319,10 @@ app-contacts {
     height: 100%;
 }
 
+app-add-task {
+    @include column-center;
+}
+
 @media (max-width: 1024px) {
     h1 {
         font-size: 47px;

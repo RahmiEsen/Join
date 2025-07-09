@@ -112,17 +112,175 @@
             </div>
         </div>
     </div>
-<div class="editor-toolbar">
-  <button (click)="editor.chain().focus().toggleBold().run()">B</button>
-  <button (click)="editor.chain().focus().toggleItalic().run()"><i>I</i></button>
-  <button (click)="editor.chain().focus().toggleBulletList().run()">•</button>
-  <button (click)="editor.chain().focus().toggleOrderedList().run()">1.</button>
-  <button (click)="editor.chain().focus().setHorizontalRule().run()">―</button>
-  <button (click)="editor.chain().focus().undo().run()">↶</button>
-  <button (click)="editor.chain().focus().redo().run()">↷</button>
-</div>
-
-<!-- Hier wird der Editor dynamisch eingefügt -->
-<div class="editor-content" #editorContainer></div>
-
+    <section>
+        <div class="description-wrapper">
+            <div class="img-wrapper">
+                <img src="assets/images/description.png" alt="Description">
+            </div>
+            <div class="description">
+                <div class="headline">
+                    <span>Description</span>
+                    <button>Edit</button>
+                </div>
+                <div class="editor-placeholder" (click)="showEditor()" *ngIf="!editorVisible">
+                    <p>Add detailed description ...</p>
+                </div>
+                <div class="editor-wrapper" 
+                *ngIf="editorVisible" 
+                [class.focused]="isEditorFocused">
+                    <div class="editor-toolbar"
+                    *ngIf="editor">
+                        <button class="dropdown-btn">
+                            <span>H1</span>
+                            <p (click)="headingDropdown()">&#709;</p>
+                        </button>
+                        <div class="dropdown-content dropdown-heading"
+                        *ngIf="isheadingDropdownOpen">
+                            <button (click)="setHeading(null)">Normal text</button>
+                            <button (click)="setHeading(1)">Heading 1</button>
+                            <button (click)="setHeading(2)">Heading 2</button>
+                            <button (click)="setHeading(3)">Heading 3</button>
+                            <button (click)="setHeading(4)">Heading 4</button>
+                            <button (click)="setHeading(5)">Heading 5</button>
+                            <button (click)="setHeading(6)">Heading 6</button>
+                        </div>
+                        <button class="dropdown-btn">
+                            <span>Aa</span>
+                            <p (click)="upperLowerCaseDropwdown()">&#709;</p>
+                        </button>
+                        <div class="dropdown-content dropdown-case"
+                        *ngIf="isupperLowerCaseOpen">
+                            <button (click)="capitalizeSentence()">Capitalize first letter of sentence</button>
+                            <button (click)="lowercase()">lowercase</button>
+                            <button (click)="uppercase()">UPPERCASE</button>
+                            <button (click)="capitalizeEachWord()">Capitalize Each Word</button>
+                            <button (click)="toggleCase()">Toggle Case</button>
+                        </div>
+                        <button 
+                        (click)="editor.chain().focus().toggleBold().run()" [class.is-active]="editor.isActive('bold')">
+                            B
+                        </button>
+                        <button 
+                        (click)="editor.chain().focus().toggleItalic().run()" [class.is-active]="editor.isActive('italic')">
+                            <i>I</i>
+                        </button>
+                        <button 
+                        (click)="editor.chain().focus().toggleUnderline().run()" [class.is-active]="editor.isActive('underline')">
+                            <u>U</u>
+                        </button>
+                        <button 
+                        (click)="editor.chain().focus().toggleStrike().run()" [class.is-active]="editor.isActive('strike')">
+                            <s>ab</s>
+                        </button>
+                        <button class="dropdown-btn">
+                            <span [ngStyle]="{ 'border-bottom': '3px solid ' + (selectedFontColorHex || 'black') }">
+                            A
+                            </span>
+                            <p (click)="fontColorDropdown()">&#709;</p>
+                        </button>
+                        <div class="dropdown-content"
+                        *ngIf="isFontDropdownOpen">
+                            <div class="color-wrapper">
+                                <p>Design colors</p>
+                                <div class="color-row">
+                                    <div class="color-option"
+                                    *ngFor="let color of designColors"
+                                    [style.backgroundColor]="color.hex"
+                                    (click)="onFontColorSelect(color.hex)"
+                                    [class.selected]="color.hex === selectedFontColorHex"
+                                    title="{{ color.name }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="color-row">
+                                <div class="color-option"
+                                *ngFor="let color of primaryColors"
+                                [style.backgroundColor]="color.hex"
+                                (click)="onFontColorSelect(color.hex)"
+                                [class.selected]="color.hex === selectedFontColorHex"
+                                title="{{ color.name }}">
+                                </div>
+                            </div>
+                            <div class="color-wrapper">
+                                <p>Standard colors</p>
+                                <div class="color-row">
+                                    <div class="color-option"
+                                    *ngFor="let color of standardColors"
+                                    [style.backgroundColor]="color.hex"
+                                    (click)="onFontColorSelect(color.hex)"
+                                    [class.selected]="color.hex === selectedFontColorHex"
+                                    title="{{ color.name }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="dropdown-btn">
+                            <span
+                                [ngStyle]="{ 'border-bottom': '3px solid ' + (selectedHighlightHex || '#000') }">
+                                <img src="assets/images/edit.png" alt="">
+                            </span>
+                            <p (click)="fontHighlighterDropdown()">&#709;</p>
+                        </button>
+                        <div class="dropdown-content dropdown-highlight"
+                        *ngIf="isFontHighlighterOpen">
+                            <p>Highlight Text</p>
+                            <div class="highlight-row">
+                                <div class="color-option"
+                                *ngFor="let color of highlightColors"
+                                [style.backgroundColor]="color.hex"
+                                (click)="onFontHighlightSelect(color.hex)"
+                                [class.selected]="color.hex === selectedHighlightHex"
+                                title="{{ color.name }}">
+                                </div>
+                            </div>
+                            <div class="deselect-wrapper"
+                                *ngIf="selectedHighlightHex"
+                                (click)="clearHighlight()">
+                                <div class="choosen-highlight"
+                                [style.backgroundColor]="selectedHighlightHex || '#ffffff'">
+                                </div>
+                                <p>End highlighting</p>
+                            </div>
+                        </div>
+                        <button 
+                        (click)="editor.chain().focus().toggleBulletList().run()" [class.is-active]="editor.isActive('bulletList')">
+                            <img [src]="editor.isActive('bulletList') ? 'assets/images/list-hover.png' : 'assets/images/list.png'" alt="Bullet List">
+                        </button>
+                        <button 
+                        (click)="editor.chain().focus().toggleOrderedList().run()" [class.is-active]="editor.isActive('orderedList')">
+                            <img [src]="editor.isActive('orderedList') ? 'assets/images/number-list-hover.png' : 'assets/images/number-list.png'" alt="Number List">
+                        </button>
+                        <label class="editor-attachment">
+                            <input 
+                            type="file" 
+                            id="editorFileUpload" 
+                            hidden 
+                            accept="image/*,.pdf,.docx" 
+                            (change)="onAttachmentSelected($event)">
+                            <button type="button" (click)="triggerFileUpload()">
+                                <img [src]="editor.isActive('image') ? 'assets/images/attach-hover.png' : 'assets/images/attach.png'" alt="Attach">
+                            </button>
+                        </label>
+                    </div>
+                    <div class="editor-content" #editorContainer></div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-wrapper">
+            <button>
+                Save
+                <div class="img">
+                    <img src="assets/images/check-hover.png" alt="Submit">
+                </div>
+            </button>
+            <button class="secondary-btn"
+            (click)="cancelDescription()">
+                Cancel
+                <div class="img-wrapper">
+                    <img class="icon-default" src="assets/images/close.png" alt="Cancel">
+                    <img class="icon-hover" src="assets/images/close-hover.png" alt="Cancel Hover">
+                </div>
+            </button>
+        </div>
+    </section>
 </div>

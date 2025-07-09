@@ -3,19 +3,26 @@ import {
   Component,
   ChangeDetectionStrategy,
   HostListener,
-  ViewChild,
   ElementRef,
   ChangeDetectorRef,
   OnInit,
   OnDestroy,
-  AfterViewInit
+  AfterViewInit,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Editor } from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit';
+import { StarterKit } from '@tiptap/starter-kit';
+import { Underline } from '@tiptap/extension-underline';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import { Highlight } from '@tiptap/extension-highlight';
+import Image from '@tiptap/extension-image';
+import { Subscription } from 'rxjs';
 
-interface Color {
+interface ColorConfig { 
   base: string;
   hover: string;
 }
@@ -23,6 +30,16 @@ interface Color {
 interface CoverImage {
   name: string;
   dataUrl: string;
+}
+
+interface fontColorConfig {
+  name: string;
+  hex: string;
+}
+
+interface highlightColorConfig {
+  name: string;
+  hex: string;
 }
 
 @Component({
@@ -41,11 +58,11 @@ interface CoverImage {
 })
 
 export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('editorContainer', { static: true }) editorContainerRef!: ElementRef;
-  @ViewChild('toggleButton') toggleButtonRef!: ElementRef;
-  @ViewChild('coverMenuContainer') menuElementRef!: ElementRef;
+  @ViewChildren('toggleButton') toggleButtonRef!: QueryList<ElementRef>;
+  @ViewChildren('coverMenuContainer') menuElementRef!: QueryList<ElementRef>;
+  @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   
-  readonly colors: Color[] = [
+  readonly colors: ColorConfig[] = [
     { base: '#4bce97', hover: '#7ee2b8' },
     { base: '#f5cd47', hover: '#e2b203' },
     { base: '#fea362', hover: '#fec195' },
@@ -68,43 +85,200 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     { url: 'assets/images/tokio.avif' }
   ];
   
+  readonly designColors: fontColorConfig[] = [
+    { name: 'Farbe 1', hex: '#ffffff' },
+    { name: 'Farbe 2', hex: '#000000' },
+    { name: 'Farbe 3', hex: '#e8e8e8' },
+    { name: 'Farbe 4', hex: '#0e2841' },
+    { name: 'Farbe 5', hex: '#156082' },
+    { name: 'Farbe 6', hex: '#e97132' },
+    { name: 'Farbe 7', hex: '#196b24' },
+    { name: 'Farbe 8', hex: '#0f9ed5' },
+    { name: 'Farbe 9', hex: '#a02b93' },
+    { name: 'Farbe 10', hex: '#4ea72e' }
+  ];
+  
+  readonly primaryColors: fontColorConfig[] = [
+    { name: 'Farbe 1', hex: '#f2f2f2' },
+    { name: 'Farbe 2', hex: '#7f7f7f' },
+    { name: 'Farbe 3', hex: '#d0d0d0' },
+    { name: 'Farbe 4', hex: '#dbe9f7' },
+    { name: 'Farbe 5', hex: '#c1e4f5' },
+    { name: 'Farbe 6', hex: '#fae2d6' },
+    { name: 'Farbe 7', hex: '#c1f0c8' },
+    { name: 'Farbe 8', hex: '#caedfb' },
+    { name: 'Farbe 9', hex: '#f1ceee' },
+    { name: 'Farbe 10', hex: '#d9f2d0' },
+    { name: 'Farbe 11', hex: '#d8d8d8' },
+    { name: 'Farbe 12', hex: '#595959' },
+    { name: 'Farbe 13', hex: '#aeaeae' },
+    { name: 'Farbe 14', hex: '#a6c9eb' },
+    { name: 'Farbe 15', hex: '#83caeb' },
+    { name: 'Farbe 16', hex: '#f6c6ac' },
+    { name: 'Farbe 17', hex: '#84e291' },
+    { name: 'Farbe 18', hex: '#95dcf7' },
+    { name: 'Farbe 19', hex: '#e49edd' },
+    { name: 'Farbe 20', hex: '#b3e5a1' },
+    { name: 'Farbe 21', hex: '#bfbfbf' },
+    { name: 'Farbe 22', hex: '#3f3f3f' },
+    { name: 'Farbe 23', hex: '#747474' },
+    { name: 'Farbe 24', hex: '#4d94d8' },
+    { name: 'Farbe 25', hex: '#45b0e1' },
+    { name: 'Farbe 26', hex: '#f1a984' },
+    { name: 'Farbe 27', hex: '#47d45a' },
+    { name: 'Farbe 28', hex: '#60cbf3' },
+    { name: 'Farbe 29', hex: '#d76dcc' },
+    { name: 'Farbe 30', hex: '#8ed873' },
+    { name: 'Farbe 31', hex: '#a5a5a5' },
+    { name: 'Farbe 32', hex: '#262626' },
+    { name: 'Farbe 33', hex: '#3a3a3a' },
+    { name: 'Farbe 34', hex: '#215e99' },
+    { name: 'Farbe 35', hex: '#0f4861' },
+    { name: 'Farbe 36', hex: '#bf4f14' },
+    { name: 'Farbe 37', hex: '#12501b' },
+    { name: 'Farbe 38', hex: '#0b769f' },
+    { name: 'Farbe 39', hex: '#78206e' },
+    { name: 'Farbe 40', hex: '#3a7d22' },
+    { name: 'Farbe 41', hex: '#7f7f7f' },
+    { name: 'Farbe 42', hex: '#0c0c0c' },
+    { name: 'Farbe 43', hex: '#171717' },
+    { name: 'Farbe 44', hex: '#153d64' },
+    { name: 'Farbe 45', hex: '#0a3041' },
+    { name: 'Farbe 46', hex: '#7f340d' },
+    { name: 'Farbe 47', hex: '#0c3512' },
+    { name: 'Farbe 48', hex: '#074f6a' },
+    { name: 'Farbe 49', hex: '#501549' },
+    { name: 'Farbe 50', hex: '#265316' },
+  ];
+  
+  readonly standardColors: fontColorConfig[] = [
+    { name: 'Farbe 1', hex: '#c00000' },
+    { name: 'Farbe 2', hex: '#ee0000' },
+    { name: 'Farbe 3', hex: '#ffc000' },
+    { name: 'Farbe 4', hex: '#ffff00' },
+    { name: 'Farbe 5', hex: '#92d050' },
+    { name: 'Farbe 6', hex: '#00b050' },
+    { name: 'Farbe 7', hex: '#00b0f0' },
+    { name: 'Farbe 8', hex: '#0070c0' },
+    { name: 'Farbe 9', hex: '#002060' },
+    { name: 'Farbe 10', hex: '#7030a0' },
+  ];
+  
+  readonly highlightColors: highlightColorConfig[] = [
+    { name: 'Farbe 1', hex: '#ffff00' },
+    { name: 'Farbe 2', hex: '#00ff00' },
+    { name: 'Farbe 3', hex: '#00ffff' },
+    { name: 'Farbe 4', hex: '#ff00ff' },
+    { name: 'Farbe 5', hex: '#0000ff' },
+    { name: 'Farbe 6', hex: '#ff0000' },
+    { name: 'Farbe 7', hex: '#000080' },
+    { name: 'Farbe 8', hex: '#008080' },
+    { name: 'Farbe 9', hex: '#008000' },
+    { name: 'Farbe 10', hex: '#800080' },
+    { name: 'Farbe 11', hex: '#800000' },
+    { name: 'Farbe 12', hex: '#808000' },
+    { name: 'Farbe 13', hex: '#808080' },
+    { name: 'Farbe 14', hex: '#c0c0c0' },
+    { name: 'Farbe 15', hex: '#000000' },
+  ];
+  
   editor!: Editor;
   isMenuOpen = false;
   showAllImages = false;
   isImageLoading = false;
-  selectedColor: Color | null = null;
+  selectedColor: ColorConfig | null = null;
   selectedCoverImageForHeader: string | null = null;
   selectedCoverImages: CoverImage[] = [];
   displayedCoverImages: CoverImage[] = [];
+  activeEditorButton: string | null = null;
+  editorVisible = false;
+  isEditorFocused = false;
+  private editorSubscription: Subscription | undefined;
+  isFontDropdownOpen = false;
+  selectedFontColorHex: string | null = null;
+  isFontHighlighterOpen = false;
+  selectedHighlightHex: string | null = null;
+  isupperLowerCaseOpen = false;
+  isheadingDropdownOpen = false;
+  description: string = '';
+  originalDescription: string = '';
+  isEditingDescription: boolean = false;
   
   constructor(private cdr: ChangeDetectorRef) {}
   
   ngOnInit(): void {
     this.updateDisplayedImages();
-    this.editor = new Editor({ extensions: [StarterKit], content: '' });
+    this.setInitialColor();
   }
   
   ngAfterViewInit(): void {
-    const el = this.editorContainerRef?.nativeElement;
-    if (el && this.editor) {
-      const dom = this.editor.view.dom;
-      dom.setAttribute('contenteditable', 'true');
-      dom.classList.add('ProseMirror');
-      dom.style.minHeight = '150px';
-      dom.style.outline = 'none';
-      el.appendChild(dom);
-    }
+    this.editorSubscription = this.editorContainerRef.changes.subscribe((list: QueryList<ElementRef>) => {
+      if (list.first) {
+        this.initializeEditor(list.first.nativeElement);
+      }
+    });
+  }
+  
+  private initializeEditor(element: HTMLElement): void {
+    if (this.editor) return;
+    this.editor = new Editor({
+      element: element,
+      extensions: [
+        StarterKit,
+          Underline,
+          TextStyle,
+          Color,
+          Image,
+          Highlight.configure({ multicolor: true }),
+      ],
+      editorProps: {
+        attributes: {
+          class: 'ProseMirror',
+          spellcheck: 'true',
+        },
+      },
+      onFocus: () => {
+        this.isEditorFocused = true;
+        this.cdr.detectChanges();
+      },
+      onBlur: () => {
+        this.isEditorFocused = false;
+        this.cdr.detectChanges();
+      },
+    });
+    this.editor.commands.focus();
+    this.cdr.detectChanges();
+  }
+  
+  showEditor(): void {
+    this.editorVisible = true;
+    this.originalDescription = this.description;
+    this.editor?.commands.setContent(this.description || '');
   }
   
   ngOnDestroy(): void {
     this.editor?.destroy();
+    this.editorSubscription?.unsubscribe();
   }
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.isMenuOpen) return;
-    if (this.toggleButtonRef?.nativeElement.contains(event.target)) return;
-    if (!this.menuElementRef?.nativeElement.contains(event.target)) this.closeMenu();
+    if (this.toggleButtonRef?.first?.nativeElement.contains(event.target)) return;
+    if (!this.menuElementRef?.first?.nativeElement.contains(event.target)) {
+      this.closeMenu();
+    }
+  }
+  
+  @HostListener('document:click', ['$event.target'])
+  onOutsideClick(target: HTMLElement): void {
+    const clickedInside = target.closest('.dropdown-btn') || target.closest('.dropdown-content');
+    if (!clickedInside) {
+      this.isFontDropdownOpen = false;
+      this.isFontHighlighterOpen = false;
+      this.isupperLowerCaseOpen = false;
+      this.isheadingDropdownOpen = false;
+    }
   }
   
   toggleMenu(): void {
@@ -115,7 +289,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isMenuOpen = false;
   }
   
-  selectColor(color: Color): void {
+  selectColor(color: ColorConfig): void {
     this.selectedColor = this.selectedColor === color ? null : color;
     if (this.selectedColor) this.selectedCoverImageForHeader = null;
   }
@@ -171,5 +345,165 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
       : this.selectedCoverImages.slice(0, this.imageDisplayLimit);
   }
   
-  trackByColor = (_: number, color: Color) => color.base;
+  trackByColor = (_: number, color: ColorConfig) => color.base;
+  
+  setActiveEditorButton(buttonName: string): void {
+    if (this.activeEditorButton === buttonName) {
+      this.activeEditorButton = null;
+    } else {
+      this.activeEditorButton = buttonName;
+    }
+  }
+  
+  fontColorDropdown() {
+    this.isFontDropdownOpen = !this.isFontDropdownOpen;
+    if (this.isFontDropdownOpen) {
+      this.isFontHighlighterOpen = false;
+      this.isupperLowerCaseOpen = false;
+      this.isheadingDropdownOpen = false;
+    }
+  }
+  
+  onFontColorSelect(color: string): void {
+    if (this.selectedFontColorHex === color) {
+      this.editor?.chain().focus().unsetColor().run();
+      this.selectedFontColorHex = null;
+    } else {
+      this.editor?.chain().focus().setColor(color).run();
+      this.selectedFontColorHex = color;
+    }
+    this.isFontDropdownOpen = false;
+  }
+  
+  setInitialColor(): void {
+    const defaultColor = this.designColors?.[1]?.hex;
+    if (defaultColor) {
+      this.selectedFontColorHex = defaultColor;
+      this.editor?.chain().focus().setColor(defaultColor).run();
+    }
+  }
+  
+  fontHighlighterDropdown() {
+    this.isFontHighlighterOpen = !this.isFontHighlighterOpen;
+    if (this.isFontHighlighterOpen) {
+      this.isFontDropdownOpen = false;
+      this.isupperLowerCaseOpen = false;
+      this.isheadingDropdownOpen = false;
+    }
+  }
+  
+  onFontHighlightSelect(color: string): void {
+    this.selectedHighlightHex = color;
+    this.editor?.chain().focus().setHighlight({ color }).run();
+    this.isFontHighlighterOpen = false;
+  }
+  
+  clearHighlight(): void {
+    this.editor?.chain().focus().unsetHighlight().run();
+    this.selectedHighlightHex = null;
+  }
+  
+  upperLowerCaseDropwdown() {
+    this.isupperLowerCaseOpen = !this.isupperLowerCaseOpen;
+    if (this.isupperLowerCaseOpen) {
+      this.isFontDropdownOpen = false;
+      this.isFontHighlighterOpen = false;
+      this.isheadingDropdownOpen = false;
+    }
+  }
+  
+  private replaceSelectedText(transformFn: (text: string) => string): void {
+    const { state, view } = this.editor;
+    const { from, to } = state.selection;
+    const selectedText = state.doc.textBetween(from, to, ' ');
+    
+    const transformedText = transformFn(selectedText);
+    
+    this.editor.chain().focus().insertContentAt({ from, to }, transformedText).run();
+  }
+  
+  capitalizeSentence(): void {
+    this.replaceSelectedText(text => 
+      text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+    );
+    this.isupperLowerCaseOpen = false;
+  }
+  
+  lowercase(): void {
+    this.replaceSelectedText(text => text.toLowerCase());
+    this.isupperLowerCaseOpen = false;
+  }
+  
+  uppercase(): void {
+    this.replaceSelectedText(text => text.toUpperCase());
+    this.isupperLowerCaseOpen = false;
+  }
+  
+  capitalizeEachWord(): void {
+    this.replaceSelectedText(text =>
+      text.replace(/\w\S*/g, word =>
+        word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      )
+    );
+    this.isupperLowerCaseOpen = false;
+  }
+  
+  toggleCase(): void {
+    this.replaceSelectedText(text =>
+      [...text].map(char =>
+        char === char.toUpperCase()
+          ? char.toLowerCase()
+          : char.toUpperCase()
+      ).join('')
+    );
+    this.isupperLowerCaseOpen = false;
+  }
+  
+  headingDropdown() {
+    this.isheadingDropdownOpen = !this.isheadingDropdownOpen;
+    if (this.isheadingDropdownOpen) {
+      this.isFontDropdownOpen = false;
+      this.isFontHighlighterOpen = false;
+      this.isupperLowerCaseOpen = false;
+    }
+  }
+  
+  setHeading(level: 1 | 2 | 3 | 4 | 5 | 6 | null): void {
+    if (level === null) {
+      this.editor?.chain().focus().setParagraph().run();
+    } else {
+      this.editor?.chain().focus().toggleHeading({ level }).run();
+    }
+    this.isheadingDropdownOpen = false;
+  }
+  
+  onAttachmentSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      if (file.type.startsWith('image/')) {
+        this.editor?.chain().focus().setImage({ src: base64 }).run();
+      } else {
+        this.editor?.chain().focus().insertContent(
+          `<a href="${base64}" download="${file.name}">${file.name}</a>`
+        ).run();
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  triggerFileUpload(): void {
+    document.getElementById('editorFileUpload')?.click();
+  }
+  
+  cancelDescription(): void {
+    if (this.editor && this.originalDescription) {
+      this.editor.commands.setContent(this.originalDescription);
+    }
+    this.editorVisible = false;
+    this.isEditorFocused = false;
+  }
 }

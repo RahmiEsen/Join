@@ -25,7 +25,6 @@ export class HeaderComponent {
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.userImageUrl = user?.picture ?? null;
-    console.log('PB URL:', this.userImageUrl);
   }
   
   get initials() {
