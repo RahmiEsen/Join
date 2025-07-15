@@ -1,0 +1,22 @@
+<button 
+    class="secondary-btn options-btn" 
+    [ngClass]="{ 'active': isOpen }"
+    (click)="toggle()">
+    <div class="img-wrapper" *ngIf="iconSrc">
+        <img [src]="isOpen && iconActiveSrc ? iconActiveSrc : iconSrc" [alt]="title + ' Icon'">
+    </div>
+    {{ title }}
+</button>
+<div class="dropdown-content" *ngIf="isOpen">
+    <div class="menu-header">
+        <p>{{ title }}</p>
+        <button 
+        type="button" 
+        class="close"
+        (click)="close()">
+            <img src="assets/images/close.png" alt="">
+        </button>
+    </div>
+    <div class="options-wrapper"></div>
+    <ng-content></ng-content>
+</div>

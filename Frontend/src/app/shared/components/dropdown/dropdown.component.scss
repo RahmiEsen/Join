@@ -1,0 +1,71 @@
+
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.options-btn {
+    all: unset;
+    @include center;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid $border-color;
+    border-radius: 3px;
+    padding: 4px 8px;
+    gap: 5px;
+    transition: all 100ms ease-in-out;
+    cursor: pointer;
+    &:hover {
+        background-color: $menu-hover;
+    }
+    &.active {
+        background-color: $primary;
+        border-color: $primary;
+        color: $white;
+    }
+    .img-wrapper {
+        height: 16px;
+        width: 16px;
+        img {
+            width: 100%;
+        }
+    }
+}
+
+.dropdown-content {
+    position: absolute;
+    @include column;
+    top: 35px;
+    width: 304px;
+    background-color: $white;
+    border-radius: 10px;
+    border: 1px solid $border-color;
+    .menu-header {
+        display: flex;
+        align-items: center;
+        padding: 4px 8px;
+        p {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            padding: 0 32px;
+        }
+        .close {
+            flex-shrink: 0;
+            background-color: unset;
+            border-color: unset;
+            border: unset;
+            border-radius: unset;
+            padding: unset;
+            &:hover {
+                background-color: $close-menu-hover;
+                border-radius: 8px;
+                box-shadow: none;
+            }
+        }
+    }
+    .options-wrapper {
+        @include column;
+        padding: 0 12px 12px;
+        gap: 8px;
+    }
+}

@@ -25,6 +25,7 @@ import Image from '@tiptap/extension-image';
 import { Subscription } from 'rxjs';
 import { TaskService } from '../../shared/services/task.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 
 const CustomHighlight = Highlight.configure({ multicolor: true }).extend({
   addAttributes() {
@@ -70,7 +71,11 @@ interface highlightColorConfig {
 @Component({
   selector: 'app-add-task',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    DropdownComponent
+  ],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,6 +122,14 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   safeSavedDescription: SafeHtml = '';
   isDescriptionOverflowing = false;
   isDescriptionExpanded = false;
+  isLabelDropdownOpen = false;
+  availableLabels = [
+    { name: 'Feature', color: '#61bd4f' },
+    { name: 'Bug', color: '#f2d600' },
+    { name: 'Urgent', color: '#eb5a46' },
+    { name: 'Idea', color: '#c377e0' },
+  ];
+  selectedLabels: string[] = [];
   
   readonly colors: ColorConfig[] = [
     { base: '#4bce97', hover: '#7ee2b8' },
@@ -258,23 +271,6 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
     });
   }
   
-/*   ngAfterViewChecked(): void {
-  // Die Bedingung "!this.isDescriptionExpanded" wurde hier entfernt
-  if (this.descriptionPreviewRef) {
-    const element = this.descriptionPreviewRef.nativeElement;
-    // Prüft, ob die tatsächliche Höhe größer ist als die sichtbare Höhe
-    const isCurrentlyOverflowing = element.scrollHeight > element.clientHeight;
-
-    // Nur aktualisieren, wenn sich der Zustand geändert hat
-    if (isCurrentlyOverflowing !== this.isDescriptionOverflowing) {
-      setTimeout(() => {
-        this.isDescriptionOverflowing = isCurrentlyOverflowing;
-        this.cdr.detectChanges();
-      }, 0);
-    }
-  }
-} */
-  
   private initializeEditor(element: HTMLElement): void {
     if (this.editor) return;
     this.editor = new Editor({
@@ -320,21 +316,19 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (!this.isMenuOpen) return;
-    if (this.toggleButtonRef?.first?.nativeElement.contains(event.target)) return;
-    if (!this.menuElementRef?.first?.nativeElement.contains(event.target)) {
-      this.closeMenu();
-    }
-  }
-  
-  @HostListener('document:click', ['$event.target'])
-  onOutsideClick(target: HTMLElement): void {
-    const clickedInside = target.closest('.dropdown-btn') || target.closest('.dropdown-content');
-    if (!clickedInside) {
+    const target = event.target as HTMLElement;
+
+    const isDropdownElement =
+      target.closest('.dropdown-btn') ||
+      target.closest('.dropdown-content') ||
+      target.closest('.options-btn'); // ← das ist dein Label-Button
+
+    if (!isDropdownElement) {
       this.isFontDropdownOpen = false;
       this.isFontHighlighterOpen = false;
       this.isupperLowerCaseOpen = false;
       this.isheadingDropdownOpen = false;
+      this.isLabelDropdownOpen = false;
     }
   }
   
@@ -642,6 +636,18 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
     }, 0); 
   }
 
+toggleLabelDropdown(): void {
+  this.isLabelDropdownOpen = !this.isLabelDropdownOpen;
+  console.log('isLabelDropdownOpen', this.isLabelDropdownOpen);
+}
+
+
+selectLabel(label: { name: string; color: string }): void {
+  if (!this.selectedLabels.includes(label.name)) {
+    this.selectedLabels.push(label.name);
+  }
+  this.isLabelDropdownOpen = false;
+}
 
   /* private detectUserContext(): void {
     const user = this.authService.getUser();

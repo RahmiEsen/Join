@@ -458,6 +458,14 @@ section {
     }
 }
 
+.option-section {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 8px;
+}
+
 .description-preview {
     @include column-start;
     min-width: 272px;
