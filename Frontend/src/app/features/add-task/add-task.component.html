@@ -120,9 +120,15 @@
             <div class="description">
                 <div class="headline">
                     <span>Description</span>
-                    <button>Edit</button>
+                    <button
+                        *ngIf="savedDescription && !editorVisible"
+                        (click)="editDescription()">
+                        Edit
+                    </button>
                 </div>
-                <div class="editor-placeholder" (click)="showEditor()" *ngIf="!editorVisible">
+                <div class="editor-placeholder" 
+                (click)="showEditor()" 
+                *ngIf="!editorVisible && !savedDescription">
                     <p>Add detailed description ...</p>
                 </div>
                 <div class="editor-wrapper" 
@@ -264,10 +270,44 @@
                     </div>
                     <div class="editor-content" #editorContainer></div>
                 </div>
+                <div class="description-preview"
+                    #descriptionPreview
+                    *ngIf="savedDescription && !editorVisible"
+                    [ngClass]="{
+                        'fade-out-bottom': isDescriptionOverflowing && !isDescriptionExpanded,
+                        'expanded': isDescriptionExpanded
+                    }"
+                    [innerHTML]="safeSavedDescription"
+                    (click)="editDescription()">
+                </div>
+                <button class="show-more"
+                    *ngIf="!editorVisible && (isDescriptionOverflowing || isDescriptionExpanded)"
+                    (click)="toggleDescriptionExpansion($event)">
+                    {{ isDescriptionExpanded ? 'Show Less' : 'Show More' }}
+                </button>
+                <div class="btn-wrapper"
+                *ngIf="editorVisible">
+                    <button
+                    (click)="saveDescription()">
+                        Save
+                        <div class="img">
+                            <img src="assets/images/check-hover.png" alt="Submit">
+                        </div>
+                    </button>
+                    <button class="secondary-btn"
+                    (click)="cancelDescription()">
+                        Cancel
+                        <div class="img-wrapper">
+                            <img class="icon-default" src="assets/images/close.png" alt="Cancel">
+                            <img class="icon-hover" src="assets/images/close-hover.png" alt="Cancel Hover">
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="btn-wrapper">
-            <button>
+        <!-- <div class="btn-wrapper">
+            <button
+            (click)="submitTask()">
                 Save
                 <div class="img">
                     <img src="assets/images/check-hover.png" alt="Submit">
@@ -281,6 +321,6 @@
                     <img class="icon-hover" src="assets/images/close-hover.png" alt="Cancel Hover">
                 </div>
             </button>
-        </div>
+        </div> -->
     </section>
 </div>

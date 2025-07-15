@@ -155,20 +155,6 @@
                             @include center;
                             width: 100%;
                         }
-                        .show-more {
-                            background-color: revert;
-                            color: $black;
-                            font-size: 14px;
-                            font-weight: unset;
-                            border-radius: unset;
-                            border-color: unset;
-                            padding: unset;
-                            gap: unset;
-                            &:hover {
-                                box-shadow: none;
-                                background-color: $button-hover-default;
-                            }
-                        }
                         .own-img {
                             background-color: $body;
                             padding: 6px 12px;
@@ -196,13 +182,31 @@
     }
 }
 
+.show-more {
+    background-color: #091E420F;
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 3px;
+    padding: 6px 12px;
+    gap: unset;
+    &:hover {
+        box-shadow: none;
+        background-color: #091E4224;
+    }
+}
+
 section {
-    @include column;
+    @include column-start;
     width: 100%;
     padding: 0px 40px 16px 20px;
     gap: 12px;
+    max-height: 630px;
+    overflow-y: auto;
     .description-wrapper {
         @include start;
+        width: 100%;
         gap: 12px;
         .img-wrapper {
             @include center;
@@ -454,9 +458,27 @@ section {
     }
 }
 
+.description-preview {
+    @include column-start;
+    min-width: 272px;
+    max-height: 350px;
+    border-radius: 3px;
+    padding: 8px 12px 0px;
+    transition: max-height 0.3s ease-in-out;
+    overflow: hidden;
+    cursor: pointer;
+    &.fade-out-bottom {
+        mask-image: linear-gradient(to bottom, black 0, black calc(100% - 100px), transparent 100%);
+    }
+    &.expanded {
+        max-height: 100%;
+    }
+}
+
 :host ::ng-deep .ProseMirror {
     all: unset;
     position: absolute;
+    @include column-start-center;
     width: -webkit-fill-available;
     height: -webkit-fill-available;
     font-family: inherit;
@@ -464,14 +486,46 @@ section {
     white-space: pre-wrap;
     word-wrap: break-word;
     cursor: text;
+    span, p, ul , ol, li {
+        font-size: 16px;
+        width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        width: 100%;
+        text-align: unset;
+        span {
+            font-size: unset;
+        }
+    }
+    img {
+        width: auto;
+        height: 100%;
+    }
+}
+
+:host ::ng-deep .description-preview {
+    p, ul , ol, li {
+        width: 100%;
+    }
+    img {
+        width: 95%;
+    }
+    span {
+        font-size: unset;
+    }
+    p {
+        font-size: 16px;
+        height: 24px;
+    }
+}
+
+:host ::ng-deep .description-preview mark {
     span {
         font-size: 16px;
     }
-    img {
-        position: relative;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        height: 100%;
+    h1, h2, h3, h4, h5, h6 {
+        span {
+            font-size: unset;
+        }
     }
 }

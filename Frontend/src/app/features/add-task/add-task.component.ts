@@ -9,7 +9,9 @@ import {
   OnDestroy,
   AfterViewInit,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  ViewChild,
+  AfterViewChecked
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -21,6 +23,29 @@ import { Color } from '@tiptap/extension-color';
 import { Highlight } from '@tiptap/extension-highlight';
 import Image from '@tiptap/extension-image';
 import { Subscription } from 'rxjs';
+import { TaskService } from '../../shared/services/task.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+const CustomHighlight = Highlight.configure({ multicolor: true }).extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      color: {
+        default: null,
+        parseHTML: element => element.style.backgroundColor,
+        renderHTML: attributes => {
+          if (!attributes['color']) {
+            return {};
+          }
+          // HIER DIE ÄNDERUNG: "color: inherit;" HINZUFÜGEN
+          return {
+            style: `background-color: ${attributes['color']}; color: inherit;`,
+          };
+        },
+      },
+    };
+  },
+});
 
 interface ColorConfig { 
   base: string;
@@ -57,10 +82,41 @@ interface highlightColorConfig {
   ]
 })
 
-export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChildren('toggleButton') toggleButtonRef!: QueryList<ElementRef>;
   @ViewChildren('coverMenuContainer') menuElementRef!: QueryList<ElementRef>;
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
+  @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
+  
+  editor!: Editor;
+  isMenuOpen = false;
+  showAllImages = false;
+  isImageLoading = false;
+  selectedColor: ColorConfig | null = null;
+  selectedCoverImageForHeader: string | null = null;
+  selectedCoverImages: CoverImage[] = [];
+  displayedCoverImages: CoverImage[] = [];
+  activeEditorButton: string | null = null;
+  editorVisible = false;
+  isEditorFocused = false;
+  private editorSubscription: Subscription | undefined;
+  isFontDropdownOpen = false;
+  selectedFontColorHex: string | null = null;
+  isFontHighlighterOpen = false;
+  selectedHighlightHex: string | null = null;
+  isupperLowerCaseOpen = false;
+  isheadingDropdownOpen = false;
+  description: string = '';
+  originalDescription: string = '';
+  isEditingDescription: boolean = false;
+  attachments: any[] = [];
+  isGuestUser: boolean = true;
+  loggedInUserId: string | null = null; 
+  authService: any;
+  savedDescription: string = '';
+  safeSavedDescription: SafeHtml = '';
+  isDescriptionOverflowing = false;
+  isDescriptionExpanded = false;
   
   readonly colors: ColorConfig[] = [
     { base: '#4bce97', hover: '#7ee2b8' },
@@ -182,33 +238,16 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     { name: 'Farbe 15', hex: '#000000' },
   ];
   
-  editor!: Editor;
-  isMenuOpen = false;
-  showAllImages = false;
-  isImageLoading = false;
-  selectedColor: ColorConfig | null = null;
-  selectedCoverImageForHeader: string | null = null;
-  selectedCoverImages: CoverImage[] = [];
-  displayedCoverImages: CoverImage[] = [];
-  activeEditorButton: string | null = null;
-  editorVisible = false;
-  isEditorFocused = false;
-  private editorSubscription: Subscription | undefined;
-  isFontDropdownOpen = false;
-  selectedFontColorHex: string | null = null;
-  isFontHighlighterOpen = false;
-  selectedHighlightHex: string | null = null;
-  isupperLowerCaseOpen = false;
-  isheadingDropdownOpen = false;
-  description: string = '';
-  originalDescription: string = '';
-  isEditingDescription: boolean = false;
-  
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private taskService: TaskService,
+    private sanitizer: DomSanitizer
+  ) {}
   
   ngOnInit(): void {
     this.updateDisplayedImages();
     this.setInitialColor();
+    /* this.detectUserContext(); */
   }
   
   ngAfterViewInit(): void {
@@ -219,23 +258,43 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   
+/*   ngAfterViewChecked(): void {
+  // Die Bedingung "!this.isDescriptionExpanded" wurde hier entfernt
+  if (this.descriptionPreviewRef) {
+    const element = this.descriptionPreviewRef.nativeElement;
+    // Prüft, ob die tatsächliche Höhe größer ist als die sichtbare Höhe
+    const isCurrentlyOverflowing = element.scrollHeight > element.clientHeight;
+
+    // Nur aktualisieren, wenn sich der Zustand geändert hat
+    if (isCurrentlyOverflowing !== this.isDescriptionOverflowing) {
+      setTimeout(() => {
+        this.isDescriptionOverflowing = isCurrentlyOverflowing;
+        this.cdr.detectChanges();
+      }, 0);
+    }
+  }
+} */
+  
   private initializeEditor(element: HTMLElement): void {
     if (this.editor) return;
     this.editor = new Editor({
-      element: element,
+      element,
+      content: this.savedDescription || '',
       extensions: [
         StarterKit,
-          Underline,
-          TextStyle,
-          Color,
-          Image,
-          Highlight.configure({ multicolor: true }),
+        Underline,
+        TextStyle,
+        Color,
+        Image.configure({
+          allowBase64: true,
+        }),
+        CustomHighlight
       ],
       editorProps: {
         attributes: {
           class: 'ProseMirror',
-          spellcheck: 'true',
-        },
+          spellcheck: 'true'
+        }
       },
       onFocus: () => {
         this.isEditorFocused = true;
@@ -244,7 +303,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
       onBlur: () => {
         this.isEditorFocused = false;
         this.cdr.detectChanges();
-      },
+      }
     });
     this.editor.commands.focus();
     this.cdr.detectChanges();
@@ -252,8 +311,6 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
   
   showEditor(): void {
     this.editorVisible = true;
-    this.originalDescription = this.description;
-    this.editor?.commands.setContent(this.description || '');
   }
   
   ngOnDestroy(): void {
@@ -416,9 +473,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
     const { state, view } = this.editor;
     const { from, to } = state.selection;
     const selectedText = state.doc.textBetween(from, to, ' ');
-    
     const transformedText = transformFn(selectedText);
-    
     this.editor.chain().focus().insertContentAt({ from, to }, transformedText).run();
   }
   
@@ -500,10 +555,98 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   
   cancelDescription(): void {
-    if (this.editor && this.originalDescription) {
-      this.editor.commands.setContent(this.originalDescription);
-    }
     this.editorVisible = false;
     this.isEditorFocused = false;
+    if (this.editor) {
+      this.editor.destroy();
+      this.editor = undefined!;
+    }
   }
+  
+  saveDescription(): void {
+    if (this.editor) {
+      this.savedDescription = this.editor.getHTML();
+      this.safeSavedDescription = this.sanitizer.bypassSecurityTrustHtml(this.savedDescription);
+      this.isDescriptionExpanded = false;
+      this.runOverflowCheckWhenReady();
+      this.editorVisible = false;
+      this.isEditorFocused = false;
+      this.editor.destroy();
+      this.editor = undefined!;
+    }
+  }
+  
+  submitTask(): void {
+    const taskPayload = {
+      description: this.editor?.getHTML() || '',
+      coverColor: this.selectedColor?.base || null,
+      coverImage: this.selectedCoverImageForHeader || null,
+      attachments: this.attachments || [],
+      isGuest: this.isGuestUser ?? true,
+      ownerId: this.loggedInUserId ?? null
+    };
+    this.taskService.createTask(taskPayload).subscribe({
+      next: (response) => {
+        console.log('✅ Task gespeichert:', response);
+      },
+      error: (error) => {
+        console.error('❌ Fehler beim Speichern:', error);
+      }
+    });
+  }
+  
+  editDescription(): void {
+    this.editorVisible = true;
+  }
+
+  toggleDescriptionExpansion(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isDescriptionExpanded = !this.isDescriptionExpanded;
+  }
+
+  private checkOverflow(): void {
+    if (!this.descriptionPreviewRef) return;
+    const element = this.descriptionPreviewRef.nativeElement;
+    const isCurrentlyOverflowing = element.scrollHeight > element.clientHeight;
+    
+    if (isCurrentlyOverflowing !== this.isDescriptionOverflowing) {
+      this.isDescriptionOverflowing = isCurrentlyOverflowing;
+      this.cdr.detectChanges();
+    }
+  }
+
+  private runOverflowCheckWhenReady(): void {
+    setTimeout(() => {
+      if (!this.descriptionPreviewRef) return;
+      
+      const images = Array.from(this.descriptionPreviewRef.nativeElement.querySelectorAll('img'));
+      
+      if (images.length === 0) {
+        this.checkOverflow();
+        return;
+      }
+
+      const promises = images.map(img => 
+        new Promise(resolve => {
+          if (img.complete) {
+            resolve(true);
+          } else {
+            img.onload = img.onerror = () => resolve(true);
+          }
+        })
+      );
+
+      Promise.all(promises).then(() => {
+        this.checkOverflow();
+      });
+    }, 0); 
+  }
+
+
+  /* private detectUserContext(): void {
+    const user = this.authService.getUser();
+    const isValidUser = user && user.id && user.id !== 'guest';
+    this.loggedInUserId = isValidUser ? user.id : null;
+    this.isGuestUser = !isValidUser;
+  } */
 }

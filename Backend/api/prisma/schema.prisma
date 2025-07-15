@@ -8,8 +8,8 @@ datasource db {
 }
 
 model User {
-  id               String   @id @default(uuid())
-  email            String   @unique
+  id               String    @id @default(uuid())
+  email            String    @unique
   password         String?
   name             String?
   firstName        String?
@@ -19,21 +19,36 @@ model User {
   googleId         String?
   resetToken       String?
   resetTokenExpiry DateTime?
-  createdAt        DateTime @default(now())
-  role             String   @default("user")
+  createdAt        DateTime  @default(now())
+  role             String    @default("user")
   contacts         Contact[]
+  tasks            Task[]
+
   @@map("User")
 }
 
 model Contact {
-  id             String   @id @default(uuid())
-  firstName      String
-  lastName       String
-  email          String
-  phoneNumber    String?
-  isGuest        Boolean  @default(false)
-  ownerId        String?
-  owner          User?    @relation(fields: [ownerId], references: [id])
-  createdAt      DateTime @default(now())
-  color          String?
+  id          String   @id @default(uuid())
+  firstName   String
+  lastName    String
+  email       String
+  phoneNumber String?
+  isGuest     Boolean  @default(false)
+  ownerId     String?
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  color       String?
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  description String
+  coverColor  String?
+  coverImage  String?
+  attachments Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ownerId     String?
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  isGuest     Boolean  @default(false)
 }
