@@ -26,6 +26,7 @@ import { Subscription } from 'rxjs';
 import { TaskService } from '../../shared/services/task.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
+import { LabelSelectorComponent } from './label-selector/label-selector.component';
 
 const CustomHighlight = Highlight.configure({ multicolor: true }).extend({
   addAttributes() {
@@ -68,13 +69,19 @@ interface highlightColorConfig {
   hex: string;
 }
 
+export interface LabelItem {
+  name: string;
+  color: string;
+}
+
 @Component({
   selector: 'app-add-task',
   standalone: true,
   imports: [
     CommonModule, 
     RouterModule, 
-    DropdownComponent
+    DropdownComponent,
+    LabelSelectorComponent
   ],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
@@ -92,6 +99,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChildren('coverMenuContainer') menuElementRef!: QueryList<ElementRef>;
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
+  @ViewChild('labelSelector') labelSelectorComponent!: LabelSelectorComponent;
   
   editor!: Editor;
   isMenuOpen = false;
@@ -273,6 +281,15 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   
   private initializeEditor(element: HTMLElement): void {
     if (this.editor) return;
+    const CustomImage = Image.extend({
+      renderHTML({ HTMLAttributes }) {
+        return [
+          'div',
+          { class: 'image-wrapper' },
+          ['img', HTMLAttributes],
+        ];
+      },
+    });
     this.editor = new Editor({
       element,
       content: this.savedDescription || '',
@@ -281,7 +298,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
         Underline,
         TextStyle,
         Color,
-        Image.configure({
+        CustomImage.configure({
           allowBase64: true,
         }),
         CustomHighlight
@@ -317,18 +334,23 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-
     const isDropdownElement =
       target.closest('.dropdown-btn') ||
       target.closest('.dropdown-content') ||
-      target.closest('.options-btn'); // ← das ist dein Label-Button
-
+      target.closest('.options-btn');
+    const menuElement = this.menuElementRef.first?.nativeElement;
+    const toggleButtonElement = this.toggleButtonRef.first?.nativeElement;
+    const clickedInsideCoverMenu =
+      menuElement?.contains(target) || toggleButtonElement?.contains(target);
     if (!isDropdownElement) {
       this.isFontDropdownOpen = false;
       this.isFontHighlighterOpen = false;
       this.isupperLowerCaseOpen = false;
       this.isheadingDropdownOpen = false;
       this.isLabelDropdownOpen = false;
+    }
+    if (!clickedInsideCoverMenu) {
+      this.closeMenu();
     }
   }
   
@@ -592,12 +614,12 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   editDescription(): void {
     this.editorVisible = true;
   }
-
+  
   toggleDescriptionExpansion(event: MouseEvent): void {
     event.stopPropagation();
     this.isDescriptionExpanded = !this.isDescriptionExpanded;
   }
-
+  
   private checkOverflow(): void {
     if (!this.descriptionPreviewRef) return;
     const element = this.descriptionPreviewRef.nativeElement;
@@ -608,7 +630,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
       this.cdr.detectChanges();
     }
   }
-
+  
   private runOverflowCheckWhenReady(): void {
     setTimeout(() => {
       if (!this.descriptionPreviewRef) return;
@@ -635,20 +657,39 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
       });
     }, 0); 
   }
-
-toggleLabelDropdown(): void {
-  this.isLabelDropdownOpen = !this.isLabelDropdownOpen;
-  console.log('isLabelDropdownOpen', this.isLabelDropdownOpen);
-}
-
-
-selectLabel(label: { name: string; color: string }): void {
-  if (!this.selectedLabels.includes(label.name)) {
-    this.selectedLabels.push(label.name);
+  
+  toggleLabelDropdown(): void {
+    this.isLabelDropdownOpen = !this.isLabelDropdownOpen;
+    console.log('isLabelDropdownOpen', this.isLabelDropdownOpen);
   }
-  this.isLabelDropdownOpen = false;
-}
+  
+  selectLabel(label: { name: string; color: string }): void {
+    if (!this.selectedLabels.includes(label.name)) {
+      this.selectedLabels.push(label.name);
+    }
+    this.isLabelDropdownOpen = false;
+  }
+  
+  onLabelSelect(labelName: string): void {
+    if (this.selectedLabels.includes(labelName)) {
+      this.selectedLabels = this.selectedLabels.filter(l => l !== labelName);
+    } else {
+      this.selectedLabels.push(labelName);
+    }
+  }
+  
+  get labelTitle(): string {
+    return this.labelSelectorComponent?.title || 'Labels';
+  }
 
+  public getLabelByName(name: string): LabelItem | undefined {
+    if (!this.labelSelectorComponent) {
+      return undefined;
+    }
+    // Find the label object in the availableLabels array of the child component
+    return this.labelSelectorComponent.availableLabels.find(label => label.name === name);
+  }
+  
   /* private detectUserContext(): void {
     const user = this.authService.getUser();
     const isValidUser = user && user.id && user.id !== 'guest';

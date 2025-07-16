@@ -9,14 +9,18 @@
 </button>
 <div class="dropdown-content" *ngIf="isOpen">
     <div class="menu-header">
+        <button class="back"
+            *ngIf="showBackButton"
+            type="button"
+            (click)="goBackToList($event)">
+            <img src="assets/images/go-back.png" alt="Back">
+        </button>
         <p>{{ title }}</p>
-        <button 
+        <button class="close"
         type="button" 
-        class="close"
         (click)="close()">
             <img src="assets/images/close.png" alt="">
         </button>
     </div>
-    <div class="options-wrapper"></div>
     <ng-content></ng-content>
 </div>

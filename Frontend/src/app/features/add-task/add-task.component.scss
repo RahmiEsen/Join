@@ -203,7 +203,31 @@ section {
     padding: 0px 40px 16px 20px;
     gap: 12px;
     max-height: 630px;
-    overflow-y: auto;
+    .label-wrapper {
+        @include column-start;
+        width: 100%;
+        padding-left: 40px;
+        span {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .choosen-labels {
+            @include center;
+            gap: 4px;
+            .label {
+                @include center;
+                min-width: 48px;
+                max-width: 100%;
+                height: 32px;
+                font-size: 14px;
+                font-weight: 500;
+                text-align: left;
+                padding: 0 12px;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+        }
+    }
     .description-wrapper {
         @include start;
         width: 100%;
@@ -458,11 +482,20 @@ section {
     }
 }
 
+.option-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 8px 12px;
+    gap: 8px;
+}
+
 .option-section {
     position: relative;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    padding-left: 40px;
     gap: 8px;
 }
 
@@ -474,6 +507,7 @@ section {
     padding: 8px 12px 0px;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
+    gap: 4px;
     cursor: pointer;
     &.fade-out-bottom {
         mask-image: linear-gradient(to bottom, black 0, black calc(100% - 100px), transparent 100%);
@@ -509,6 +543,28 @@ section {
         width: auto;
         height: 100%;
     }
+    p {
+        margin-top: 0.75rem;
+    }
+    li p {
+        margin-top: unset;
+    }
+    .image-wrapper {
+        @include center;
+        width: 80%;
+        margin: 0 auto;
+        padding: 8px;
+        border-radius: 3px;
+        &.ProseMirror-selectednode {
+            box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0c66e4;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    }
 }
 
 :host ::ng-deep .description-preview {
@@ -524,6 +580,10 @@ section {
     p {
         font-size: 16px;
         height: 24px;
+        margin-top: 0.75rem;
+    }
+    li p {
+        margin-top: unset;
     }
 }
 

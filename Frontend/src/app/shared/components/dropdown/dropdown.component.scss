@@ -38,19 +38,23 @@
     background-color: $white;
     border-radius: 10px;
     border: 1px solid $border-color;
+    z-index: 2;
     .menu-header {
-        display: flex;
-        align-items: center;
+        position: relative;
         padding: 4px 8px;
         p {
-            flex: 1;
+            @include center;
+            width: 100%;
+            height: 32px;
             font-size: 14px;
             font-weight: 600;
             text-align: center;
             padding: 0 32px;
         }
-        .close {
-            flex-shrink: 0;
+        .close, .back {
+            position: absolute;
+            top: 4px;
+            right: 8px;
             background-color: unset;
             border-color: unset;
             border: unset;
@@ -60,6 +64,13 @@
                 background-color: $close-menu-hover;
                 border-radius: 8px;
                 box-shadow: none;
+            }
+        }
+        .back {
+            left: 8px;
+            right: unset;
+            img {
+                width: 24px;
             }
         }
     }

@@ -1,0 +1,157 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+p {
+    font-size: 12px;
+    font-weight: 600;
+    padding-left: 10px;
+}
+
+.label {
+    @include center-start;
+    flex: 1;
+    min-width: 48px;
+    max-width: 100%;
+    height: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+    padding: 0 12px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.label-list {
+    @include column;
+    margin: 0;
+    padding: 4px 0  8px 0;
+    gap: 5px;
+    .label-item {
+        @include space-between;
+        width: 100%;
+        gap: 12px;
+        .img-wrapper {
+            all: unset;
+            @include center;
+            height: 32px;
+            width: 32px;
+            cursor: pointer;
+            img {
+                height: 16px;
+                width: 16px;
+            }
+        }
+        .edit-icon:hover {
+            background-color: $close-menu-hover;
+            border-radius: 8px;
+            box-shadow: none;
+        }
+    }
+}
+
+.new, .remove {
+    all: unset;
+    @include center;
+    width: -webkit-fill-available;
+    background-color: #091E420F;
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: 6px 12px;
+    margin: 4px 0  8px 0;
+    gap: 8px;
+    cursor: pointer;
+    &:hover {
+        box-shadow: none;
+        background-color: #091E4224;
+    }
+    .img-wrapper {
+        @include center;
+        height: 16px;
+        width: 16px;
+    }
+}
+
+.remove:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.preview {
+    @include center;
+    background-color: #f7f8f9;
+    padding: 32px;
+    margin: 0 -8px;
+    .label {
+        cursor: unset;
+    }
+}
+
+.title-wrapper {
+    @include column;
+    margin-bottom: 16px;
+    gap: 5px;
+    .title {
+        padding: 8px 12px;
+        border-radius: 3px;
+        font-size: 14px;
+        &.invalid {
+            border-color: $error;
+        }
+    }
+}
+
+.color-wrapper {
+    @include column;
+    gap: 5px;
+    .color-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 16px;
+        .color-option {
+            width: 50px;
+            height: 32px;
+            padding: unset;
+            background-color: var(--base-color);
+            border-radius: 3px;
+            border: unset;
+            border-color: unset;
+            cursor: pointer;
+            &:hover {
+                background-color: var(--hover-color);
+            }
+            &.selected {
+                box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0c66e4;
+                filter: none;
+            }
+        }
+    }
+}
+
+.seperate {
+    width: 100%;
+    height: 1px;
+    background-color: $border-color;
+    border-radius: 3px;
+    margin: 16px 0;
+}
+
+.button-wrapper {
+    @include space-between;
+    width: 100%;
+    button {
+        padding: 6px 12px;
+        font-size: 16px;
+        gap: 8px;
+        .img-wrapper {
+            @include center;
+            height: 16px;
+            width: 16px;
+            img {
+                width: 100%;
+            }
+        }
+    }
+}

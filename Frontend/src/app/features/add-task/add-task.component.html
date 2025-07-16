@@ -115,10 +115,18 @@
     <section>
         <div class="option-section">
             <app-dropdown
-                title="Labels"
+                [title]="labelTitle"
+                [showBackButton]="labelSelector?.viewMode === 'edit' || labelSelector?.viewMode === 'create'"
+                (backClicked)="labelSelector?.exitEdit()"
                 iconSrc="assets/images/label.png"
-                iconActiveSrc="assets/images/label-active.png">
-                
+                iconActiveSrc="assets/images/label-active.png"
+                (closed)="labelSelector?.exitEdit()">
+                <div class="option-content">
+                    <app-label-selector
+                        [(selectedLabels)]="selectedLabels"
+                        #labelSelector>
+                    </app-label-selector>
+                </div>
             </app-dropdown>
             <app-dropdown
                 title="Date"
@@ -135,6 +143,17 @@
                 iconSrc="assets/images/add-person.png"
                 iconActiveSrc="assets/images/add-person-active.png">
             </app-dropdown>
+        </div>
+        <div class="label-wrapper"
+        *ngIf="selectedLabels && selectedLabels.length > 0">
+            <span>Labels</span>
+            <div class="choosen-labels">
+                <span class="label"
+                *ngFor="let labelName of selectedLabels"
+                [ngStyle]="{ 'background-color': getLabelByName(labelName)?.color }">
+                    {{ labelName }}
+                </span>
+            </div>
         </div>
         <div class="description-wrapper">
             <div class="img-wrapper">

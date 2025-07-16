@@ -1,5 +1,6 @@
-import { Component, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LabelSelectorComponent } from '../../../features/add-task/label-selector/label-selector.component';
 
 @Component({
   selector: 'app-dropdown',
@@ -13,6 +14,10 @@ export class DropdownComponent {
   @Input() title: string = '';
   @Input() iconSrc: string = '';
   @Input() iconActiveSrc: string = '';
+  @Input() showBackButton: boolean = false;
+  @Output() backClicked = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
+  @ViewChild('labelSelector') labelSelector?: LabelSelectorComponent;
   
   isOpen = false;
   
@@ -22,7 +27,7 @@ export class DropdownComponent {
   onDocumentClick(target: HTMLElement): void {
     const clickedInside = this.elementRef.nativeElement.contains(target);
     if (!clickedInside) {
-      this.isOpen = false;
+      this.close();
     }
   }
   
@@ -31,6 +36,12 @@ export class DropdownComponent {
   }
   
   close(): void {
+    this.closed.emit();
     this.isOpen = false;
+  }
+  
+  goBackToList(event: MouseEvent): void {
+    event.stopPropagation();
+    this.backClicked.emit();
   }
 }

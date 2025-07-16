@@ -1,0 +1,95 @@
+<ng-container [ngSwitch]="viewMode">
+    <ng-container *ngSwitchCase="'list'">
+        <ul class="label-list">
+            <li class="label-item"
+                *ngFor="let label of availableLabels"
+                (click)="toggleLabel(label.name)">
+                <div class="img-wrapper" (click)="toggleLabel(label.name); $event.stopPropagation()">
+                    <img
+                        *ngIf="!selectedLabels.includes(label.name)"
+                        src="assets/images/unchecked.png"
+                        alt="unchecked"
+                    />
+                    <img
+                        *ngIf="selectedLabels.includes(label.name)"
+                        src="assets/images/checked.png"
+                        alt="checked"
+                    />
+                </div>
+                <span class="label"
+                [style.backgroundColor]="label.color"
+                (click)="toggleLabel(label.name); $event.stopPropagation()">
+                    {{ label.name }}
+                </span>
+                <button class="img-wrapper edit-icon"
+                    (click)="onEdit(label.name); $event.stopPropagation()">
+                    <img src="assets/images/edit.png" alt="edit" />
+                </button>
+            </li>
+        </ul>
+        <button class="new" (click)="onCreate(); $event.stopPropagation()">
+            Create a new label
+        </button>
+    </ng-container>
+    <ng-container *ngSwitchCase="'edit'">
+        <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'create'">
+        <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+    </ng-container>
+    <ng-template #formTemplate>
+        <div class="preview">
+            <span class="label" 
+            [ngStyle]="{ 'background-color': selectedColor || '#e9ebee' }">
+                {{ editLabelTitle }}
+            </span>
+        </div>
+        <div class="title-wrapper">
+            <p>Title</p>
+            <input class="title" [(ngModel)]="editLabelTitle">
+        </div>
+        <div class="color-wrapper">
+            <p>Select a color</p>
+            <div class="color-row">
+                <button class="color-option"
+                *ngFor="let color of labelColors"
+                [ngClass]="{ 'selected': selectedColor === color.color }"
+                [ngStyle]="{
+                    '--base-color': color.color,
+                    '--hover-color': color.hover
+                }"
+                (click)="selectColor(color.color)"
+                ></button>
+            </div>
+        </div>
+        <button class="remove"
+        [disabled]="selectedColor === '#e9ebee'"
+        (click)="removeColor()">
+            <div class="img-wrapper">
+                <img src="assets/images/close.png" alt="">
+            </div>
+            Remove color
+        </button>
+        <div class="seperate"></div>
+        <div class="button-wrapper">
+            <button
+            (click)="onSubmit($event)"
+            type="button">
+                {{ viewMode === 'edit' ? 'Save' : 'Create' }}
+                <div class="img-wrapper">
+                    <img src="assets/images/check-hover.png" alt="Submit">
+                </div>
+            </button>
+            <button class="secondary-btn" 
+            *ngIf="viewMode === 'edit'"
+            type="button"
+            (click)="deleteLabel($event)">
+                Delete
+                <div class="img-wrapper">
+                    <img class="icon-default" src="assets/images/delete.png" alt="Delete">
+                    <img class="icon-hover" src="assets/images/delete-hover.png" alt="Delete Hover">
+                </div>
+            </button>
+        </div>
+    </ng-template>
+</ng-container>
