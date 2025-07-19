@@ -1,7 +1,4 @@
 import {
-  Strike
-} from "./chunk-NBHUCYD4.js";
-import {
   Decoration,
   DecorationSet,
   Extension,
@@ -1921,6 +1918,72 @@ var Paragraph = Node.create({
     return {
       "Mod-Alt-0": () => this.editor.commands.setParagraph()
     };
+  }
+});
+
+// node_modules/@tiptap/extension-strike/dist/index.js
+var inputRegex5 = /(?:^|\s)(~~(?!\s+~~)((?:[^~]+))~~(?!\s+~~))$/;
+var pasteRegex2 = /(?:^|\s)(~~(?!\s+~~)((?:[^~]+))~~(?!\s+~~))/g;
+var Strike = Mark.create({
+  name: "strike",
+  addOptions() {
+    return {
+      HTMLAttributes: {}
+    };
+  },
+  parseHTML() {
+    return [{
+      tag: "s"
+    }, {
+      tag: "del"
+    }, {
+      tag: "strike"
+    }, {
+      style: "text-decoration",
+      consuming: false,
+      getAttrs: (style) => style.includes("line-through") ? {} : false
+    }];
+  },
+  renderHTML({
+    HTMLAttributes
+  }) {
+    return ["s", mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
+  },
+  addCommands() {
+    return {
+      setStrike: () => ({
+        commands
+      }) => {
+        return commands.setMark(this.name);
+      },
+      toggleStrike: () => ({
+        commands
+      }) => {
+        return commands.toggleMark(this.name);
+      },
+      unsetStrike: () => ({
+        commands
+      }) => {
+        return commands.unsetMark(this.name);
+      }
+    };
+  },
+  addKeyboardShortcuts() {
+    return {
+      "Mod-Shift-s": () => this.editor.commands.toggleStrike()
+    };
+  },
+  addInputRules() {
+    return [markInputRule({
+      find: inputRegex5,
+      type: this.type
+    })];
+  },
+  addPasteRules() {
+    return [markPasteRule({
+      find: pasteRegex2,
+      type: this.type
+    })];
   }
 });
 

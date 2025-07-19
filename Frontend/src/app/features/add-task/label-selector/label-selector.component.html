@@ -17,7 +17,10 @@
                     />
                 </div>
                 <span class="label"
-                [style.backgroundColor]="label.color"
+                [ngStyle]="{
+                    '--base-color': label.color,
+                    '--hover-color': label.hover
+                }"
                 (click)="toggleLabel(label.name); $event.stopPropagation()">
                     {{ label.name }}
                 </span>
@@ -40,7 +43,10 @@
     <ng-template #formTemplate>
         <div class="preview">
             <span class="label" 
-            [ngStyle]="{ 'background-color': selectedColor || '#e9ebee' }">
+            [ngStyle]="{
+                '--base-color': selectedColor || '#e9ebee',
+                '--hover-color': getHoverColor(selectedColor)
+            }">
                 {{ editLabelTitle }}
             </span>
         </div>

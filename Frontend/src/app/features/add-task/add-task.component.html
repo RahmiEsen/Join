@@ -129,12 +129,19 @@
                 </div>
             </app-dropdown>
             <app-dropdown
+                #dateDropdownRef
                 title="Date"
                 iconSrc="assets/images/date.png"
                 iconActiveSrc="assets/images/date-active.png">
+                <div class="option-content">
+                    <app-date-selector 
+                        (dateSelected)="onDatesReceived($event)"> 
+                    </app-date-selector>
+                </div>
             </app-dropdown>
             <app-dropdown
                 title="Checklist"
+                [headerTitle]="'Add checklist'"
                 iconSrc="assets/images/checklist.png"
                 iconActiveSrc="assets/images/checklist-active.png">
             </app-dropdown>
@@ -144,15 +151,38 @@
                 iconActiveSrc="assets/images/add-person-active.png">
             </app-dropdown>
         </div>
-        <div class="label-wrapper"
-        *ngIf="selectedLabels && selectedLabels.length > 0">
-            <span>Labels</span>
-            <div class="choosen-labels">
-                <span class="label"
-                *ngFor="let labelName of selectedLabels"
-                [ngStyle]="{ 'background-color': getLabelByName(labelName)?.color }">
-                    {{ labelName }}
+        <div class="options-container">
+            <div class="label-wrapper"
+            *ngIf="selectedLabels && selectedLabels.length > 0">
+                <span>Labels</span>
+                <div class="choosen-labels">
+                    <span class="label"
+                    *ngFor="let labelName of selectedLabels"
+                    [ngStyle]="{
+                        '--base-color': getLabelByName(labelName)?.color,
+                        '--hover-color': getLabelByName(labelName)?.hover
+                    }">
+                        {{ labelName }}
+                    </span>
+                </div>
+            </div>
+            <div class="date-wrapper"
+            *ngIf="selectedStartDate || selectedEndDate">
+                <span>
+                    {{
+                    selectedStartDate && selectedEndDate ? 'Date' :
+                    selectedStartDate ? 'Start date' :
+                    selectedEndDate ? 'Deadline' :
+                    ''
+                    }}
                 </span>
+                <div class="choosen-date">
+                    {{ selectedStartDate ? (selectedStartDate | date: 'dd.MM.yyyy') : '' }}
+                    <ng-container 
+                        *ngIf="selectedStartDate && selectedEndDate">-
+                    </ng-container>
+                    {{ selectedEndDate ? (selectedEndDate | date: 'dd.MM.yyyy') : '' }}
+                </div>
             </div>
         </div>
         <div class="description-wrapper">

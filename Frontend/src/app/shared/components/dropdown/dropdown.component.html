@@ -15,7 +15,7 @@
             (click)="goBackToList($event)">
             <img src="assets/images/go-back.png" alt="Back">
         </button>
-        <p>{{ title }}</p>
+        <p>{{ headerTitle || title }}</p>
         <button class="close"
         type="button" 
         (click)="close()">

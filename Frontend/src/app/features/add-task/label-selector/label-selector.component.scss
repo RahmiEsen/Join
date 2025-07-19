@@ -15,10 +15,13 @@ p {
     height: 32px;
     font-size: 14px;
     font-weight: 500;
-    text-align: left;
+    background-color: var(--base-color);
+    border-radius: 10px;
     padding: 0 12px;
-    border-radius: 3px;
     cursor: pointer;
+    &:hover {
+        background-color: var(--hover-color);
+    }
 }
 
 .label-list {
@@ -85,6 +88,9 @@ p {
     margin: 0 -8px;
     .label {
         cursor: unset;
+        &:hover {
+            box-shadow: $shadow-hover;
+        }
     }
 }
 

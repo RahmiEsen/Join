@@ -1,0 +1,151 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.calendar-header {
+    @include space-between;
+    .btn-wrapper {
+        @include center;
+        gap: 8px;
+        button {
+            all: unset;
+            @include center;
+            width: 24px;
+            height: 24px;
+            border-radius: 3px;
+            padding: 2px 0;
+            cursor: pointer;
+            img {
+                height: 20px;
+            }
+            &:hover {
+                background-color: #091E420F;
+            }
+        }
+    }
+    span {
+        flex: 1;
+        @include center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 14px;
+    .weekday {
+        font-size: 12px;
+        font-weight: 600;
+        text-align: center;
+        padding: 8px;
+        border-radius: 3px;
+    }
+    .day {
+        text-align: center;
+        font-weight: 400;
+        padding: 4px 9px;
+        border: 2px solid transparent;
+        border-radius: 3px;
+        cursor: pointer;
+        &:hover {
+            background-color: #f1f2f4;
+        }
+        &.today {
+            font-weight: 600;
+            color: #0C66E4;
+            border-bottom: 2px solid #0C66E4;
+        }
+        &.start, &.end {
+            color: #0C66E4;
+            &:hover {
+                background-color: #CCE0FF !important;
+            }
+        }
+        &.in-range, &.start, &.end {
+            background-color: #e9f2ff;
+            &:hover {
+                background-color: #f1f2f4;
+            }
+        }
+    }
+}
+
+.date-wrapper {
+    @include column;
+    width: 100%;
+    padding: 8px 0;
+    gap: 8px;
+    .date-input-wrapper {
+        @include column;
+        width: fit-content;
+        gap: 4px;
+        > span {
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .input-row {
+            @include align-center;
+            gap: 8px;
+            .custom-checkbox-label {
+                @include center;
+                cursor: pointer;
+            }
+            .visually-hidden {
+                position: absolute;
+                opacity: 0;
+                width: 0;
+                height: 0;
+                pointer-events: none;
+            }
+            .custom-checkbox {
+                display: inline-block;
+                width: 18px;
+                height: 18px;
+                border: none;
+                background-image: url('/assets/images/unchecked.png');
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+                transition: background-image 0.2s;
+            }
+            .visually-hidden:checked + .custom-checkbox {
+                background-image: url('/assets/images/checked.png');
+            }
+            input[type="text"] {
+                all: unset;
+                @include center;
+                max-width: 90px;
+                font-size: 14px;
+                border: 1px solid $border-color;
+                border-radius: 10px;
+                padding: 6px;
+                &:disabled {
+                    background-color: #f2f2f2;
+                    cursor: not-allowed;
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+}
+
+.button-wrapper {
+    @include column;
+    width: 100%;
+    padding: 8px 0;
+    gap: 8px;
+    button {
+        padding: 6px 12px;
+        font-size: 16px;
+        gap: 8px;
+        .img-wrapper {
+            @include center;
+            height: 16px;
+            width: 16px;
+            img {
+                width: 100%;
+            }
+        }
+    }
+}

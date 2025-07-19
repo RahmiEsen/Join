@@ -16,6 +16,7 @@ export interface ColorConfig {
 interface Label {
   name: string;
   color: string;
+  hover: string;
   isSystemLabel: boolean;
 }
 
@@ -46,9 +47,9 @@ export class LabelSelectorComponent {
   editLabelIndex: number | null = null;
   
   availableLabels = [
-    { name: 'Low', color: '#4bce97', isSystemLabel: true },
-    { name: 'Medium', color: '#9f8fef', isSystemLabel: true },
-    { name: 'Urgent', color: '#c9372c', isSystemLabel: true },
+    { name: 'Low', color: '#4bce97', hover: '#7ee2b8', isSystemLabel: true },
+    { name: 'Medium', color: '#9f8fef', hover: '#b8acf6', isSystemLabel: true },
+    { name: 'Urgent', color: '#c9372c', hover: '#ae2e24', isSystemLabel: true },
   ];
   
   readonly labelColors: ColorConfig[] = [
@@ -138,6 +139,14 @@ export class LabelSelectorComponent {
     this.selectedColor = '#e9ebee';
   }
   
+  public getHoverColor(baseColor: string | null): string {
+    if (!baseColor) {
+      return '#e9ebee';
+    }
+    const colorConfig = this.labelColors.find(c => c.color === baseColor);
+    return colorConfig ? colorConfig.hover : baseColor;
+  }
+  
   onSubmit(event: MouseEvent): void {
     event.stopPropagation();
     if (this.viewMode === 'edit') {
@@ -155,10 +164,13 @@ export class LabelSelectorComponent {
   }
   
   createLabel(): void {
+    // Finde das vollständige Farbobjekt, um die Hover-Farbe zu bekommen
+    const colorConfig = this.labelColors.find(c => c.color === this.selectedColor);
     const newLabel = {
       name: this.editLabelTitle.trim(),
       color: this.selectedColor || '#e9ebee',
-      isSystemLabel: false // 🔥 das musst du ergänzen!
+      hover: colorConfig ? colorConfig.hover : this.selectedColor || '#e9ebee', // <-- Hover-Farbe setzen
+      isSystemLabel: false
     };
     const exists = this.availableLabels.some(
       l => l.name === newLabel.name && l.color === newLabel.color
@@ -171,13 +183,19 @@ export class LabelSelectorComponent {
   
   saveLabel(): void {
     if (this.editLabelIndex === null) return;
+    
+    // Finde auch hier das vollständige Farbobjekt
+    const colorConfig = this.labelColors.find(c => c.color === this.selectedColor);
     const oldName = this.availableLabels[this.editLabelIndex].name;
     const newName = this.editLabelTitle.trim();
+    
     this.availableLabels[this.editLabelIndex] = {
       name: newName,
       color: this.selectedColor || '#e9ebee',
+      hover: colorConfig ? colorConfig.hover : this.selectedColor || '#e9ebee', // <-- Hover-Farbe setzen
       isSystemLabel: this.availableLabels[this.editLabelIndex].isSystemLabel
     };
+    
     const selectedIndex = this.selectedLabels.indexOf(oldName);
     if (selectedIndex !== -1) {
       const updatedSelectedLabels = [...this.selectedLabels];

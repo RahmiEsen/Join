@@ -1,0 +1,99 @@
+<div class="calendar-header">
+    <div class="btn-wrapper">
+        <button (click)="changeYear(-1)">
+            <img src="assets/images/double-prev.png" alt="Vorheriges Jahr">
+        </button>
+        <button (click)="changeMonth(-1)">
+            <img src="assets/images/prev.png" alt="Vorheriger Monat">
+        </button>
+    </div>
+    <span class="month-year">
+        {{ monthNames[currentMonth] }} {{ currentYear }}
+    </span>
+    <div class="btn-wrapper">
+        <button (click)="changeMonth(1)">
+            <img src="assets/images/next.png" alt="Nächster Monat">
+        </button>
+        <button (click)="changeYear(1)">
+            <img src="assets/images/double-next.png" alt="Nächstes Jahr">
+        </button>
+    </div>
+</div>
+<div class="calendar-grid">
+    <div class="weekday" 
+    *ngFor="let day of weekdays">
+        {{ day }}
+    </div>
+    <div class="day"
+    *ngFor="let d of days"
+    (click)="onDayClick(d)"
+    [class.other-month]="!d.isCurrentMonth"
+    [class.today]="isToday(d.date)"
+    [class.start]="isStart(d.date)"
+    [class.end]="isEnd(d.date)"
+    [class.in-range]="isInRange(d.date)">
+        {{ d.date.getDate() }}
+    </div>
+</div>
+<div class="date-wrapper">
+    <div class="date-input-wrapper">
+        <span>Start date</span>
+        <div class="input-row">
+            <label class="custom-checkbox-label" for="start-date-toggle">
+                <input class="visually-hidden"
+                    type="checkbox" 
+                    id="start-date-toggle" 
+                    [(ngModel)]="startEnabled"
+                    (change)="onStartToggle(startEnabled)">
+                <span class="custom-checkbox"></span>
+            </label>
+            <input 
+            type="text" 
+            placeholder="DD-MM-YYYY" 
+            [disabled]="!startEnabled"
+            [(ngModel)]="startDateString"
+            (ngModelChange)="handleDateInput()">
+        </div>
+    </div>
+    <div class="date-input-wrapper">
+        <span>Due date</span>
+        <div class="input-row">
+            <label class="custom-checkbox-label" for="end-date-toggle">
+                <input class="visually-hidden"
+                    type="checkbox" 
+                    id="end-date-toggle" 
+                    [(ngModel)]="endEnabled"
+                    (change)="onEndToggle(endEnabled)">
+                <span class="custom-checkbox"></span>
+            </label>
+            <input 
+            type="text" 
+            placeholder="DD-MM-YYYY"
+            [disabled]="!endEnabled"
+            [(ngModel)]="endDateString"
+            (ngModelChange)="handleDueDateInput()">
+            <!-- <input 
+            type="text" 
+            placeholder="H:mm" 
+            [disabled]="!endEnabled"
+            [value]="selectedEndDate | date:'dd.MM.yyyy'"
+            readonly
+            > -->
+        </div>
+    </div>
+</div>
+<div class="button-wrapper">
+    <button (click)="onSaveDates()">
+        Save
+        <div class="img-wrapper">
+            <img src="assets/images/check-hover.png" alt="Submit">
+        </div>
+    </button>
+    <button class="secondary-btn">
+        Delete
+        <div class="img-wrapper">
+            <img class="icon-default" src="assets/images/delete.png" alt="Delete">
+            <img class="icon-hover" src="assets/images/delete-hover.png" alt="Delete Hover">
+        </div>
+    </button>
+</div>

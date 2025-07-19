@@ -27,6 +27,7 @@ import { TaskService } from '../../shared/services/task.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { LabelSelectorComponent } from './label-selector/label-selector.component';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
 
 const CustomHighlight = Highlight.configure({ multicolor: true }).extend({
   addAttributes() {
@@ -72,6 +73,7 @@ interface highlightColorConfig {
 export interface LabelItem {
   name: string;
   color: string;
+  hover: string;
 }
 
 @Component({
@@ -81,7 +83,8 @@ export interface LabelItem {
     CommonModule, 
     RouterModule, 
     DropdownComponent,
-    LabelSelectorComponent
+    LabelSelectorComponent,
+    DateSelectorComponent
   ],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
@@ -100,6 +103,7 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
   @ViewChild('labelSelector') labelSelectorComponent!: LabelSelectorComponent;
+  @ViewChild('dateDropdownRef') dateDropdownRef!: DropdownComponent;
   
   editor!: Editor;
   isMenuOpen = false;
@@ -138,6 +142,9 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
     { name: 'Idea', color: '#c377e0' },
   ];
   selectedLabels: string[] = [];
+  selectedStartDate: Date | null = null;
+  selectedEndDate: Date | null = null;
+  
   
   readonly colors: ColorConfig[] = [
     { base: '#4bce97', hover: '#7ee2b8' },
@@ -681,13 +688,18 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
   get labelTitle(): string {
     return this.labelSelectorComponent?.title || 'Labels';
   }
-
+  
   public getLabelByName(name: string): LabelItem | undefined {
     if (!this.labelSelectorComponent) {
       return undefined;
     }
-    // Find the label object in the availableLabels array of the child component
     return this.labelSelectorComponent.availableLabels.find(label => label.name === name);
+  }
+  
+  onDatesReceived(dates: { startDate: Date | null; endDate: Date | null }) {
+    this.selectedStartDate = dates.startDate;
+    this.selectedEndDate = dates.endDate;
+    this.dateDropdownRef?.close();
   }
   
   /* private detectUserContext(): void {

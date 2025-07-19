@@ -15,6 +15,7 @@ export class DropdownComponent {
   @Input() iconSrc: string = '';
   @Input() iconActiveSrc: string = '';
   @Input() showBackButton: boolean = false;
+  @Input() headerTitle: string = '';
   @Output() backClicked = new EventEmitter<void>();
   @Output() closed = new EventEmitter<void>();
   @ViewChild('labelSelector') labelSelector?: LabelSelectorComponent;
