@@ -1,0 +1,22 @@
+<div class="description-preview"
+    *ngIf="content"
+    [ngClass]="{ 'fade-out-bottom': isOverflowing && !isExpanded, 'expanded': isExpanded }"
+    [innerHTML]="content"
+    (click)="requestEdit()">
+</div>
+<button class="show-more"
+    *ngIf="!isExpanded && isOverflowing"
+    (click)="toggleExpansion($event)">
+    <div class="img-wrapper">
+        <img src="assets/images/arrow-dropdown-down.png" alt="">
+    </div>
+    Show More
+</button>
+<button class="show-more"
+    *ngIf="isExpanded"
+    (click)="toggleExpansion($event)">
+    <div class="img-wrapper">
+        <img src="assets/images/arrow-dropdown-up.png" alt="">
+    </div>
+    Show Less
+</button>

@@ -1,0 +1,31 @@
+<div class="description-wrapper">
+  <div class="img-wrapper">
+    <img src="assets/images/description.png" alt="Description">
+  </div>
+  <div class="description">
+    <div class="headline">
+      <span>Description</span>
+      <button *ngIf="savedDescription && !editorVisible" (click)="editDescription()">Edit</button>
+    </div>
+    <ng-container *ngIf="!editorVisible">
+      <div class="editor-placeholder" (click)="showEditor()" *ngIf="!savedDescription">
+        <p>Add detailed description ...</p>
+      </div>
+      <app-description-view
+        *ngIf="savedDescription"
+        #descriptionView
+        [content]="safeSavedDescription"
+        [isOverflowing]="isDescriptionOverflowing"
+        [isExpanded]="isDescriptionExpanded"
+        (editRequest)="editDescription()"
+        (expansionToggle)="toggleDescriptionExpansion()">
+      </app-description-view>
+    </ng-container>
+    <app-rich-text-editor 
+      *ngIf="editorVisible"
+      [initialContent]="savedDescription"
+      (save)="saveDescription($event)"
+      (cancel)="cancelDescription()">
+    </app-rich-text-editor>
+  </div>
+</div>

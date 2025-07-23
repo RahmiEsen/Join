@@ -1,0 +1,33 @@
+@use '../../../../../styles/mixins' as *;
+@use '../../../../../styles/variables' as *;
+
+.editor-wrapper {
+    @include column-align;
+    min-width: 272px;
+    min-height: 275px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px inset #091e4224;
+    &.focused {
+        box-shadow: 0 0 0 2px #0c66e4;
+    }
+    .editor-content {
+        position: relative;
+        flex: 2;
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+.btn-wrapper {
+    @include center-start;
+    width: 100%;
+    margin-top: 12px;
+    gap: 12px;
+    button {
+        font-size: 16px;
+        padding: 6px 12px;
+    }
+}

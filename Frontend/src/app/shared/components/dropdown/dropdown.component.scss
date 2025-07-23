@@ -32,9 +32,9 @@
 }
 
 .dropdown-content {
-    position: absolute;
+    position: fixed;
     @include column;
-    top: 35px;
+    top: 210px;
     width: 304px;
     background-color: $white;
     border-radius: 10px;

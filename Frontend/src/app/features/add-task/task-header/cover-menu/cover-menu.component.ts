@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { ColorConfig, CoverImage } from '../../add-task.component';
+import { ColorConfig, CoverImage } from '../../add-task.models';
 
 @Component({
   selector: 'app-cover-menu',

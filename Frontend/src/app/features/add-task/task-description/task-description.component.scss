@@ -1,0 +1,325 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.description-wrapper {
+    @include start;
+    width: 100%;
+    gap: 12px;
+    .img-wrapper {
+        @include center;
+        width: 28px;
+        height: 28px;
+    }
+    .description {
+        @include column;
+        flex: 1;
+        gap: 12px;
+        .headline {
+            @include space-between;
+            span {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            button {
+                all: unset;
+                @include center;
+                font-size: 14px;
+                font-weight: 600;
+                background-color: $menu-hover;
+                border-radius: 3px;
+                padding: 6px 12px;
+                cursor: pointer;
+                &:hover {
+                    background-color: $dark-hover;
+                }
+            }
+        }
+        .editor-placeholder {
+            border: 1px solid $border-color;
+            border-radius: 10px;
+            padding: 8px 12px 32px;
+            cursor: pointer;
+            &:hover {
+                background-color: $menu-hover;
+            }
+            p {
+                font-size: 13px;
+                font-weight: 600;
+            }
+        }
+        .editor-wrapper {
+            @include column-align;
+            min-width: 272px;
+            min-height: 275px;
+            border-radius: 3px;
+            box-shadow: 0 0 0 1px inset #091e4224;
+            .editor-toolbar {
+                position: relative;
+                @include center;
+                width: 100%;
+                padding: 8px;
+                box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1019607843);
+                gap: 4px;
+                z-index: 1;
+                button {
+                    @include center;
+                    height: 24px;
+                    width: 24px;
+                    color: $black;
+                    font-size: inherit;
+                    padding: unset;
+                    border: none;
+                    background: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    &:hover {
+                        background: $menu-hover;
+                        box-shadow: none;
+                    }
+                    img {
+                        width: 18px;
+                    }
+                    &.is-active {
+                        color: $hover;
+                        background: $menu-hover;
+                    }
+                }
+                .dropdown-btn {
+                    width: fit-content;
+                    border: 1px solid transparent;
+                    gap: 0;
+                    .icon {
+                        @include column;
+                    }
+                    span {
+                        @include center;
+                        height: -webkit-fill-available;
+                        font-size: 16px;
+                        padding: 0 4px;
+                        img {
+                            width: 14px;
+                        }
+                        &:hover {
+                            border-top-left-radius: 4px;
+                            background-color: $menu-hover;
+                        }
+                    }
+                    p {
+                        @include center;
+                        height: 100%;
+                        font-size: 12px;
+                        border-left: 1px solid transparent;
+                        border-top-right-radius: 4px;
+                        border-bottom-right-radius: 4px;
+                        padding: 2px;
+                        &:hover {
+                            background-color: $menu-hover;
+                        }
+                    }
+                    &:hover {
+                        background-color: unset;
+                        border: 1px solid $dark-hover;
+                        cursor: default;
+                        p {
+                            border-left: 1px solid $dark-hover;
+                        }
+                    }
+                }
+                .dropdown-case, .dropdown-heading {
+                    left: 30% !important;
+                    gap: unset !important;
+                    button {
+                        all: unset;
+                        font-size: 14px;
+                        padding: 6px 12px;
+                        border-radius: 3px;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: $menu-hover;
+                        }
+                    }
+                }
+                .dropdown-heading {
+                    left: 22% !important;
+                    button:nth-child(1) {
+                        font-size: 14px; // Normal text
+                    }
+                    button:nth-child(2) {
+                        font-size: 22px;
+                        font-weight: bold;
+                    }
+                    button:nth-child(3) {
+                        font-size: 20px;
+                        font-weight: bold;
+                    }
+                    button:nth-child(4) {
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+                    button:nth-child(5) {
+                        font-size: 16px;
+                        font-weight: 600;
+                    }
+                    button:nth-child(6) {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+                    button:nth-child(7) {
+                        font-size: 13px;
+                        font-weight: 400;
+                        color: #666;
+                    }
+                }
+                .dropdown-highlight {
+                    left: 60% !important;
+                    gap: 5px !important;
+                    .highlight-row {
+                    grid-template-columns: repeat(5, 1fr) !important;
+                    }
+                    .deselect-wrapper {
+                        @include center-start;
+                        width: 100%;
+                        padding: 4px 8px;
+                        border-radius: 3px;
+                        margin-top: 5px;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: $menu-hover;
+                        }
+                        .choosen-highlight {
+                            height: 22px;
+                            width: 22px;
+                            border: 2px solid #f29436;
+                        }
+                    }
+                }
+                .dropdown-content {
+                    position: absolute;
+                    @include column;
+                    top: 35px;
+                    left: 55%;
+                    background-color: #FFF;
+                    border-radius: 10px;
+                    border: 1px solid $border-color;
+                    padding: 10px;
+                    gap: 16px;
+                    p {
+                        font-size: 12px;
+                        font-weight: 600;
+                        padding-left: 10px;
+                    }
+                    .color-wrapper {
+                        @include column;
+                        gap: 5px;
+                    }
+                    .color-row, .highlight-row {
+                        display: grid;
+                        grid-template-columns: repeat(10, 1fr);
+                        column-gap: 8px;
+                        .color-option {
+                            height: 22px;
+                            width: 22px;
+                            border: 1px solid #0000001a;
+                            box-shadow: 0 0 0 1.5px transparent, 0 0 0 3px transparent;
+                            cursor: pointer;
+                            &:hover {
+                                border: 2px solid #f29436;
+                            }
+                            &.selected {
+                                border: 2px solid #f29436;
+                            }
+                        }
+                    }
+                }
+            }
+            .editor-content {
+                position: relative;
+                flex: 2;
+                width: 100%;
+                border: none;
+                border-radius: 6px;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        }
+    }
+}
+
+:host ::ng-deep .ProseMirror {
+    all: unset;
+    position: absolute;
+    @include column-start-center;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    font-family: inherit;
+    padding: 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    cursor: text;
+    span, p, ul , ol, li {
+        font-size: 16px;
+        width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        width: 100%;
+        text-align: unset;
+        span {
+            font-size: unset;
+        }
+    }
+    img {
+        width: auto;
+        height: 100%;
+    }
+    p {
+        margin-top: 0.75rem;
+    }
+    li p {
+        margin-top: unset;
+    }
+    .image-wrapper {
+        @include center;
+        width: 80%;
+        margin: 0 auto;
+        padding: 8px;
+        border-radius: 3px;
+        &.ProseMirror-selectednode {
+            box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0c66e4;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    }
+}
+
+:host ::ng-deep .description-preview {
+    p, ul , ol, li {
+        width: 100%;
+    }
+    img {
+        width: 95%;
+    }
+    span {
+        font-size: unset;
+    }
+    p {
+        font-size: 13px;
+    }
+    li p {
+        margin-top: unset;
+    }
+}
+
+:host ::ng-deep .description-preview mark {
+    span {
+        font-size: 16px;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        span {
+            font-size: unset;
+        }
+    }
+}

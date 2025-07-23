@@ -100,7 +100,11 @@
                 </div>
             </div>
         </div>
-        <div class="description-wrapper">
+        <app-task-description
+            [initialDescription]="savedDescription"
+            (descriptionSaved)="saveDescription($event)">
+        </app-task-description>
+        <!-- <div class="description-wrapper">
             <div class="img-wrapper">
                 <img src="assets/images/description.png" alt="Description">
             </div>
@@ -291,7 +295,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- <div class="btn-wrapper">
             <button
             (click)="submitTask()">

@@ -1,0 +1,19 @@
+<div class="editor-wrapper" [ngClass]="{ 'focused': isEditorFocused }">
+    <app-toolbar [editor]="editor"></app-toolbar>
+    <div class="editor-content" #editorContainer></div>
+</div>
+<div class="btn-wrapper">
+    <button (click)="onSave()">
+        Save
+        <div class="img">
+            <img src="assets/images/check-hover.png" alt="Submit">
+        </div>
+    </button>
+    <button class="secondary-btn" (click)="cancel.emit()">
+        Cancel
+        <div class="img-wrapper">
+            <img class="icon-default" src="assets/images/close.png" alt="Cancel">
+            <img class="icon-hover" src="assets/images/close-hover.png" alt="Cancel Hover">
+        </div>
+    </button>
+</div>
