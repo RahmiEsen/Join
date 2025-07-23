@@ -1,0 +1,46 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.checklist-input-wrapper {
+    @include column;
+    width: 100%;
+    gap: 4px;
+    > span {
+        font-weight: 700;
+        font-size: 12px;
+    }
+    .input-row {
+        @include align-center;
+        gap: 8px;
+        input[type="text"] {
+            all: unset;
+            @include center;
+            width: 100%;
+            font-size: 14px;
+            border: 1px solid $border-color;
+            border-radius: 10px;
+            padding: 6px;
+        }
+    }
+}
+
+.button-wrapper {
+    @include column;
+    width: 100%;
+    padding-top: 10px;
+    gap: 8px;
+    button {
+        width: fit-content;
+        font-size: 16px;
+        padding: 6px 12px;
+        gap: 8px;
+        .img-wrapper {
+            @include center;
+            height: 16px;
+            width: 16px;
+            img {
+                width: 100%;
+            }
+        }
+    }
+}

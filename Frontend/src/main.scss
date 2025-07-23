@@ -184,10 +184,6 @@ main {
     right: 0;
 }
 
-/* h1, h2, h3, h4, h5, h6, span, p {
-    color: #44546F;
-} */
-
 .secondary-btn {
     background-color: transparent;
     color: $primary;
@@ -314,7 +310,7 @@ app-success-popup {
     @include center;
 }
 
-app-contact-item, app-contact-list, app-contact-details {
+app-contact-item, app-contact-list, app-contact-details, app-task-header {
     width: 100%;
 }
 
@@ -326,6 +322,8 @@ app-contacts {
 app-add-task {
     @include column-center;
 }
+
+
 
 @media (max-width: 1024px) {
     h1 {

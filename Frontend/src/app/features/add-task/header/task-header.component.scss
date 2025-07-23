@@ -1,0 +1,174 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.header {
+    @include space-start;
+    width: 100%;
+    min-height: 56px;
+    padding: 8px 16px;
+    border-bottom: 1px solid $border-color;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 0px 8px #091e4229, 0px 0px 1px #091e421f;
+    &.has-cover-color {
+        min-height: 116px;
+    }
+    &.has-cover-img {
+        min-height: 116px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .header-options {
+        @include center;
+        gap: 8px;
+        .title {
+            @include center;
+            height: 32px;
+            background-color: $glass;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid $glass-border;
+            box-shadow: $shadow;
+            backdrop-filter: $blur;
+            -webkit-backdrop-filter: $blur;
+            cursor: pointer;
+        }
+        .add-cover, .close {
+            background-color: unset;
+            border-color: unset;
+            border: unset;
+            border-radius: unset;
+            padding: unset;
+            &:hover {
+                background-color: var(--hover-color, $menu-hover);
+                border-radius: 50%;
+                box-shadow: none;
+            }
+            &.has-cover-img-bg {
+                background-color: #fff;
+                border-radius: 50%;
+                &:hover {
+                    background-color: $menu-hover;
+                }
+            }
+        }
+        .cover-menu {
+            position: absolute;
+            @include column;
+            width: 304px;
+            top: 40px;
+            right: -20%;
+            background-color: $white;
+            border-radius: 10px;
+            border: 1px solid $border-color;
+            z-index: 2;
+            p {
+                font-size: 12px;
+                font-weight: 600;
+            }
+            .menu-header {
+                display: flex;
+                align-items: center;
+                padding: 4px 8px;
+                p {
+                    flex: 1;
+                    font-size: 14px;
+                    text-align: center;
+                    padding: 0 32px;
+                }
+                .close {
+                    flex-shrink: 0;
+                    &:hover {
+                        background-color: $close-menu-hover;
+                        border-radius: 8px;
+                        box-shadow: none;
+                    }
+                }
+            }
+            .options-wrapper {
+                @include column;
+                padding: 0 12px 12px;
+                gap: 8px;
+                .option {
+                    @include column;
+                    margin-top: 16px;
+                    gap: 8px;
+                    .colors {
+                        display: grid;
+                        grid-template-columns: repeat(5, 1fr);
+                        gap: 8px;
+                        button {
+                            width: 50px;
+                            height: 32px;
+                            padding: unset;
+                            background-color: var(--base-color);
+                            border-radius: 3px;
+                            border: unset;
+                            border-color: unset;
+                            &:hover {
+                                background-color: var(--hover-color);
+                                box-shadow: unset;
+                            }
+                            &.selected {
+                                box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0c66e4;
+                                filter: none;
+                            }
+                        }
+                    }
+                    .choosen-img {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 8px;
+                        button {
+                            width: 88px;
+                            height: 48px;
+                            border: none;
+                            border-radius: 3px;
+                            padding: unset;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: cover;
+                            &:hover {
+                                filter: saturate(85%) brightness(85%);
+                                box-shadow: none;
+                                background-color: unset;
+                            }
+                            &.selected {
+                                box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #0c66e4;
+                                filter: none;
+                            }
+                        }
+                    }
+                    .loading {
+                        @include center;
+                        width: 100%;
+                    }
+                    .own-img {
+                        background-color: $body;
+                        padding: 6px 12px;
+                        cursor: pointer;
+                        label {
+                            display: block;
+                            width: 100%;
+                            font-size: 14px;
+                            font-weight: 600;
+                            text-align: center;
+                            cursor: pointer;
+                        }
+                        input[type="file"] {
+                            display: none;
+                        }
+                    }
+                    .tip {
+                        font-size: 12px;
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+    }
+}

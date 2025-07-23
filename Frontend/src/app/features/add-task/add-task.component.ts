@@ -28,6 +28,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { LabelSelectorComponent } from './label-selector/label-selector.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { ChecklistSelectorComponent } from './checklist-selector/checklist-selector.component';
+import { CoverMenuComponent } from './header/cover-menu/cover-menu.component';
+import { TaskHeaderComponent } from './header/task-header.component';
 
 const CustomHighlight = Highlight.configure({ multicolor: true }).extend({
   addAttributes() {
@@ -50,12 +53,12 @@ const CustomHighlight = Highlight.configure({ multicolor: true }).extend({
   },
 });
 
-interface ColorConfig { 
+export interface ColorConfig { 
   base: string;
   hover: string;
 }
 
-interface CoverImage {
+export interface CoverImage {
   name: string;
   dataUrl: string;
 }
@@ -84,7 +87,10 @@ export interface LabelItem {
     RouterModule, 
     DropdownComponent,
     LabelSelectorComponent,
-    DateSelectorComponent
+    DateSelectorComponent,
+    ChecklistSelectorComponent,
+    TaskHeaderComponent,
+    CoverMenuComponent,
   ],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
@@ -98,8 +104,11 @@ export interface LabelItem {
 })
 
 export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
-  @ViewChildren('toggleButton') toggleButtonRef!: QueryList<ElementRef>;
-  @ViewChildren('coverMenuContainer') menuElementRef!: QueryList<ElementRef>;
+  /* @ViewChildren('toggleButton') toggleButtonRef!: QueryList<ElementRef>;
+  @ViewChildren('coverMenuContainer') menuElementRef!: QueryList<ElementRef>; */
+  @ViewChild(TaskHeaderComponent, { read: ElementRef }) taskHeaderElementRef!: ElementRef;
+  @ViewChild(CoverMenuComponent, { read: ElementRef }) coverMenuElementRef!: ElementRef;
+
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
   @ViewChild('labelSelector') labelSelectorComponent!: LabelSelectorComponent;
@@ -345,19 +354,17 @@ export class AddTaskComponent implements OnInit, AfterViewInit, OnDestroy  {
       target.closest('.dropdown-btn') ||
       target.closest('.dropdown-content') ||
       target.closest('.options-btn');
-    const menuElement = this.menuElementRef.first?.nativeElement;
-    const toggleButtonElement = this.toggleButtonRef.first?.nativeElement;
-    const clickedInsideCoverMenu =
-      menuElement?.contains(target) || toggleButtonElement?.contains(target);
+    const clickedInsideHeader = this.taskHeaderElementRef?.nativeElement.contains(target);
+    const clickedInsideMenu = this.coverMenuElementRef?.nativeElement.contains(target);
+    if (!clickedInsideHeader && !clickedInsideMenu) {
+        this.closeMenu();
+    }
     if (!isDropdownElement) {
       this.isFontDropdownOpen = false;
       this.isFontHighlighterOpen = false;
       this.isupperLowerCaseOpen = false;
       this.isheadingDropdownOpen = false;
       this.isLabelDropdownOpen = false;
-    }
-    if (!clickedInsideCoverMenu) {
-      this.closeMenu();
     }
   }
   

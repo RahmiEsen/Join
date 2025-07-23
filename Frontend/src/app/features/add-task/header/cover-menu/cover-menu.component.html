@@ -1,0 +1,72 @@
+<div class="cover-menu" [@fadeInOut]>
+    <div class="menu-header">
+        <p>Cover picture</p>
+        <button class="close"
+            type="button"
+            (click)="onCloseMenu()">
+            <img src="assets/images/close.png" alt="Close">
+        </button>
+    </div>
+    <div class="options-wrapper">
+        <div class="option">
+            <p>Colors</p>
+            <div class="colors">
+                <button *ngFor="let color of colors; trackBy: trackByColor"
+                    (click)="onSelectColor(color)"
+                    [ngClass]="{'selected': color === selectedColor}"
+                    [style.--base-color]="color.base"
+                    [style.--hover-color]="color.hover">
+                </button>
+            </div>
+        </div>
+        <div class="option">
+            <p>Attachments</p>
+            <div class="choosen-img" *ngIf="selectedCoverImages.length > 0">
+                <button class="image-button"
+                    *ngFor="let image of displayedCoverImages" 
+                    [ngClass]="{'selected': selectedCoverImageForHeader === image.dataUrl}"
+                    [style.backgroundImage]="'url(' + image.dataUrl + ')'"
+                    (click)="onSelectCoverImage(image)">
+                </button>
+            </div>
+            <div class="loading">
+                <div class="spinner-border" *ngIf="isImageLoading" role="status"></div>
+            </div>
+            <button class="show-more"
+                *ngIf="selectedCoverImages.length > imageDisplayLimit"
+                (click)="onToggleImageDisplay()"
+                type="button">
+                {{ showAllImages ? 'Show Less' : 'Show More' }}
+            </button>
+            <div class="own-img" *ngIf="!isImageLoading">
+                <label class="upload-label" for="coverUpload">
+                    Upload Cover Image
+                    <input
+                        type="file"
+                        id="coverUpload"
+                        accept="image/*"
+                        (change)="onFileSelected($event)"
+                        hidden
+                    />
+                </label>
+            </div>
+            <p class="tip">Tip: To upload a picture, drag it onto the card.</p>
+        </div>
+        <div class="option">
+            <p>Photos from Join</p>
+            <div class="choosen-img">
+                <button class="image-button"
+                    *ngFor="let img of predefinedImages"
+                    [ngClass]="{'selected': selectedCoverImageForHeader === img.url}"
+                    [style.backgroundImage]="'url(' + img.url + ')'"
+                    (click)="onSelectPredefinedImage(img.url)">
+                </button>
+            </div>
+            <p class="tip">
+                By using images from Join, you agree to our 
+                <a [routerLink]="'/privacy-policy'">Privacy Policy</a> and 
+                <a [routerLink]="'/legal-notice'">Legal Notice</a>.
+            </p>
+        </div>
+    </div>
+</div>
