@@ -1,0 +1,13 @@
+<div class="label-wrapper">
+    <span>Labels</span>
+    <div class="choosen-labels">
+        <span class="label"
+              *ngFor="let labelName of selectedLabels"
+                [ngStyle]="{
+                    '--base-color': getLabelByName(labelName)?.color,
+                    '--hover-color': getLabelByName(labelName)?.hover
+                }">
+            {{ labelName }}
+        </span>
+    </div>
+</div>

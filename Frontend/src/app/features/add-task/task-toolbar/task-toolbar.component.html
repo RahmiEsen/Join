@@ -1,0 +1,44 @@
+<div class="option-section">
+    <app-dropdown
+        [title]="labelTitle"
+        [showBackButton]="labelSelector?.viewMode === 'edit' || labelSelector?.viewMode === 'create'"
+        (backClicked)="labelSelector?.exitEdit()"
+        iconSrc="assets/images/label.png"
+        iconActiveSrc="assets/images/label-active.png"
+        (closed)="labelSelector?.exitEdit()">
+        <div class="option-content">
+            <app-label-selector 
+                [selectedLabels]="selectedLabels"
+                (selectedLabelsChange)="selectedLabelsChange.emit($event)"
+                (availableLabelsChange)="availableLabelsChange.emit($event)" #labelSelector>
+            </app-label-selector>
+        </div>
+    </app-dropdown>
+    <app-dropdown
+        #dateDropdownRef
+        title="Date"
+        iconSrc="assets/images/date.png"
+        iconActiveSrc="assets/images/date-active.png">
+        <div class="option-content">
+            <app-date-selector 
+                (dateSelected)="dateSelected.emit($event)"> 
+            </app-date-selector>
+        </div>
+    </app-dropdown>
+    <app-dropdown
+        title="Checklist"
+        [headerTitle]="'Add checklist'"
+        iconSrc="assets/images/checklist.png"
+        iconActiveSrc="assets/images/checklist-active.png">
+        <div class="option-content">
+            <app-checklist-selector>
+
+            </app-checklist-selector>
+        </div>
+    </app-dropdown>
+    <app-dropdown
+        title="Members"
+        iconSrc="assets/images/add-person.png"
+        iconActiveSrc="assets/images/add-person-active.png">
+    </app-dropdown>
+</div>

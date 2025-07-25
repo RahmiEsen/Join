@@ -7,18 +7,17 @@
         'background-image': selectedCoverImageForHeader ? 'url(' + selectedCoverImageForHeader + ')' : 'none',
         'background-color': !selectedCoverImageForHeader && selectedColor ? selectedColor.base : 'transparent'
     }">
-    <div class="title">Test</div>
+    <div class="title"></div>
     <div class="header-options">
         <button class="add-cover"
             type="button"
-            (click)="onToggleMenu()"
+            (click)="toggleMenu()"
             [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
             [style.--hover-color]="selectedColor?.hover">
             <img src="assets/images/background-img.png" alt="Add Cover">
         </button>
         <button class="close"
             type="button"
-            (click)="onCloseTask()"
             [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
             [style.--hover-color]="selectedColor?.hover">
             <img src="assets/images/close.png" alt="Close Task">

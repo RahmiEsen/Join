@@ -2,37 +2,30 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   ChangeDetectionStrategy,
-  HostListener,
   ElementRef,
   ChangeDetectorRef,
-  OnInit,
   OnDestroy,
-  AfterViewInit,
   QueryList,
   ViewChildren,
   ViewChild,
-  AfterViewChecked
+  HostListener,
+  OnInit,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Editor } from '@tiptap/core';
-import { StarterKit } from '@tiptap/starter-kit';
-import { Underline } from '@tiptap/extension-underline';
-import { TextStyle } from '@tiptap/extension-text-style';
-import { Color } from '@tiptap/extension-color';
-import Image from '@tiptap/extension-image';
 import { Subscription } from 'rxjs';
 import { TaskService } from '../../shared/services/task.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
-import { LabelSelectorComponent } from './label-selector/label-selector.component';
-import { DateSelectorComponent } from './date-selector/date-selector.component';
-import { ChecklistSelectorComponent } from './checklist-selector/checklist-selector.component';
 import { CoverMenuComponent } from './task-header/cover-menu/cover-menu.component';
 import { TaskHeaderComponent } from './task-header/task-header.component';
 import { TaskDescriptionComponent } from './task-description/task-description.component';
 import * as TaskModels from './add-task.models';
-import { CustomHighlight, ColorConfig, CoverImage, LabelItem, } from './add-task.models';
+import { LabelItem } from './add-task.models';
+import { ColorConfig, CoverImage } from './add-task.models';
+import { TaskToolbarComponent } from './task-toolbar/task-toolbar.component';
+import { TaskSelectionsComponent } from './task-selections/task-selections.component';
 
 @Component({
   selector: 'app-add-task',
@@ -40,13 +33,11 @@ import { CustomHighlight, ColorConfig, CoverImage, LabelItem, } from './add-task
   imports: [
     CommonModule, 
     RouterModule, 
-    DropdownComponent,
-    LabelSelectorComponent,
-    DateSelectorComponent,
-    ChecklistSelectorComponent,
+    TaskToolbarComponent,
     TaskHeaderComponent,
     CoverMenuComponent,
     TaskDescriptionComponent,
+    TaskSelectionsComponent
   ],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
@@ -64,7 +55,6 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   @ViewChild(CoverMenuComponent, { read: ElementRef }) coverMenuElementRef!: ElementRef;
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('labelSelector') labelSelectorComponent!: LabelSelectorComponent;
   @ViewChild('dateDropdownRef') dateDropdownRef!: DropdownComponent;
   
   editor!: Editor;
@@ -97,12 +87,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   isDescriptionOverflowing = false;
   isDescriptionExpanded = false;
   isLabelDropdownOpen = false;
-  availableLabels = [
-    { name: 'Feature', color: '#61bd4f' },
-    { name: 'Bug', color: '#f2d600' },
-    { name: 'Urgent', color: '#eb5a46' },
-    { name: 'Idea', color: '#c377e0' },
-  ];
+  availableLabels: any[] = [];
   selectedLabels: string[] = [];
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
@@ -114,6 +99,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   readonly primaryColors = TaskModels.primaryColors;
   readonly standardColors = TaskModels.standardColors;
   readonly highlightColors = TaskModels.highlightColors;
+  readonly labelColors = TaskModels.labelColors;
   
   constructor(
     private cdr: ChangeDetectorRef,
@@ -137,15 +123,18 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
+    const clickedInsideMenu = this.coverMenuElementRef?.nativeElement.contains(target);
+    const clickedOnToggleButton = target.closest('.add-cover');
+    if (clickedOnToggleButton) {
+      return;
+    }
+    if (!clickedInsideMenu) {
+      this.closeMenu();
+    }
     const isDropdownElement =
       target.closest('.dropdown-btn') ||
       target.closest('.dropdown-content') ||
       target.closest('.options-btn');
-    const clickedInsideHeader = this.taskHeaderElementRef?.nativeElement.contains(target);
-    const clickedInsideMenu = this.coverMenuElementRef?.nativeElement.contains(target);
-    if (!clickedInsideHeader && !clickedInsideMenu) {
-        this.closeMenu();
-    }
     if (!isDropdownElement) {
       this.isFontDropdownOpen = false;
       this.isFontHighlighterOpen = false;
@@ -323,15 +312,13 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
     }
   }
   
-  get labelTitle(): string {
-    return this.labelSelectorComponent?.title || 'Labels';
-  }
   
   public getLabelByName(name: string): LabelItem | undefined {
-    if (!this.labelSelectorComponent) {
-      return undefined;
-    }
-    return this.labelSelectorComponent.availableLabels.find(label => label.name === name);
+    return this.availableLabels.find(label => label.name === name);
+  }
+  
+  public onAvailableLabelsChange(labels: any[]): void {
+    this.availableLabels = labels;
   }
   
   onDatesReceived(dates: { startDate: Date | null; endDate: Date | null }) {

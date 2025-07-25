@@ -29,8 +29,8 @@
                     (click)="onSelectCoverImage(image)">
                 </button>
             </div>
-            <div class="loading">
-                <div class="spinner-border" *ngIf="isImageLoading" role="status"></div>
+            <div class="loading" *ngIf="isImageLoading">
+                <div class="spinner-border" role="status"></div>
             </div>
             <button class="show-more"
                 *ngIf="selectedCoverImages.length > imageDisplayLimit"

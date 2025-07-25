@@ -29,39 +29,36 @@ export class CoverMenuComponent {
   @Input() imageDisplayLimit: number = 6;
   @Input() showAllImages: boolean = false;
   @Input() predefinedImages: { url: string }[] = [];
-
-  // Outputs: Ereignisse, die an die Eltern-Komponente gesendet werden
   @Output() closeMenuRequest = new EventEmitter<void>();
   @Output() colorSelected = new EventEmitter<ColorConfig>();
   @Output() coverImageSelected = new EventEmitter<CoverImage>();
   @Output() imageUploaded = new EventEmitter<Event>();
   @Output() toggleDisplayRequest = new EventEmitter<void>();
   @Output() predefinedImageSelected = new EventEmitter<string>();
-
-  // Methoden, die die Events auslösen
+  
   onCloseMenu(): void {
     this.closeMenuRequest.emit();
   }
-
+  
   onSelectColor(color: ColorConfig): void {
     this.colorSelected.emit(color);
   }
-
+  
   onSelectCoverImage(image: CoverImage): void {
     this.coverImageSelected.emit(image);
   }
-
+  
   onFileSelected(event: Event): void {
     this.imageUploaded.emit(event);
   }
-
+  
   onToggleImageDisplay(): void {
     this.toggleDisplayRequest.emit();
   }
-
+  
   onSelectPredefinedImage(url: string): void {
     this.predefinedImageSelected.emit(url);
   }
-
+  
   trackByColor = (_: number, color: ColorConfig) => color.base;
 }

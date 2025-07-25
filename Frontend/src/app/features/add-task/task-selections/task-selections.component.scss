@@ -1,0 +1,9 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.options-container {
+    @include start;
+    width: 100%;
+    padding-left: 40px;
+    gap: 20px;
+}

@@ -1,0 +1,31 @@
+@use '../../../../../styles/mixins' as *;
+@use '../../../../../styles/variables' as *;
+
+.label-wrapper {
+    @include column-start;
+    gap: 5px;
+    span {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .choosen-labels {
+        @include center;
+        gap: 8px;
+        .label {
+            @include center;
+            min-width: 48px;
+            max-width: 100%;
+            height: 32px;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: var(--base-color);
+            border-radius: 10px;
+            padding: 0 12px;
+            cursor: pointer;
+            &:hover {
+                background-color: var(--hover-color);
+                box-shadow: $shadow-hover;
+            }
+        }
+    }
+}

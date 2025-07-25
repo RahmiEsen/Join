@@ -1,0 +1,19 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.option-section {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-left: 40px;
+    gap: 10px;
+}
+
+.option-content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 8px 12px;
+    gap: 8px;
+}

@@ -1,0 +1,8 @@
+<div class="date-wrapper">
+    <span>{{ title }}</span>
+    <div class="choosen-date">
+        {{ startDate ? (startDate | date: 'dd.MM.yyyy') : '' }}
+        <ng-container *ngIf="startDate && endDate">-</ng-container>
+        {{ endDate ? (endDate | date: 'dd.MM.yyyy') : '' }}
+    </div>
+</div>

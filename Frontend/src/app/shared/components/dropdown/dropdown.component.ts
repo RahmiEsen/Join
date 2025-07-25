@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LabelSelectorComponent } from '../../../features/add-task/label-selector/label-selector.component';
+import { LabelSelectorComponent } from '../../../features/add-task/task-toolbar/label-selector/label-selector.component';
 
 @Component({
   selector: 'app-dropdown',

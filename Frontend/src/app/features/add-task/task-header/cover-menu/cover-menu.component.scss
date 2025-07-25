@@ -21,6 +21,21 @@
     }
 }
 
+.show-more {
+    background-color: #091E420F;
+    color: #000;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid $black;
+    border-radius: 3px;
+    padding: 3px 0;
+    gap: unset;
+    &:hover {
+        box-shadow: none;
+        background-color: #091E4224;
+    }
+}
+
 .cover-menu {
     position: absolute;
     @include column;
@@ -113,12 +128,16 @@
                 width: 100%;
             }
             .own-img {
-                background-color: $body;
+                background-color: rgba(9, 30, 66, 0.0588235294);
+                border-radius: 10px;
                 padding: 6px 12px;
+                margin: 0;
                 cursor: pointer;
+                &:hover {
+                    background-color: rgba(9, 30, 66, 0.1411764706);
+                }
                 label {
                     display: block;
-                    width: 100%;
                     font-size: 14px;
                     font-weight: 600;
                     text-align: center;

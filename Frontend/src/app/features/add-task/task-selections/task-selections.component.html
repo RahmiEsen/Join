@@ -1,0 +1,12 @@
+<div class="options-container">
+    <app-selected-label
+        *ngIf="selectedLabels && selectedLabels.length > 0"
+        [selectedLabels]="selectedLabels"
+        [availableLabels]="availableLabels">
+    </app-selected-label>
+    <app-selected-date 
+        *ngIf="startDate || endDate"
+        [startDate]="startDate"
+        [endDate]="endDate">
+    </app-selected-date>
+</div>

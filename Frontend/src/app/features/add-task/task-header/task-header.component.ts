@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ColorConfig } from '../add-task.models';
 
@@ -12,16 +12,11 @@ import { ColorConfig } from '../add-task.models';
 })
 
 export class TaskHeaderComponent {
+  @Output() menuToggle = new EventEmitter<void>();
   @Input() selectedColor: ColorConfig | null = null;
   @Input() selectedCoverImageForHeader: string | null = null;
-  @Output() toggleMenuRequest = new EventEmitter<void>();
-  @Output() closeTaskRequest = new EventEmitter<void>();
   
-  onToggleMenu(): void {
-    this.toggleMenuRequest.emit();
-  }
-  
-  onCloseTask(): void {
-    this.closeTaskRequest.emit();
+  toggleMenu(): void {
+    this.menuToggle.emit();
   }
 }
