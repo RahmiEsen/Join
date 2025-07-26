@@ -1,5 +1,5 @@
 <div class="contact" 
-[ngClass]="{ active: isActive }" 
+[class.active]="isActive" 
 (click)="contactClicked.emit()">
   <div class="avatar" [ngStyle]="{ 'background-color': contact.color }">
     {{ getInitials(contact.firstName, contact.lastName) }}

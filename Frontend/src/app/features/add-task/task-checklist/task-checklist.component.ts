@@ -131,6 +131,7 @@ export class TaskChecklistComponent implements AfterViewChecked {
   @Input() title: string = '';
   @Output() checklistDeleted = new EventEmitter<void>();
   
+  
   public showAddElement = false;
   public titleInputFocused = false;
   public tasks: { text: string; checked: boolean }[] = [];  
@@ -141,6 +142,7 @@ export class TaskChecklistComponent implements AfterViewChecked {
   public progress = 0;
   public areCompletedTasksHidden = false;
   public previousValidTitle: string = '';
+  public activeDropdown: { taskIndex: number; type: 'date' | 'assign' } | null = null;
   
   constructor(private cd: ChangeDetectorRef) {}
   
@@ -273,5 +275,17 @@ export class TaskChecklistComponent implements AfterViewChecked {
     if (this.editingTaskIndex === index) {
       this.cancelEditTask();
     }
+  }
+
+  public toggleDropdown(index: number, type: 'date' | 'assign'): void {
+    if (this.activeDropdown && this.activeDropdown.taskIndex === index && this.activeDropdown.type === type) {
+      this.activeDropdown = null; // Schließe das Dropdown, wenn es bereits offen ist
+    } else {
+      this.activeDropdown = { taskIndex: index, type: type }; // Öffne das angeklickte Dropdown
+    }
+  }
+
+  public isDropdownOpen(index: number, type: 'date' | 'assign'): boolean {
+    return this.activeDropdown?.taskIndex === index && this.activeDropdown?.type === type;
   }
 }

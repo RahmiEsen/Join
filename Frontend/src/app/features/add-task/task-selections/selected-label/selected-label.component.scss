@@ -9,23 +9,42 @@
         font-weight: 600;
     }
     .choosen-labels {
-        @include center;
-        gap: 8px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        width: 210px;
+        gap: 5px;
         .label {
-            @include center;
-            min-width: 48px;
-            max-width: 100%;
-            height: 32px;
+            display: inline-block;
+            text-align: center;
             font-size: 14px;
             font-weight: 500;
             background-color: var(--base-color);
             border-radius: 10px;
-            padding: 0 12px;
+            padding: 4px 8px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
             cursor: pointer;
             &:hover {
                 background-color: var(--hover-color);
                 box-shadow: $shadow-hover;
             }
+        }
+    }
+    .show-more {
+        width: 100%;
+        background-color: #091e420f;
+        color: #000;
+        font-size: 12px;
+        font-weight: 500;
+        border: none;
+        border-radius: 10px;
+        padding: 3px 0;
+        margin-top: 5px;
+        gap: unset;
+        &:hover {
+            box-shadow: none;
+            background-color: #091e4224;
         }
     }
 }

@@ -1,0 +1,24 @@
+@use '../../../../../styles/mixins' as *;
+@use '../../../../../styles/variables' as *;
+
+:host ::ng-deep app-contact-item .contact {
+    @include center;
+    padding: 8px 12px;
+    transition: all 100ms ease-in-out;
+    gap: 15px;
+    cursor: pointer;
+    .avatar {
+        height: 34px !important;
+        width: 34px !important;
+        border: unset !important;
+        box-shadow: 0 0 0 1px #ffffff, 0 0 0 2px #e1e1e1;
+    }
+    .info-wrapper {
+        .contact-name {
+            font-size: 14px;
+        }
+        .contact-mail {
+            font-size: 13px;
+        }
+    }
+}

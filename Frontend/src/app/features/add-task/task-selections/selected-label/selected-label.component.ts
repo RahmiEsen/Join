@@ -13,8 +13,13 @@ import { LabelItem } from '../../add-task.models';
 export class SelectedLabelComponent {
   @Input() selectedLabels: string[] = [];
   @Input() availableLabels: any[] = [];
+  showAllLabels = false;
   
   public getLabelByName(name: string): LabelItem | undefined {
     return this.availableLabels.find(label => label.name === name);
+  }
+  
+  toggleShowAll() {
+    this.showAllLabels = !this.showAllLabels;
   }
 }

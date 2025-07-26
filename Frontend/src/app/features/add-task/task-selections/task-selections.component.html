@@ -11,4 +11,8 @@
         [endDate]="endDate"
         (click)="onDateClick(); $event.stopPropagation()">
     </app-selected-date>
+    <app-selected-members 
+        [members]="selectedMembers"
+        (memberAreaClicked)="onMemberAreaClick()">
+    </app-selected-members>
 </div>

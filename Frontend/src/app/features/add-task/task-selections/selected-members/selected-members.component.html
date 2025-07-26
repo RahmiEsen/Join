@@ -1,0 +1,22 @@
+<div class="member-wrapper" 
+    *ngIf="members.length > 0">
+    <span class="title">Members</span>
+    <div class="choosen-member">
+        <div class="contact-wrapper">
+            <div class="avatar"
+                *ngFor="let member of members | slice:0:4"
+                [style.backgroundColor]="getMemberColor(member)"
+                [title]="member.firstName + ' ' + member.lastName">
+                {{ getInitials(member) }}
+            </div>
+        </div>
+        <p class="rest" *ngIf="members.length > 4">
+        +{{ members.length - 4 }}
+        </p>
+    </div>
+    <div class="seperate"></div>
+    <button class="add"
+    (click)="onMembersClick(); $event.stopPropagation()">
+        <img src="assets/images/add-person.png" alt="">
+    </button>
+</div>

@@ -68,19 +68,12 @@
                     </div>
                     <div class="checklist-task"
                         (click)="startEditingTask(i)">
-                        <ng-container 
-                            *ngIf="editingTaskIndex !== i; else editMode">
+                        <ng-container>
                             <p 
                             [ngClass]="{ 'completed': task.checked }">
                                 {{ task.text }}
                             </p>
                             <div class="options">
-                                <div class="date">
-                                    <img src="assets/images/date.png" alt="Deadline">
-                                </div>
-                                <div class="assign">
-                                    <img src="assets/images/add-person.png" alt="Assigned to">
-                                </div>
                                 <div class="delete"
                                 (click)="deleteTask(i); $event.stopPropagation()">
                                     <img src="assets/images/delete.png" alt="Delete">
@@ -111,20 +104,20 @@
                                         </div>
                                     </button>
                                 </div>
-                                <div class="option">
+                                <!-- <div class="option">
                                     <button>
                                         <div class="img-wrapper">
                                             <img src="assets/images/date.png" alt="Deadline">
                                         </div>
                                         Assign
                                     </button>
-                                    <button >
+                                    <button>
                                         <div class="img-wrapper">
                                             <img src="assets/images/add-person.png" alt="Assigned to">
                                         </div>
                                         Deadline
                                     </button>
-                                </div>
+                                </div> -->
                             </div>
                         </ng-template>
                     </div>
@@ -145,7 +138,7 @@
         (click)="stopPropagation($event)">
         <input type="text" 
         (keydown.enter)="addTask()"
-        [(ngModel)]="newTaskText" 
+        [(ngModel)]="newTaskText"
         placeholder="Add element">
         <div class="add-element-options">
             <div class="button-wrapper">
@@ -163,20 +156,6 @@
                         <img class="icon-default" src="assets/images/close.png" alt="Delete">
                         <img class="icon-hover" src="assets/images/close-hover.png" alt="Delete Hover">
                     </div>
-                </button>
-            </div>
-            <div class="option">
-                <button>
-                    <div class="img-wrapper">
-                        <img src="assets/images/date.png" alt="Deadline">
-                    </div>
-                    Assign
-                </button>
-                <button >
-                    <div class="img-wrapper">
-                        <img src="assets/images/add-person.png" alt="Assigned to">
-                    </div>
-                    Deadline
                 </button>
             </div>
         </div>

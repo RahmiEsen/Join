@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectedDateComponent } from './selected-date/selected-date.component';
 import { SelectedLabelComponent } from './selected-label/selected-label.component';
+import { SelectedMembersComponent } from './selected-members/selected-members.component';
+import { Contact } from '../../../shared/models/contact.model';
 
 @Component({
   selector: 'app-task-selections',
@@ -9,7 +11,8 @@ import { SelectedLabelComponent } from './selected-label/selected-label.componen
   imports: [
     CommonModule,
     SelectedDateComponent, 
-    SelectedLabelComponent
+    SelectedLabelComponent,
+    SelectedMembersComponent
   ],
   templateUrl: './task-selections.component.html',
   styleUrl: './task-selections.component.scss'
@@ -22,6 +25,8 @@ export class TaskSelectionsComponent {
   @Input() endDate: Date | null = null;
   @Output() labelAreaClicked = new EventEmitter<void>();
   @Output() dateAreaClicked = new EventEmitter<void>();
+  @Output() memberAreaClicked = new EventEmitter<void>();
+  @Input() selectedMembers: Contact[] = [];
   
   onLabelClick(): void {
     this.labelAreaClicked.emit();
@@ -29,5 +34,9 @@ export class TaskSelectionsComponent {
   
   onDateClick(): void {
     this.dateAreaClicked.emit();
+  }
+  
+  onMemberAreaClick(): void {
+    this.memberAreaClicked.emit();
   }
 }

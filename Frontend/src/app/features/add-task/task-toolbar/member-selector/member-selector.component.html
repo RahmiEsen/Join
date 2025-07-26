@@ -1,0 +1,17 @@
+<div *ngIf="isLoading">
+    <p>Loading contacts...</p>
+</div>
+<div *ngIf="!isLoading">
+    <ng-container *ngIf="contacts.length > 0; else noContacts">
+        <app-contact-item 
+            *ngFor="let contact of contacts" 
+            [contact]="contact" 
+            [getInitials]="getInitials"
+            [isActive]="isSelected(contact)"
+            (click)="selectMember(contact)">
+        </app-contact-item>
+    </ng-container>
+    <ng-template #noContacts>
+        <p>No contacts found.</p>
+    </ng-template>
+</div>

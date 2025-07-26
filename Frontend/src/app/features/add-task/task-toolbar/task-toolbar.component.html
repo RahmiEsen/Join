@@ -42,8 +42,15 @@
         </div>
     </app-dropdown>
     <app-dropdown
+        #memberDropdown
         title="Members"
         iconSrc="assets/images/add-person.png"
         iconActiveSrc="assets/images/add-person-active.png">
+        <div class="option-content">
+            <app-member-selector
+                [contacts]="allContacts"
+                (selectionChange)="updateMembers($event)">
+            </app-member-selector>
+        </div>
     </app-dropdown>
 </div>

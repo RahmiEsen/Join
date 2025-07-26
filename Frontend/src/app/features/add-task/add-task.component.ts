@@ -29,6 +29,7 @@ import { ColorConfig, CoverImage } from './add-task.models';
 import { TaskToolbarComponent } from './task-toolbar/task-toolbar.component';
 import { TaskSelectionsComponent } from './task-selections/task-selections.component';
 import { TaskChecklistComponent } from './task-checklist/task-checklist.component';
+import { Contact } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-add-task',
@@ -98,6 +99,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
   checklists: { title: string }[] = [];
+  selectedMembers: Contact[] = [];
   
   readonly colors = TaskModels.coverColors;
   readonly imageDisplayLimit = TaskModels.imageDisplayLimit;
@@ -354,6 +356,10 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   
   public onDateSelectionClicked(): void {
     this.taskToolbar.openDateDropdown();
+  }
+  
+  public onMemberSelectionClicked(): void {
+    this.taskToolbar.openMemberDropdown();
   }
   
   /* private detectUserContext(): void {

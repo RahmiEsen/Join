@@ -28,16 +28,19 @@
             (availableLabelsChange)="onAvailableLabelsChange($event)"
             (dateSelected)="onDatesReceived($event)"
             (dateCleared)="onDatesCleared()"
-            (checklistCreated)="addChecklist($event)">
+            (checklistCreated)="addChecklist($event)"
+            (selectedMembersChange)="selectedMembers = $event">
         </app-task-toolbar>
         <app-task-selections
-            *ngIf="(selectedLabels && selectedLabels.length > 0) || selectedStartDate || selectedEndDate"
+            *ngIf="(selectedLabels && selectedLabels.length > 0) || selectedStartDate || selectedEndDate || (selectedMembers && selectedMembers.length > 0)"
             [selectedLabels]="selectedLabels"
             [availableLabels]="availableLabels"
             [startDate]="selectedStartDate"
             [endDate]="selectedEndDate"
+            [selectedMembers]="selectedMembers"
             (labelAreaClicked)="onLabelSelectionClicked()"
-            (dateAreaClicked)="onDateSelectionClicked()">
+            (dateAreaClicked)="onDateSelectionClicked()"
+            (memberAreaClicked)="onMemberSelectionClicked()">
         </app-task-selections>
         <app-task-description
             [initialDescription]="savedDescription"

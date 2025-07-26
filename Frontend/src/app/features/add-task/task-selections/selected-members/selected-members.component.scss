@@ -1,0 +1,52 @@
+@use '../../../../../styles/mixins' as *;
+@use '../../../../../styles/variables' as *;
+
+.member-wrapper {
+    @include column-start;
+    gap: 5px;
+    span {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .choosen-member {
+        @include center;
+        gap: 7px;
+        .contact-wrapper {
+            @include center;
+            .avatar {
+                @include center;
+                height: 30px;
+                width: 30px;
+                color: #FFF;
+                font-size: 12px;
+                border: unset;
+                border-radius: 50%;
+                box-shadow: 0 0 0 1px #ffffff, 0 0 0 2px #e1e1e1;
+                cursor: pointer;
+            }
+        }
+        .rest {
+            font-size: 14px;
+        }
+    }
+    .seperate {
+        width: 100%;
+        height: 2px;
+        background-color: $border-color;
+        margin: 5px 0px;
+    }
+    .add {
+        @include center;
+        background-color: #091e420f;
+        border-radius: 50%;
+        border: 1px solid $border-color;
+        padding: 6px;
+        cursor: pointer;
+        img {
+            height: 20px;
+        }
+        &:hover {
+            background-color: #091e4224;
+        }
+    }
+}

@@ -14,8 +14,8 @@ import { getRandomColor } from '../../../shared/utils/color.util';
 
 export class ContactItemComponent {
   @Input() contact!: Contact;
-  @Input() isActive: boolean = false;
   @Input() getInitials!: (first: string, last: string) => string;
   @Output() contactClicked = new EventEmitter<void>();
+  @Input() isActive: boolean = false;
   newContactColor = getRandomColor();
 }

@@ -2,7 +2,7 @@
     <span>Labels</span>
     <div class="choosen-labels">
         <span class="label"
-              *ngFor="let labelName of selectedLabels"
+                *ngFor="let labelName of (showAllLabels ? selectedLabels : (selectedLabels | slice:0:6))"
                 [ngStyle]="{
                     '--base-color': getLabelByName(labelName)?.color,
                     '--hover-color': getLabelByName(labelName)?.hover
@@ -10,4 +10,9 @@
             {{ labelName }}
         </span>
     </div>
+    <button class="show-more"
+        *ngIf="selectedLabels.length > 6"
+        (click)="toggleShowAll(); $event.stopPropagation()">
+        {{ showAllLabels ? 'Show less' : 'Show more' }}
+    </button>
 </div>
