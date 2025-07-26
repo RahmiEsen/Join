@@ -2,11 +2,13 @@
     <app-selected-label
         *ngIf="selectedLabels && selectedLabels.length > 0"
         [selectedLabels]="selectedLabels"
-        [availableLabels]="availableLabels">
+        [availableLabels]="availableLabels"
+        (click)="onLabelClick(); $event.stopPropagation()">
     </app-selected-label>
     <app-selected-date 
         *ngIf="startDate || endDate"
         [startDate]="startDate"
-        [endDate]="endDate">
+        [endDate]="endDate"
+        (click)="onDateClick(); $event.stopPropagation()">
     </app-selected-date>
 </div>

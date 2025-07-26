@@ -21,7 +21,7 @@
             border-radius: 10px;
             padding: 6px;
             &:focus {
-                border-color: $hover;
+                box-shadow: 0 0 0 2px #0c66e4;
             }
         }
     }

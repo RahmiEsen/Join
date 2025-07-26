@@ -69,8 +69,12 @@ export class TaskDescriptionComponent implements OnChanges {
   }
   
   private isEmptyContent(content: string): boolean {
-    const stripped = content.replace(/<[^>]*>/g, '').trim();
-    return !stripped;
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = content;
+    const textContent = tempElement.textContent;
+    const hasText = !!textContent && textContent.trim().length > 0;
+    const hasImage = tempElement.querySelector('img') !== null;
+    return !hasText && !hasImage;
   }
   
   private checkOverflow(): void {

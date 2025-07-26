@@ -1,13 +1,20 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LabelSelectorComponent } from '../../../features/add-task/task-toolbar/label-selector/label-selector.component';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-dropdown',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dropdown.component.html',
-  styleUrls: ['./dropdown.component.scss']
+  styleUrls: ['./dropdown.component.scss'],
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [style({ opacity: 0 }), animate('200ms ease-in', style({ opacity: 1 }))]),
+      transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))])
+    ])
+  ]
 })
 
 export class DropdownComponent {

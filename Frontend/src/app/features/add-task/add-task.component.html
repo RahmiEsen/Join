@@ -26,19 +26,30 @@
         <app-task-toolbar
             [(selectedLabels)]="selectedLabels"
             (availableLabelsChange)="onAvailableLabelsChange($event)"
-            (dateSelected)="onDatesReceived($event)">
+            (dateSelected)="onDatesReceived($event)"
+            (dateCleared)="onDatesCleared()"
+            (checklistCreated)="addChecklist($event)">
         </app-task-toolbar>
         <app-task-selections
             *ngIf="(selectedLabels && selectedLabels.length > 0) || selectedStartDate || selectedEndDate"
             [selectedLabels]="selectedLabels"
             [availableLabels]="availableLabels"
             [startDate]="selectedStartDate"
-            [endDate]="selectedEndDate">
+            [endDate]="selectedEndDate"
+            (labelAreaClicked)="onLabelSelectionClicked()"
+            (dateAreaClicked)="onDateSelectionClicked()">
         </app-task-selections>
         <app-task-description
             [initialDescription]="savedDescription"
             (descriptionSaved)="saveDescription($event)">
         </app-task-description>
+        <ng-container *ngIf="checklists.length > 0">
+            <app-task-checklist
+                *ngFor="let checklist of checklists; let i = index"
+                (checklistDeleted)="removeChecklist(i)"
+                [title]="checklist.title">
+            </app-task-checklist>
+        </ng-container>
     </section>
 </div>
 

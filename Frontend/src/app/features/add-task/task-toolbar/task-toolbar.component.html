@@ -1,5 +1,6 @@
 <div class="option-section">
     <app-dropdown
+        #labelDropdown [title]="labelTitle"
         [title]="labelTitle"
         [showBackButton]="labelSelector?.viewMode === 'edit' || labelSelector?.viewMode === 'create'"
         (backClicked)="labelSelector?.exitEdit()"
@@ -21,7 +22,9 @@
         iconActiveSrc="assets/images/date-active.png">
         <div class="option-content">
             <app-date-selector 
-                (dateSelected)="dateSelected.emit($event)"> 
+                (closeRequested)="dateDropdownRef.close()"
+                (dateSelected)="dateSelected.emit($event)"
+                (dateCleared)="dateCleared.emit()"> 
             </app-date-selector>
         </div>
     </app-dropdown>
@@ -29,10 +32,12 @@
         title="Checklist"
         [headerTitle]="'Add checklist'"
         iconSrc="assets/images/checklist.png"
-        iconActiveSrc="assets/images/checklist-active.png">
+        iconActiveSrc="assets/images/checklist-active.png"
+        #checklistDropdown>
         <div class="option-content">
-            <app-checklist-selector>
-
+            <app-checklist-selector 
+                (closeRequested)="checklistDropdown.close()"
+                (checklistCreated)="handleChecklistCreated($event)">
             </app-checklist-selector>
         </div>
     </app-dropdown>

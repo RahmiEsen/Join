@@ -7,6 +7,7 @@ import { ChecklistSelectorComponent } from './checklist-selector/checklist-selec
 
 @Component({
   selector: 'app-task-toolbar',
+  standalone: true,
   imports: [
     CommonModule,
     DropdownComponent,
@@ -23,7 +24,23 @@ export class TaskToolbarComponent {
   @Output() selectedLabelsChange = new EventEmitter<string[]>();
   @Output() dateSelected = new EventEmitter<{ startDate: Date | null; endDate: Date | null }>();
   @Output() availableLabelsChange = new EventEmitter<any[]>();
+  @Output() checklistCreated = new EventEmitter<string>();
+  @Output() dateCleared = new EventEmitter<void>();
   @ViewChild('labelSelector') labelSelector?: LabelSelectorComponent;
+  @ViewChild('labelDropdown') labelDropdown!: DropdownComponent;
+  @ViewChild('dateDropdownRef') dateDropdownRef!: DropdownComponent;
+  
+  handleChecklistCreated(title: string): void {
+    this.checklistCreated.emit(title);
+  }
+  
+  public openLabelDropdown(): void {
+    this.labelDropdown.toggle();
+  }
+  
+  public openDateDropdown(): void {
+    this.dateDropdownRef.toggle();
+  }
   
   labelTitle = 'Labels';
 }

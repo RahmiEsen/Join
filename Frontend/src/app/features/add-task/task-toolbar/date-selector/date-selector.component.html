@@ -35,7 +35,8 @@
         {{ d.date.getDate() }}
     </div>
 </div>
-<div class="date-wrapper">
+<div class="date-wrapper"
+(keydown.enter)="onSaveDates()">
     <div class="date-input-wrapper">
         <span>Start date</span>
         <div class="input-row">
@@ -89,7 +90,8 @@
             <img src="assets/images/check-hover.png" alt="Submit">
         </div>
     </button>
-    <button class="secondary-btn">
+    <button class="secondary-btn"
+    (click)="clearDates()">
         Delete
         <div class="img-wrapper">
             <img class="icon-default" src="assets/images/delete.png" alt="Delete">

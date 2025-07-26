@@ -1,0 +1,242 @@
+@use '../../../../styles/mixins' as *;
+@use '../../../../styles/variables' as *;
+
+.checklist-wrapper {
+    @include column;
+    width: 100%;
+    gap: 12px;
+    .img-wrapper {
+        @include center;
+        width: 16px;
+        height: 16px;
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    .checklist-header {
+        @include center;
+        gap: 10px;
+        .checklist-titel {
+            flex: 1;
+            @include space-between;
+            input {
+                flex: 1;
+                height: 32px;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 8px 12px;
+                border: none;
+                cursor: pointer;
+                &:focus {
+                    border: 2px solid #0c66e4;
+                }
+            }
+            button {
+                height: 32px;
+                font-size: 14px;
+                padding: 0 12px;
+                gap: 8px;
+                .img-wrapper {
+                    height: 14px;
+                    width: 14px;
+                }
+            }
+        }
+    }
+    .checklist {
+        @include column;
+        width: 100%;
+        .progress-bar-wrapper {
+            @include center;
+            width: 100%;
+            gap: 10px;
+            .progress-info {
+                @include center;
+                width: 16px;
+                height: 16px;
+                p {
+                    font-size: 12px;
+                }
+            }
+            .progress-bar {
+                width: 100%;
+                height: 6px;
+                background-color: #091e4221;
+                border-radius: 10px;
+                .progress-bar-fill {
+                    height: 100%;
+                    border-radius: 10px;
+                    transition: width 400ms ease-in-out, background-color 400ms ease-in-out;
+                    &.low {
+                        background-color: #38b000;
+                    }
+                    &.medium {
+                        background-color: #008000;
+                    }
+                    &.good {
+                        background-color: #006400;
+                    }
+                    &.complete {
+                        background-color: #004b23;
+                    }
+                }
+            }
+        }
+        .info {
+            font-size: 14px;
+            padding: 6px 8px;
+            margin-left: 26px;
+        }
+        .list-wrapper {
+            @include column;
+            width: 100%;
+            .task {
+                @include center;
+                width: 100%;
+                gap: 10px;
+                .img-wrapper {
+                    cursor: pointer;
+                }
+                .task-wrapper {
+                    width: 100%;
+                }
+                .checklist-task {
+                    position: relative;
+                    @include column;
+                    width: 100%;
+                    font-size: 14px;
+                    border-radius: 10px;
+                    padding: 6px 8px;
+                    word-break: break-word;
+                    transition: all 100ms ease-in-out;
+                    gap: 10px;
+                    cursor: pointer;
+                    .options {
+                        position: absolute;
+                        @include center;
+                        right: 8px;
+                        gap: 8px;
+                        transition: all 100ms ease-in-out;
+                        opacity: 0;
+                        transform: translateY(10px);
+                        pointer-events: none;
+                        .date, .assign, .delete {
+                            @include center;
+                            background-color: #091e420f;
+                            border-radius: 50%;
+                            padding: 4px;
+                            transition: all 100ms ease-in-out;
+                            cursor: pointer;
+                            img {
+                                width: 16px;
+                                height: 16px;
+                            }
+                            &:hover {
+                                background-color: #091e4224;
+                            }
+                        }
+                    }
+                    p {
+                        width: 80%;
+                        pointer-events: none;
+                        &.completed {
+                            text-decoration: line-through;
+                            opacity: 0.75;
+                        }
+                    }
+                    &:hover {
+                        background-color: #091e420f;
+                        .options {
+                            opacity: 1;
+                            transform: translateY(0);
+                            pointer-events: auto;
+                        }
+                    }
+                    input {
+                        width: 100%;
+                        height: 32px;
+                        font-size: 14px;
+                        padding: 8px 12px;
+                        &:focus {
+                            border: 2px solid #0c66e4;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .add-element {
+        all: unset;
+        @include center;
+        width: fit-content;
+        background-color: #091e420f;
+        color: #000;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 6px 12px;
+        margin-left: 26px;
+        transition: all 100ms ease-in-out;
+        gap: 8px;
+        cursor: pointer;
+        &:hover {
+            background-color: #091e4224;
+        }
+    }
+    .add-element-wrapper {
+        @include column;
+        width: 100%;
+        padding-left: 26px;
+        gap: 10px;
+        input {
+            height: 32px;
+            font-size: 14px;
+            padding: 8px 12px;
+            &:focus {
+                border: 2px solid #0c66e4;
+            }
+        }
+    }
+}
+
+.button-wrapper {
+    @include center;
+    gap: 10px;
+    button {
+        font-size: 14px;
+        padding: 6px 12px;
+        gap: 5px;
+    }
+}
+
+.hide-elements {
+    width: 20px !important;
+    height: 20px !important;
+    img {
+        width: 20px !important;
+        height: 20px !important;
+    }
+}
+
+.add-element-options {
+    @include space-between;
+    width: 100%;
+    .option {
+        @include center;
+        gap: 10px;
+        button {
+            all: unset;
+            @include center;
+            font-size: 14px;
+            border-radius: 10px;
+            padding: 6px 12px;
+            transition: all 100ms ease-in-out;
+            gap: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: #091e4224;
+            }
+        }
+    }
+}

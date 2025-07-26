@@ -10,6 +10,8 @@ import {
   ViewChild,
   HostListener,
   OnInit,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -26,6 +28,7 @@ import { LabelItem } from './add-task.models';
 import { ColorConfig, CoverImage } from './add-task.models';
 import { TaskToolbarComponent } from './task-toolbar/task-toolbar.component';
 import { TaskSelectionsComponent } from './task-selections/task-selections.component';
+import { TaskChecklistComponent } from './task-checklist/task-checklist.component';
 
 @Component({
   selector: 'app-add-task',
@@ -37,7 +40,8 @@ import { TaskSelectionsComponent } from './task-selections/task-selections.compo
     TaskHeaderComponent,
     CoverMenuComponent,
     TaskDescriptionComponent,
-    TaskSelectionsComponent
+    TaskSelectionsComponent,
+    TaskChecklistComponent,
   ],
   templateUrl: './add-task.component.html',
   styleUrl: './add-task.component.scss',
@@ -56,6 +60,8 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
   @ViewChild('dateDropdownRef') dateDropdownRef!: DropdownComponent;
+  @Output() checklistDeleted = new EventEmitter<void>();
+  @ViewChild(TaskToolbarComponent) private taskToolbar!: TaskToolbarComponent;
   
   editor!: Editor;
   isMenuOpen = false;
@@ -91,6 +97,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   selectedLabels: string[] = [];
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
+  checklists: { title: string }[] = [];
   
   readonly colors = TaskModels.coverColors;
   readonly imageDisplayLimit = TaskModels.imageDisplayLimit;
@@ -325,6 +332,28 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
     this.selectedStartDate = dates.startDate;
     this.selectedEndDate = dates.endDate;
     this.dateDropdownRef?.close();
+  }
+  
+  onDatesCleared(): void {
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
+    this.dateDropdownRef?.close();
+  }
+  
+  addChecklist(title: string): void {
+    this.checklists.push({ title });
+  }
+  
+  public removeChecklist(index: number): void {
+    this.checklists.splice(index, 1);
+  }
+  
+  public onLabelSelectionClicked(): void {
+    this.taskToolbar.openLabelDropdown();
+  }
+  
+  public onDateSelectionClicked(): void {
+    this.taskToolbar.openDateDropdown();
   }
   
   /* private detectUserContext(): void {

@@ -1,0 +1,184 @@
+<div class="checklist-wrapper">
+    <div class="checklist-header">
+        <div class="img-wrapper">
+            <img src="assets/images/checked.png" alt="Description">
+        </div>
+        <div class="checklist-titel"
+            [@inputGrow]="titleInputFocused ? 'focused' : 'default'">
+            <input 
+            [(ngModel)]="title" 
+            [placeholder]="previousValidTitle"
+            (focus)="onTitleFocus()" 
+            (blur)="onTitleBlur()"/>
+            <div class="button-wrapper">
+                <button class="secondary-btn"
+                    *ngIf="!titleInputFocused && completedTasksCount > 0"
+                    (click)="toggleCompletedTasksVisibility()">
+                    {{ areCompletedTasksHidden ? 'Show selected items (' + completedTasksCount + ')' : 'Hide selected elements' }}
+                    <div class="img-wrapper">
+                        <img class="icon-default" 
+                        [src]="areCompletedTasksHidden ? 'assets/images/arrow-drop-up.png' : 'assets/images/arrow-drop-down.png'" alt="Toggle visibility">
+                        <img class="icon-hover" [src]="areCompletedTasksHidden ? 'assets/images/arrow-drop-up-hover.png' : 'assets/images/arrow-drop-down-hover.png'" alt="Toggle visibility Hover">
+                    </div>
+                </button>
+                <button class="secondary-btn"
+                *ngIf="!titleInputFocused"
+                (click)="deleteChecklist()">
+                    Delete
+                    <div class="img-wrapper">
+                        <img class="icon-default" src="assets/images/delete.png" alt="Delete">
+                        <img class="icon-hover" src="assets/images/delete-hover.png" alt="Delete Hover">
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="checklist">
+        <div class="progress-bar-wrapper">
+            <div class="progress-info">
+                <p>{{ progress }}%</p>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" 
+                    [style.width]="progress + '%'"
+                    [ngClass]="{
+                    'low': progress <= 25,
+                    'medium': progress > 25 && progress <= 50,
+                    'good': progress > 50 && progress < 100,
+                    'complete': progress === 100
+                    }">
+                </div>
+            </div>
+        </div>
+        <p class="info"
+        *ngIf="progress === 100 && areCompletedTasksHidden">
+            Everything on this checklist is complete!
+        </p>
+        <div class="list-wrapper">
+            <ng-container *ngFor="let task of tasks; let i = index">
+                <div class="task" 
+                #taskItem
+                *ngIf="!areCompletedTasksHidden || !task.checked">
+                    <div class="img-wrapper"
+                        (click)="toggleTaskChecked(i); $event.stopPropagation()">
+                        <img
+                            [src]="task.checked ? 'assets/images/checked.png' : 'assets/images/unchecked.png'"
+                            alt="Task status"
+                        />
+                    </div>
+                    <div class="checklist-task"
+                        (click)="startEditingTask(i)">
+                        <ng-container 
+                            *ngIf="editingTaskIndex !== i; else editMode">
+                            <p 
+                            [ngClass]="{ 'completed': task.checked }">
+                                {{ task.text }}
+                            </p>
+                            <div class="options">
+                                <div class="date">
+                                    <img src="assets/images/date.png" alt="Deadline">
+                                </div>
+                                <div class="assign">
+                                    <img src="assets/images/add-person.png" alt="Assigned to">
+                                </div>
+                                <div class="delete"
+                                (click)="deleteTask(i); $event.stopPropagation()">
+                                    <img src="assets/images/delete.png" alt="Delete">
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template 
+                        #editMode>
+                            <input type="text" 
+                                [(ngModel)]="editText" 
+                                (keydown.enter)="saveTaskText(i)"
+                                (click)="stopPropagation($event)">
+                            <div class="add-element-options">
+                                <div class="button-wrapper">
+                                    <button 
+                                    (click)="saveTaskText(i)">
+                                        Save
+                                        <div class="img-wrapper">
+                                            <img src="assets/images/check-hover.png" alt="Submit">
+                                        </div>
+                                    </button>
+                                    <button class="secondary-btn"
+                                    (click)="cancelEditTask(); $event.stopPropagation()">
+                                        Cancel
+                                        <div class="img-wrapper">
+                                            <img class="icon-default" src="assets/images/close.png" alt="Delete">
+                                            <img class="icon-hover" src="assets/images/close-hover.png" alt="Delete Hover">
+                                        </div>
+                                    </button>
+                                </div>
+                                <div class="option">
+                                    <button>
+                                        <div class="img-wrapper">
+                                            <img src="assets/images/date.png" alt="Deadline">
+                                        </div>
+                                        Assign
+                                    </button>
+                                    <button >
+                                        <div class="img-wrapper">
+                                            <img src="assets/images/add-person.png" alt="Assigned to">
+                                        </div>
+                                        Deadline
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <button class="add-element"
+        *ngIf="!showAddElement"
+        [@buttonFadeScale]
+        (click)="openAddElement($event)">
+        Add element
+    </button>
+    <div class="add-element-wrapper"
+        *ngIf="showAddElement"
+        #wrapper
+        [@elementSlideFade]
+        (click)="stopPropagation($event)">
+        <input type="text" 
+        (keydown.enter)="addTask()"
+        [(ngModel)]="newTaskText" 
+        placeholder="Add element">
+        <div class="add-element-options">
+            <div class="button-wrapper">
+                <button 
+                (click)="addTask()">
+                    Add
+                    <div class="img-wrapper">
+                        <img src="assets/images/check-hover.png" alt="Submit">
+                    </div>
+                </button>
+                <button class="secondary-btn"
+                (click)="cancelAddElement()">
+                    Cancel
+                    <div class="img-wrapper">
+                        <img class="icon-default" src="assets/images/close.png" alt="Delete">
+                        <img class="icon-hover" src="assets/images/close-hover.png" alt="Delete Hover">
+                    </div>
+                </button>
+            </div>
+            <div class="option">
+                <button>
+                    <div class="img-wrapper">
+                        <img src="assets/images/date.png" alt="Deadline">
+                    </div>
+                    Assign
+                </button>
+                <button >
+                    <div class="img-wrapper">
+                        <img src="assets/images/add-person.png" alt="Assigned to">
+                    </div>
+                    Deadline
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

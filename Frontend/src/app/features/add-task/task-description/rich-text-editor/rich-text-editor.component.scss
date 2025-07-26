@@ -3,6 +3,7 @@
 
 .editor-wrapper {
     @include column-align;
+    width: 99%;
     min-width: 272px;
     min-height: 275px;
     border-radius: 10px;
@@ -24,6 +25,7 @@
 .btn-wrapper {
     @include center-start;
     width: 100%;
+    padding: 6px 8px;
     margin-top: 12px;
     gap: 12px;
     button {

@@ -1,11 +1,16 @@
 <div class="checklist-input-wrapper">
-    <span>Due date</span>
+    <span>Titel</span>
     <div class="input-row">
-        <input type="text">
+        <input 
+        type="text"
+        #checklistInput
+        placeholder="Checklist"
+        (keydown.enter)="emitChecklist()"
+        [(ngModel)]="title">
     </div>
 </div>
 <div class="button-wrapper">
-    <button>
+    <button (click)="emitChecklist()">
         Save
         <div class="img-wrapper">
             <img src="assets/images/check-hover.png" alt="Submit">

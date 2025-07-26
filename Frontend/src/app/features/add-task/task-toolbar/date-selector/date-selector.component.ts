@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 
 export class DateSelectorComponent implements OnInit {  
   @Output() dateSelected = new EventEmitter<{ startDate: Date | null; endDate: Date | null }>();
+  @Output() closeRequested = new EventEmitter<void>();
+  @Output() dateCleared = new EventEmitter<void>();
   
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
@@ -237,5 +239,16 @@ export class DateSelectorComponent implements OnInit {
       startDate: this.selectedStartDate,
       endDate: this.selectedEndDate
     });
+    this.closeRequested.emit();
+  }
+  
+  clearDates(): void {
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
+    this.startDateString = '';
+    this.endDateString = '';
+    this.generateCalendar();
+    this.closeRequested.emit();
+    this.dateCleared.emit();
   }
 }
