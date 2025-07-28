@@ -30,13 +30,15 @@ import { TaskToolbarComponent } from './task-toolbar/task-toolbar.component';
 import { TaskSelectionsComponent } from './task-selections/task-selections.component';
 import { TaskChecklistComponent } from './task-checklist/task-checklist.component';
 import { Contact } from '../../shared/models/contact.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-add-task',
   standalone: true,
   imports: [
     CommonModule, 
-    RouterModule, 
+    RouterModule,
+    FormsModule,
     TaskToolbarComponent,
     TaskHeaderComponent,
     CoverMenuComponent,
@@ -100,6 +102,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   selectedEndDate: Date | null = null;
   checklists: { title: string }[] = [];
   selectedMembers: Contact[] = [];
+  taskTitle: string = '';
   
   readonly colors = TaskModels.coverColors;
   readonly imageDisplayLimit = TaskModels.imageDisplayLimit;
@@ -236,7 +239,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
     this.editorVisible = false;
   }
   
-  submitTask(): void {
+  /* submitTask(): void {
     const taskPayload = {
       description: this.editor?.getHTML() || '',
       coverColor: this.selectedColor?.base || null,
@@ -253,7 +256,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
         console.error('❌ Fehler beim Speichern:', error);
       }
     });
-  }
+  } */
   
   editDescription(): void {
     this.editorVisible = true;
@@ -362,10 +365,31 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
     this.taskToolbar.openMemberDropdown();
   }
   
-  /* private detectUserContext(): void {
-    const user = this.authService.getUser();
-    const isValidUser = user && user.id && user.id !== 'guest';
-    this.loggedInUserId = isValidUser ? user.id : null;
-    this.isGuestUser = !isValidUser;
-  } */
+  submitTask(): void {
+    const taskPayload = {
+      title: this.taskTitle,
+      description: this.savedDescription || '',
+      coverColor: this.selectedColor?.base || undefined,
+      coverImage: this.selectedCoverImageForHeader || undefined,
+      isGuest: this.isGuestUser,
+      ownerId: this.loggedInUserId || undefined,
+      startDate: this.selectedStartDate ? this.selectedStartDate.toISOString() : undefined,
+      dueDate: this.selectedEndDate ? this.selectedEndDate.toISOString() : undefined,
+      labelIds: [], 
+      memberIds: [],
+      checklists: this.checklists.map(checklist => ({
+        title: checklist.title,
+        items: []
+      }))
+    };
+    console.log('Sende Payload an das Backend:', taskPayload);
+    this.taskService.createTask(taskPayload).subscribe({
+      next: (response) => {
+        console.log('✅ Task erfolgreich im Backend gespeichert:', response);
+      },
+      error: (error) => {
+        console.error('❌ Fehler beim Speichern des Tasks:', error);
+      }
+    });
+  }
 }

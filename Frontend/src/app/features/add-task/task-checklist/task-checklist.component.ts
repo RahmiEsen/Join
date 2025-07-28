@@ -276,15 +276,15 @@ export class TaskChecklistComponent implements AfterViewChecked {
       this.cancelEditTask();
     }
   }
-
+  
   public toggleDropdown(index: number, type: 'date' | 'assign'): void {
     if (this.activeDropdown && this.activeDropdown.taskIndex === index && this.activeDropdown.type === type) {
-      this.activeDropdown = null; // Schließe das Dropdown, wenn es bereits offen ist
+      this.activeDropdown = null;
     } else {
-      this.activeDropdown = { taskIndex: index, type: type }; // Öffne das angeklickte Dropdown
+      this.activeDropdown = { taskIndex: index, type: type };
     }
   }
-
+  
   public isDropdownOpen(index: number, type: 'date' | 'assign'): boolean {
     return this.activeDropdown?.taskIndex === index && this.activeDropdown?.type === type;
   }

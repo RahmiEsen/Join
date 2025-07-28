@@ -23,7 +23,7 @@ model User {
   role             String    @default("user")
   contacts         Contact[]
   tasks            Task[]
-
+  labels           Label[]
   @@map("User")
 }
 
@@ -38,17 +38,50 @@ model Contact {
   owner       User?    @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
   color       String?
+  tasks       Task[]
 }
 
 model Task {
   id          String   @id @default(uuid())
-  description String
+  description String?
+  title       String?
   coverColor  String?
   coverImage  String?
   attachments Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  startDate   DateTime? 
+  dueDate     DateTime?
   ownerId     String?
   owner       User?    @relation(fields: [ownerId], references: [id])
   isGuest     Boolean  @default(false)
+  labels      Label[]
+  checklists  Checklist[]
+  members     Contact[]
+}
+
+model Label {
+  id      String @id @default(uuid())
+  title   String
+  color   String
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  tasks   Task[]
+  @@unique([ownerId, title])
+}
+
+model Checklist {
+  id    String @id @default(uuid())
+  title String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId String
+  items ChecklistItem[]
+}
+
+model ChecklistItem {
+  id          String  @id @default(uuid())
+  text        String
+  isCompleted Boolean @default(false)
+  checklist   Checklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+  checklistId String
 }

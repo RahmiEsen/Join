@@ -23,6 +23,12 @@
         (predefinedImageSelected)="selectPredefinedImage($event)">
     </app-cover-menu>
     <section>
+        <input 
+            type="text" 
+            [(ngModel)]="taskTitle" 
+            placeholder="Task Title" 
+            class="task-title-input"
+        >
         <app-task-toolbar
             [(selectedLabels)]="selectedLabels"
             (availableLabelsChange)="onAvailableLabelsChange($event)"
@@ -53,10 +59,7 @@
                 [title]="checklist.title">
             </app-task-checklist>
         </ng-container>
-    </section>
-</div>
-
-<!-- <div class="btn-wrapper">
+        <div class="button-wrapper">
             <button
             (click)="submitTask()">
                 Save
@@ -72,4 +75,6 @@
                     <img class="icon-hover" src="assets/images/close-hover.png" alt="Cancel Hover">
                 </div>
             </button>
-        </div> -->
+        </div>
+    </section>
+</div>

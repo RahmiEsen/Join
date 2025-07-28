@@ -69,3 +69,15 @@
         }
     }
 }
+
+.button-wrapper {
+    @include start;
+    width: 100%;
+    padding-left: 26px;
+    gap: 10px;
+    button {
+        font-size: 14px;
+        padding: 6px 12px;
+        gap: 5px;
+    }
+}
