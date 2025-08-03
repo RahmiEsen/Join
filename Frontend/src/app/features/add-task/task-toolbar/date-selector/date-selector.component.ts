@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -17,6 +17,8 @@ export class DateSelectorComponent implements OnInit {
   @Output() dateSelected = new EventEmitter<{ startDate: Date | null; endDate: Date | null }>();
   @Output() closeRequested = new EventEmitter<void>();
   @Output() dateCleared = new EventEmitter<void>();
+  @Input() initialStartDate: Date | null = null;
+  @Input() initialEndDate: Date | null = null;
   
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
@@ -41,6 +43,17 @@ export class DateSelectorComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef) {}
   
   ngOnInit(): void {
+    this.selectedStartDate = this.initialStartDate;
+    this.selectedEndDate = this.initialEndDate;
+    this.startEnabled = !!this.initialStartDate;
+    this.endEnabled = !!this.initialEndDate;
+    this.syncStartDateInputFromDate(this.selectedStartDate);
+    this.syncDueDateInputFromDate(this.selectedEndDate);
+    if (this.selectedEndDate) {
+      this.currentDate = new Date(this.selectedEndDate);
+    } else if (this.selectedStartDate) {
+      this.currentDate = new Date(this.selectedStartDate);
+    }
     this.generateCalendar();
   }
   

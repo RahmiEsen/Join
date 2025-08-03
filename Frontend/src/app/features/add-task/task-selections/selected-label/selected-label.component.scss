@@ -9,9 +9,8 @@
         font-weight: 600;
     }
     .choosen-labels {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        width: 210px;
+        @include center;
+        width: 100%;
         gap: 5px;
         .label {
             display: inline-block;
@@ -24,9 +23,10 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
+            transition: all 100ms ease-in-out;
             cursor: pointer;
             &:hover {
-                background-color: var(--hover-color);
+                filter: brightness(.85);
                 box-shadow: $shadow-hover;
             }
         }

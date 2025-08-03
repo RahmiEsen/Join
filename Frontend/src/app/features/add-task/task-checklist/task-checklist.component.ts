@@ -12,6 +12,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  SimpleChanges,
 } from '@angular/core';
 import { trigger, transition, style, animate, group, state, query } from '@angular/animations';
 import { FormsModule } from '@angular/forms'; 
@@ -19,6 +20,12 @@ import { FormsModule } from '@angular/forms';
 const effectDuration = '275ms';
 const easeInCurve = 'cubic-bezier(0.55, 0, 0.675, 0.2)';
 const easeOutCurve = 'cubic-bezier(0.3, 0.75, 0.45, 1)'; 
+
+interface ChecklistItem {
+  id?: string;
+  text: string;
+  isCompleted: boolean;
+}
 
 @Component({
   selector: 'app-task-checklist',
@@ -130,7 +137,7 @@ export class TaskChecklistComponent implements AfterViewChecked {
   @ViewChildren('editInput') private editInputs!: QueryList<ElementRef<HTMLInputElement>>;
   @Input() title: string = '';
   @Output() checklistDeleted = new EventEmitter<void>();
-  
+  @Input() items: ChecklistItem[] = [];
   
   public showAddElement = false;
   public titleInputFocused = false;
@@ -140,7 +147,7 @@ export class TaskChecklistComponent implements AfterViewChecked {
   public editText: string = '';
   private isInitialEdit = false;
   public progress = 0;
-  public areCompletedTasksHidden = false;
+  public areCompletedTasksHidden = true;
   public previousValidTitle: string = '';
   public activeDropdown: { taskIndex: number; type: 'date' | 'assign' } | null = null;
   
@@ -151,6 +158,16 @@ export class TaskChecklistComponent implements AfterViewChecked {
       this.previousValidTitle = this.title.trim();
     } else {
       this.previousValidTitle = 'Neue Checkliste';
+    }
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['items'] && this.items) {
+    this.tasks = this.items.map(item => ({
+      text: item.text,
+      checked: item.isCompleted
+    }));
+    this.updateProgress();
     }
   }
   

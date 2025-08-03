@@ -6,6 +6,7 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { ChecklistSelectorComponent } from './checklist-selector/checklist-selector.component';
 import { MemberSelectorComponent } from './member-selector/member-selector.component';
 import { Contact } from '../../../shared/models/contact.model';
+import { Label } from '../../../shared/services/label.service';
 
 @Component({
   selector: 'app-task-toolbar',
@@ -25,6 +26,7 @@ import { Contact } from '../../../shared/models/contact.model';
 export class TaskToolbarComponent {
   @Input() selectedLabels: string[] = [];
   @Input() allContacts: Contact[] = [];
+  @Input() availableLabels: Label[] = [];
   @Output() selectedLabelsChange = new EventEmitter<string[]>();
   @Output() dateSelected = new EventEmitter<{ startDate: Date | null; endDate: Date | null }>();
   @Output() availableLabelsChange = new EventEmitter<any[]>();
@@ -36,6 +38,9 @@ export class TaskToolbarComponent {
   @ViewChild('labelDropdown') labelDropdown!: DropdownComponent;
   @ViewChild('dateDropdownRef') dateDropdownRef!: DropdownComponent;
   @ViewChild('memberDropdown') memberDropdown!: DropdownComponent;
+  @Input() initialMembers: Contact[] = [];
+  @Input() startDate: Date | null = null;
+  @Input() endDate: Date | null = null;
   
   labelTitle = 'Labels';
   selectedMembers: Contact[] = [];

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Label" ADD COLUMN     "isGuest" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "ownerId" DROP NOT NULL;

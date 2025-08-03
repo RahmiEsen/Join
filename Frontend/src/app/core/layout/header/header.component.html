@@ -1,8 +1,5 @@
 <header>
-    <img class="logo hide" 
-    src="./assets/images/logo-dark.png" 
-    alt="Join Logo"/>
-    <span>Kanban Project Management Tool</span>
+    <img class="logo"src="./assets/images/logo-dark.png" alt="Join Logo"/>
     <div class="user-section">
         <button (click)="navigateTo('/help')" class="info-btn">
             <img src="./assets/images/help.png" alt="">
@@ -12,12 +9,11 @@
                 <img [src]="userImageUrl" alt="User Avatar" referrerpolicy="no-referrer" />
             </ng-container>
             <ng-template #initialsTemplate>
-                {{ initials }}
+                <p>{{ initials }}</p>
             </ng-template>
         </div>
     </div>
     <div class="dropdown-menu" [class.visible]="showDropdown">
-        <a (click)="navigateTo('/help')" class="hide">Help</a>
         <a (click)="navigateTo('/legal-notice')">Legal Notice</a>
         <a (click)="navigateTo('/privacy-policy')">Privacy Policy</a>
         <a (click)="logout()">Log out</a>

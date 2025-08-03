@@ -64,8 +64,9 @@ model Label {
   id      String @id @default(uuid())
   title   String
   color   String
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId String?
+  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  isGuest Boolean @default(false)
   tasks   Task[]
   @@unique([ownerId, title])
 }

@@ -3,15 +3,15 @@
         <ul class="label-list">
             <li class="label-item"
                 *ngFor="let label of availableLabels"
-                (click)="toggleLabel(label.name)">
-                <div class="img-wrapper" (click)="toggleLabel(label.name); $event.stopPropagation()">
+                (click)="toggleLabel(label.title)">
+                <div class="img-wrapper" (click)="toggleLabel(label.title); $event.stopPropagation()">
                     <img
-                        *ngIf="!selectedLabels.includes(label.name)"
+                        *ngIf="!selectedLabels.includes(label.title)"
                         src="assets/images/unchecked.png"
                         alt="unchecked"
                     />
                     <img
-                        *ngIf="selectedLabels.includes(label.name)"
+                        *ngIf="selectedLabels.includes(label.title)"
                         src="assets/images/checked.png"
                         alt="checked"
                     />
@@ -19,13 +19,12 @@
                 <span class="label"
                 [ngStyle]="{
                     '--base-color': label.color,
-                    '--hover-color': label.hover
                 }"
-                (click)="toggleLabel(label.name); $event.stopPropagation()">
-                    {{ label.name }}
+                (click)="toggleLabel(label.title); $event.stopPropagation()">
+                    {{ label.title }}
                 </span>
                 <button class="img-wrapper edit-icon"
-                    (click)="onEdit(label.name); $event.stopPropagation()">
+                    (click)="onEdit(label); $event.stopPropagation()">
                     <img src="assets/images/edit.png" alt="edit" />
                 </button>
             </li>
@@ -45,7 +44,6 @@
             <span class="label" 
             [ngStyle]="{
                 '--base-color': selectedColor || '#e9ebee',
-                '--hover-color': getHoverColor(selectedColor)
             }">
                 {{ editLabelTitle }}
             </span>

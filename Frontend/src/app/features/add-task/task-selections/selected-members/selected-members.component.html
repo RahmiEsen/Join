@@ -5,6 +5,7 @@
         <div class="contact-wrapper">
             <div class="avatar"
                 *ngFor="let member of members | slice:0:4"
+                (click)="onMembersClick(); $event.stopPropagation()"
                 [style.backgroundColor]="getMemberColor(member)"
                 [title]="member.firstName + ' ' + member.lastName">
                 {{ getInitials(member) }}
@@ -14,9 +15,4 @@
         +{{ members.length - 4 }}
         </p>
     </div>
-    <div class="seperate"></div>
-    <button class="add"
-    (click)="onMembersClick(); $event.stopPropagation()">
-        <img src="assets/images/add-person.png" alt="">
-    </button>
 </div>

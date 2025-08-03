@@ -1,89 +1,90 @@
 @use '../../../../styles/mixins' as *;
 @use '../../../../styles/variables' as *;
 
-.logo {
-    width: 32px;
-    height: auto;
-}
-
-.user-section {
-    @include center;
-    color: $hover;
-    font-weight: 700;
-    font-size: 18px;
-    gap: 16px;
-    .user-avatar {
-        @include center;
-        height: 56px;
-        width: 56px;
-        border: 3px solid $primary;
-        border-radius: 50%;
-        overflow: hidden;
-        cursor: pointer;
-        &:hover {
-            background-color: $avatar-hover;
-        }
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-    }
-}
-
-.dropdown-menu {
+header {
     position: absolute;
-    @include column;
-    background-color: $primary;
-    color: $text;
-    top: 105px;
-    right: 40px;
-    padding: 10px;
+    @include space-between;
+    width: 100%;
+    top: 0;
+    background: #ffffff3d;
+    padding: 12px 40px;
     box-shadow: $shadow;
-    border-top-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(40px);
-    transition: all 0.3s ease;
-    z-index: 1;
-    &.visible {
-        opacity: 1;
-        visibility: visible;
-        transform: translateX(0);
-    }
-    .hide {
-        display: none;
-    }
-    a {
-        @include align-center;
-        height: 46px;
-        color: $text;
-        padding: 8px 16px;
+    backdrop-filter: blur(6px);
+    .logo {
+        width: auto;
+        height: 48px;
         cursor: pointer;
-        &:hover {
-            border: none;
-            background-color: $primary-hover;
+    }
+    .user-section {
+        @include center;
+        color: $hover;
+        gap: 10px;
+        .info-btn {
+            @include center;
+            height: 20px;
+            width: 20px;
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
-    }
-}
-
-@media (max-width: 1024px) {
-    .hide {
-        display: block !important;
-    }
-    .user-section .info-btn, span  {
-        display: none;
-    }
-    .user-avatar {
-        height: 40px !important;
-        width: 40px !important;
+        .user-avatar {
+            @include center;
+            height: 48px;
+            width: 48px;
+            border: 3px solid $primary;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            p {
+                font-size: 18px;
+                font-weight: 600;
+            }
+            &:hover {
+                background-color: $avatar-hover;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
     }
     .dropdown-menu {
-        top: 90px;
-        right: 16px;
-        transform: translateX(16px);
+        position: absolute;
+        @include column;
+        background-color: $primary;
+        color: $text;
+        top: 75px;
+        right: 40px;
+        padding: 10px;
+        box-shadow: $shadow;
+        border-top-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(40px);
+        transition: all 0.3s ease;
+        z-index: 1;
+        &.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        .hide {
+            display: none;
+        }
+        a {
+            @include align-center;
+            color: $text;
+            padding: 6px 12px;
+            cursor: pointer;
+            &:hover {
+                border: none;
+                background-color: $primary-hover;
+            }
+        }
     }
 }

@@ -15,7 +15,7 @@
         min-height: 116px;
     }
     &.has-cover-img {
-        min-height: 116px;
+        min-height: 160px;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -44,16 +44,13 @@
             border-radius: unset;
             padding: unset;
             &:hover {
-                background-color: var(--hover-color, $menu-hover);
+                background-color: #00000018;
                 border-radius: 50%;
                 box-shadow: none;
             }
             &.has-cover-img-bg {
                 background-color: #fff;
                 border-radius: 50%;
-                &:hover {
-                    background-color: $menu-hover;
-                }
             }
         }
         .cover-menu {

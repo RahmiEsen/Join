@@ -9,9 +9,9 @@
         (closed)="labelSelector?.exitEdit()">
         <div class="option-content">
             <app-label-selector 
+                [availableLabels]="availableLabels"
                 [selectedLabels]="selectedLabels"
-                (selectedLabelsChange)="selectedLabelsChange.emit($event)"
-                (availableLabelsChange)="availableLabelsChange.emit($event)" #labelSelector>
+                (selectedLabelsChange)="selectedLabelsChange.emit($event)"#labelSelector>
             </app-label-selector>
         </div>
     </app-dropdown>
@@ -24,7 +24,9 @@
             <app-date-selector 
                 (closeRequested)="dateDropdownRef.close()"
                 (dateSelected)="dateSelected.emit($event)"
-                (dateCleared)="dateCleared.emit()"> 
+                (dateCleared)="dateCleared.emit()"
+                [initialStartDate]="startDate"
+                [initialEndDate]="endDate"> 
             </app-date-selector>
         </div>
     </app-dropdown>
@@ -49,6 +51,7 @@
         <div class="option-content">
             <app-member-selector
                 [contacts]="allContacts"
+                [initialSelection]="initialMembers"
                 (selectionChange)="updateMembers($event)">
             </app-member-selector>
         </div>

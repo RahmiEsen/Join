@@ -1,6 +1,87 @@
 @use '../../../../styles/mixins' as *;
 @use '../../../../styles/variables' as *;
 
+aside {
+    position: absolute;
+    @include center;
+    height: auto;
+    width: auto;
+    bottom: 15px;
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: $shadow;
+    nav {
+        @include center;
+        gap: 10px;
+        button {
+            all: unset;
+            position: relative;
+            @include center-start;
+            width: 100%;
+            font-size: 14px;
+            color: $black;
+            border-radius: 10px;
+            border: none;
+            padding: 6px 10px;
+            gap: 6px;
+            p {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            &:hover {
+                background-color: #091E4224;
+                box-shadow: none;
+            }
+            &.active {
+                background-color: #e9f2ff;
+                color: #0c66e4;
+                &::after {
+                    content: "";
+                    position: absolute;
+                    bottom: 0px;
+                    left: 40%;
+                    width: 20px;
+                    height: 2px;
+                    background-color: #0c66e4;
+                    border-radius: 3px
+                }
+                &:hover {
+                    color: #00000090;
+                    background-color: #CCE0FF;
+                    box-shadow: none;
+                    cursor: not-allowed
+                }
+            }
+            .img-wrapper {
+                @include center;
+                height: 16px;
+                width: 16px;
+                img {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    footer {
+        @include column;
+        width: 100%;
+        padding: 243px 0 0 52px;
+        a {
+            width: fit-content;
+            color: $footer-text;
+            font-size: 16px;
+            padding: 8px;
+            &:hover {
+                border: none;
+                color: $hover;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
 @media (max-width: 1024px) {
     .logo {
         display: none;

@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule, NgSwitch, NgSwitchCase, NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { labelColors } from '../../add-task.models';
+import { LabelService, Label, CreateLabelDto } from '../../../../shared/services/label.service';
+import { AuthService } from '../../../../shared/services/auth.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-label-selector',
@@ -20,67 +23,84 @@ import { labelColors } from '../../add-task.models';
 
 export class LabelSelectorComponent implements OnInit {
   @Input() selectedLabels: string[] = [];
+  @Input() availableLabels: Label[] = [];
   @Output() selectedLabelsChange = new EventEmitter<string[]>();
-  @Output() editLabel = new EventEmitter<string>();
-  @Output() availableLabelsChange = new EventEmitter<any[]>()
-  
+
   viewMode: 'list' | 'edit' | 'create' = 'list';
-  editLabelName?: string;
+  editLabelData: Label | null = null;
   selectedColor: string | null = null;
   editLabelTitle: string = '';
-  editLabelIndex: number | null = null;
-  
-  availableLabels = [
-    { name: 'Low', color: '#4bce97', hover: '#7ee2b8', isSystemLabel: true },
-    { name: 'Medium', color: '#9f8fef', hover: '#b8acf6', isSystemLabel: true },
-    { name: 'Urgent', color: '#c9372c', hover: '#ae2e24', isSystemLabel: true },
-  ];
-  
+  loggedInUserId: string | null = null;
+  isGuestUser: boolean = false;
+
   readonly labelColors = labelColors;
-  
+
+  constructor(
+    private labelService: LabelService,
+    private authService: AuthService
+  ) {}
+
   ngOnInit(): void {
-    this.availableLabelsChange.emit(this.availableLabels);
+    const user = this.authService.getUser();
+    this.isGuestUser = !user || user.id === 'guest';
+    this.loggedInUserId = this.isGuestUser ? null : user?.id ?? null;
+
+    this.loadLabels();
   }
-  
-  toggleLabel(labelName: string): void {
-    const isSelected = this.selectedLabels.includes(labelName);
+
+  loadLabels(): void {
+    const userId = this.isGuestUser ? 'guest' : this.loggedInUserId;
+    if (!userId) {
+      this.availableLabels = [];
+      return;
+    }
+    this.labelService.getLabelsForUser(userId).subscribe(dbLabels => {
+      const defaultLabels: Label[] = [
+          { id: 'default-1', title: 'Low', color: '#4bce97' },
+          { id: 'default-2', title: 'Medium', color: '#9f8fef' },
+          { id: 'default-3', title: 'Urgent', color: '#c9372c' },
+      ];
+      const combinedLabels = [...dbLabels];
+      defaultLabels.forEach(defaultLabel => {
+          const exists = dbLabels.some(dbLabel => dbLabel.title.toLowerCase() === defaultLabel.title.toLowerCase());
+          if (!exists) {
+              combinedLabels.push(defaultLabel);
+          }
+      });
+      this.availableLabels = combinedLabels.sort((a, b) => a.title.localeCompare(b.title));
+    });
+  }
+
+  toggleLabel(labelTitle: string): void {
+    const isSelected = this.selectedLabels.includes(labelTitle);
     const updated = isSelected
-      ? this.selectedLabels.filter(l => l !== labelName)
-      : [...this.selectedLabels, labelName];
+      ? this.selectedLabels.filter(l => l !== labelTitle)
+      : [...this.selectedLabels, labelTitle];
     this.selectedLabelsChange.emit(updated);
   }
-  
-  onEdit(labelName: string): void {
-    const index = this.availableLabels.findIndex(l => l.name === labelName);
-    if (index !== -1) {
-      const label = this.availableLabels[index];
-      this.editLabelIndex = index;
-      this.editLabelTitle = label.name;
-      this.selectedColor = label.color;
-      this.viewMode = 'edit';
-      const colorExists = this.labelColors.some(c => c.color === label.color);
-      if (!colorExists) {
-        this.labelColors.push({ color: label.color, hover: label.color });
-      }
-    }
+
+  onEdit(label: Label): void {
+    this.editLabelData = label;
+    this.editLabelTitle = label.title;
+    this.selectedColor = label.color;
+    this.viewMode = 'edit';
   }
-  
+
   exitEdit(): void {
-    this.editLabelName = undefined;
-    this.viewMode = 'list';
+    this.resetForm();
   }
-  
+
   onCreate(): void {
     this.editLabelTitle = '';
     const randomIndex = Math.floor(Math.random() * this.labelColors.length);
     this.selectedColor = this.labelColors[randomIndex].color;
     this.viewMode = 'create';
   }
-  
+
   selectColor(color: string): void {
     this.selectedColor = color;
   }
-  
+
   get title(): string {
     switch (this.viewMode) {
       case 'edit':
@@ -91,19 +111,11 @@ export class LabelSelectorComponent implements OnInit {
         return 'Labels';
     }
   }
-  
+
   removeColor(): void {
-    this.selectedColor = '#e9ebee';
+    this.selectedColor = null;
   }
-  
-  public getHoverColor(baseColor: string | null): string {
-    if (!baseColor) {
-      return '#e9ebee';
-    }
-    const colorConfig = this.labelColors.find(c => c.color === baseColor);
-    return colorConfig ? colorConfig.hover : baseColor;
-  }
-  
+
   onSubmit(event: MouseEvent): void {
     event.stopPropagation();
     if (this.viewMode === 'edit') {
@@ -112,74 +124,80 @@ export class LabelSelectorComponent implements OnInit {
       this.createLabel();
     }
   }
-  
+
   resetForm(): void {
-    this.editLabelIndex = null;
+    this.editLabelData = null;
     this.editLabelTitle = '';
-    this.selectedColor = '#e9ebee';
+    this.selectedColor = null;
     this.viewMode = 'list';
   }
-  
+
   createLabel(): void {
-    const colorConfig = this.labelColors.find(c => c.color === this.selectedColor);
-    const newLabel = {
-      name: this.editLabelTitle.trim(),
-      color: this.selectedColor || '#e9ebee',
-      hover: colorConfig ? colorConfig.hover : this.selectedColor || '#e9ebee',
-      isSystemLabel: false
+    if (!this.editLabelTitle || !this.selectedColor) return;
+
+    const payload: CreateLabelDto = {
+      title: this.editLabelTitle.trim(),
+      color: this.selectedColor,
+      ...(this.isGuestUser
+        ? { isGuest: true }
+        : { ownerId: this.loggedInUserId! })
     };
-    const exists = this.availableLabels.some(
-      l => l.name === newLabel.name && l.color === newLabel.color
-    );
-    if (!exists) {
-      this.availableLabels.push(newLabel);
-      this.availableLabelsChange.emit(this.availableLabels); // <-- ÄNDERUNG
-    }
-    this.resetForm();
+
+    this.labelService.createLabel(payload).subscribe(() => {
+      this.loadLabels();
+      this.resetForm(); // Nach dem Neuladen der Daten die Ansicht zurücksetzen
+    });
   }
-  
+
   saveLabel(): void {
-    if (this.editLabelIndex === null) return;
-    
-    const colorConfig = this.labelColors.find(c => c.color === this.selectedColor);
-    const oldName = this.availableLabels[this.editLabelIndex].name;
-    const newName = this.editLabelTitle.trim();
-    
-    this.availableLabels[this.editLabelIndex] = {
-      name: newName,
-      color: this.selectedColor || '#e9ebee',
-      hover: colorConfig ? colorConfig.hover : this.selectedColor || '#e9ebee',
-      isSystemLabel: this.availableLabels[this.editLabelIndex].isSystemLabel
-    };
-    
-    // ÄNDERUNG: Sende die aktualisierte Liste nach oben
-    this.availableLabelsChange.emit(this.availableLabels);
-    
-    const selectedIndex = this.selectedLabels.indexOf(oldName);
-    if (selectedIndex !== -1) {
-      const updatedSelectedLabels = [...this.selectedLabels];
-      updatedSelectedLabels[selectedIndex] = newName;
-      this.selectedLabelsChange.emit(updatedSelectedLabels);
+    if (!this.editLabelData || !this.editLabelTitle || !this.selectedColor) return;
+
+    // Wenn ein "default"-Label bearbeitet wird, ist das ein "create"-Vorgang.
+    if (this.editLabelData.id.startsWith('default-')) {
+      this.createLabel();
+      return;
     }
-    this.resetForm();
+
+    // Andernfalls ist es ein "update"-Vorgang.
+    const updates: Partial<CreateLabelDto> = {
+      title: this.editLabelTitle.trim(),
+      color: this.selectedColor,
+    };
+
+    this.labelService.updateLabel(this.editLabelData.id, updates).subscribe(() => {
+      // Prüfen, ob das bearbeitete Label in der aktuellen Auswahl war
+      if (this.selectedLabels.includes(this.editLabelData!.title)) {
+        const updatedSelection = this.selectedLabels.map(l =>
+          l === this.editLabelData!.title ? updates.title! : l
+        );
+        this.selectedLabelsChange.emit(updatedSelection);
+      }
+      this.loadLabels();
+      this.resetForm(); // Nach dem Neuladen der Daten die Ansicht zurücksetzen
+    });
   }
-  
+
   deleteLabel(event: MouseEvent): void {
     event.stopPropagation();
-    if (this.editLabelIndex === null) return;
-    
-    const deletedLabelName = this.availableLabels[this.editLabelIndex].name;
-    this.availableLabels.splice(this.editLabelIndex, 1);
+    if (!this.editLabelData) return;
 
-    // ÄNDERUNG: Sende die aktualisierte Liste nach oben
-    this.availableLabelsChange.emit(this.availableLabels);
-    
-    if (this.selectedLabels.includes(deletedLabelName)) {
-      const updatedSelectedLabels = this.selectedLabels.filter(
-        (name) => name !== deletedLabelName
-      );
-      this.selectedLabelsChange.emit(updatedSelectedLabels);
+    // "Default"-Labels, die noch nicht gespeichert sind, nur lokal entfernen.
+    if (this.editLabelData.id.startsWith('default-')) {
+      this.availableLabels = this.availableLabels.filter(l => l.id !== this.editLabelData!.id);
+      this.resetForm();
+      return;
     }
-    this.resetForm();
+
+    // Echte Labels vom Server löschen.
+    this.labelService.deleteLabel(this.editLabelData.id).subscribe(() => {
+      const deletedLabelName = this.editLabelData!.title;
+      // Prüfen, ob das gelöschte Label in der aktuellen Auswahl war
+      if (this.selectedLabels.includes(deletedLabelName)) {
+        const updatedSelection = this.selectedLabels.filter(name => name !== deletedLabelName);
+        this.selectedLabelsChange.emit(updatedSelection);
+      }
+      this.loadLabels();
+      this.resetForm(); // Nach dem Neuladen der Daten die Ansicht zurücksetzen
+    });
   }
 }

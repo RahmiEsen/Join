@@ -1,4 +1,14 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+
+import { 
+  Component, 
+  ChangeDetectionStrategy, 
+  Input, 
+  Output, 
+  EventEmitter, 
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ColorConfig } from '../add-task.models';
 
@@ -11,12 +21,25 @@ import { ColorConfig } from '../add-task.models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class TaskHeaderComponent {
+export class TaskHeaderComponent implements OnChanges {
   @Output() menuToggle = new EventEmitter<void>();
+  @Output() closeRequest = new EventEmitter<void>();
   @Input() selectedColor: ColorConfig | null = null;
   @Input() selectedCoverImageForHeader: string | null = null;
   
+  constructor(private cdr: ChangeDetectorRef) {}
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedColor'] || changes['selectedCoverImageForHeader']) {
+      this.cdr.detectChanges();
+    }
+  }
+  
   toggleMenu(): void {
     this.menuToggle.emit();
+  }
+  
+  onCloseClick(): void {
+    this.closeRequest.emit();
   }
 }

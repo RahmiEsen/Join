@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTaskDto, ChecklistDto  } from './dto/create-task.dto';
+import { CreateTaskDto, ChecklistDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -35,6 +36,37 @@ export class TaskService {
       data.checklists = this._prepareChecklistData(checklists);
     }
     return this.prisma.task.create({
+      data,
+      include: this._includeRelations,
+    });
+  }
+
+  async update(id: string, dto: UpdateTaskDto) {
+    const { ownerId, labelIds, memberIds, checklists, ...taskData } = dto;
+    const data: Prisma.TaskUpdateInput = { ...taskData };
+
+    if (ownerId) {
+      data.owner = { connect: { id: ownerId } };
+    }
+
+    if (labelIds) {
+      // "set" überschreibt die vorhandenen Labels mit der neuen Liste
+      data.labels = { set: labelIds.map((id) => ({ id })) };
+    }
+
+    if (memberIds) {
+      // "set" überschreibt die vorhandenen Members mit der neuen Liste
+      data.members = { set: memberIds.map((id) => ({ id })) };
+    }
+
+    if (checklists) {
+      // Einfacher Ansatz: Alte Checklisten löschen und neue erstellen.
+      await this.prisma.checklist.deleteMany({ where: { taskId: id } });
+      data.checklists = this._prepareChecklistData(checklists);
+    }
+
+    return this.prisma.task.update({
+      where: { id },
       data,
       include: this._includeRelations,
     });

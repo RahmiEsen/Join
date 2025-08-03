@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Contact } from '../../../../shared/models/contact.model';
 import { ContactService } from '../../../../shared/services/contact.service';
@@ -13,8 +13,9 @@ import { ContactItemComponent } from '../../../contacts/contact-item/contact-ite
   styleUrl: './member-selector.component.scss'
 })
 
-export class MemberSelectorComponent implements OnInit {
+export class MemberSelectorComponent implements OnInit, OnChanges {
   @Input() contacts: Contact[] = [];
+  @Input() initialSelection: Contact[] = [];
   @Output() selectionChange = new EventEmitter<Contact[]>(); 
   
   isLoading = true;
@@ -27,6 +28,12 @@ export class MemberSelectorComponent implements OnInit {
   
   ngOnInit(): void {
     this.loadContacts();
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialSelection']) {
+      this.selectedContacts = [...this.initialSelection];
+    }
   }
   
   loadContacts(): void {
@@ -54,14 +61,16 @@ export class MemberSelectorComponent implements OnInit {
   
   selectMember(contact: Contact): void {
     const index = this.selectedContacts.findIndex(c => c.id === contact.id);
+    
     if (index > -1) {
-      // Kontakt aus der Auswahl entfernen
-      this.selectedContacts.splice(index, 1);
+      // ERZEUGE NEUES ARRAY: Filtere den Kontakt heraus, der entfernt werden soll
+      this.selectedContacts = this.selectedContacts.filter(c => c.id !== contact.id);
     } else {
-      // Kontakt zur Auswahl hinzufügen
-      this.selectedContacts.push(contact);
+      // ERZEUGE NEUES ARRAY: Erstelle eine Kopie und füge den neuen Kontakt hinzu
+      this.selectedContacts = [...this.selectedContacts, contact];
     }
-    // ÄNDERUNG: Die gesamte aktualisierte Liste senden
+    
+    // Gib die Referenz auf das brandneue Array weiter
     this.selectionChange.emit(this.selectedContacts);
   }
   

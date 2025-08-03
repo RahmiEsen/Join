@@ -17,6 +17,21 @@
         padding: 20px 40px 16px 20px;
         overflow-y: auto;
         gap: 20px;
+        .titel {
+            width: 100%;
+            padding-left: 34px;
+            input {
+                width: 100%;
+                font-size: 28px;
+                font-weight: 600;
+                padding: 4px 8px;
+                
+                border: none;
+                &:focus {
+                    box-shadow: 0 0 0 2px #0c66e4;
+                }
+            }
+        }
         &::-webkit-scrollbar {
             display: none;
         }
@@ -67,17 +82,28 @@
                 }
             }
         }
+        .button-wrapper {
+            position: relative;
+            @include start;
+            width: 100%;
+            padding-left: 26px;
+            gap: 10px;
+            button {
+                font-size: 14px;
+                padding: 6px 12px;
+                gap: 5px;
+            }
+            .delete {
+                position: absolute;
+                right: 0;
+            }
+        }
     }
 }
 
-.button-wrapper {
-    @include start;
-    width: 100%;
-    padding-left: 26px;
-    gap: 10px;
-    button {
-        font-size: 14px;
-        padding: 6px 12px;
-        gap: 5px;
+
+@media (max-width: 670px) {
+    .task-form {
+        width: 95%;
     }
 }

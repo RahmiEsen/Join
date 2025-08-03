@@ -1,23 +1,18 @@
 <aside>
-    <img class="logo" src="./assets/images/logo.png" alt="Join Logo" />
     <nav>
-        <a
+        <button
         *ngFor="let item of navItems"
         [routerLink]="item.route"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
         >
-        <div class="img-wrapper">
-            <img
-                [src]="'./assets/images/' + (isActive(item.route) ? item.iconActive : item.icon)"
+            <div class="img-wrapper">
+                <img
+                [src]="'./assets/images/' + item.icon"
                 [alt]="item.label"
-            />
-        </div>
-        <p>{{ item.label }}</p>
-        </a>
+                />
+            </div>
+            <p>{{ item.label }}</p>
+        </button>
     </nav>
-    <footer>
-        <a routerLink="/privacy-policy">Privacy Policy</a>
-        <a routerLink="/legal-notice">Legal Notice</a>
-    </footer>
 </aside>

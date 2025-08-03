@@ -4,20 +4,50 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface Task {
-  id: string;
+    id: string;
+    title: string;
+    description?: string;
+    isGuest: boolean;
+    coverColor?: string | null;
+    coverImage?: string | null;
+    createdAt: string;
+    updatedAt: string;
+    startDate?: string | null;
+    dueDate?: string | null;
+    labelIds?: string[];
+    labels?: { id: string; title: string; color: string }[];
+    members?: { id: string; firstName: string; lastName: string }[];
+    assignedContacts?: { id: string; name: string; color: string; initials: string; avatarUrl?: string }[];
+    checklists?: { id: string; title: string; items: { id: string; text: string; isCompleted: boolean }[] }[];
+}
+
+export interface CreateChecklistItemDto {
+  text: string;
+  isCompleted?: boolean;
+}
+
+export interface CreateChecklistDto {
   title: string;
-  description?: any; // oder eine spezifischere Typ-Definition, falls bekannt
-  isGuest: boolean;
-  createdAt: string; // Datumswerte kommen als ISO-Strings vom Backend
-  updatedAt: string;
+  items: CreateChecklistItemDto[];
+}
+
+export interface CreateTaskDto {
+  title: string;
+  description?: string;
+  isGuest?: boolean;
+  coverColor?: string | null;
+  coverImage?: string | null;
   startDate?: string;
   dueDate?: string;
-  // Hier können bei Bedarf auch die Relationen wie checklists, members etc. definiert werden
+  labelIds?: string[];
+  memberIds?: string[];
+  checklists?: CreateChecklistDto[];
 }
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
+
 export class TaskService {
     private readonly apiUrl = 'http://localhost:3000/tasks';
     
@@ -35,17 +65,12 @@ export class TaskService {
         .pipe(catchError(this.handleError));
     }
     
-    createTask(taskData: Partial<Task>): Observable<Task> {
+    createTask(taskData: CreateTaskDto): Observable<Task> {
         return this.http
         .post<Task>(this.apiUrl, taskData)
         .pipe(catchError(this.handleError));
     }
     
-    updateTask(id: string, updates: Partial<Task>): Observable<Task> {
-        return this.http
-        .patch<Task>(`${this.apiUrl}/${id}`, updates)
-        .pipe(catchError(this.handleError));
-    }
     
     deleteTask(id: string): Observable<{ message: string }> {
         return this.http
@@ -62,5 +87,9 @@ export class TaskService {
         return throwError(
         () => new Error('Something bad happened; please try again later.')
         );
+    }
+    
+    updateTask(id: string, taskData: Partial<CreateTaskDto>): Observable<Task> {
+        return this.http.patch<Task>(`${this.apiUrl}/${id}`, taskData);
     }
 }

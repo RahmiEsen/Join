@@ -12,25 +12,30 @@ import {
   OnInit,
   EventEmitter,
   Output,
+  Input,
+  SimpleChanges,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { Editor } from '@tiptap/core';
 import { Subscription } from 'rxjs';
-import { TaskService } from '../../shared/services/task.service';
+import { Task, CreateTaskDto, TaskService } from '../../shared/services/task.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DropdownComponent } from '../../shared/components/dropdown/dropdown.component';
 import { CoverMenuComponent } from './task-header/cover-menu/cover-menu.component';
 import { TaskHeaderComponent } from './task-header/task-header.component';
 import { TaskDescriptionComponent } from './task-description/task-description.component';
 import * as TaskModels from './add-task.models';
-import { LabelItem } from './add-task.models';
 import { ColorConfig, CoverImage } from './add-task.models';
 import { TaskToolbarComponent } from './task-toolbar/task-toolbar.component';
 import { TaskSelectionsComponent } from './task-selections/task-selections.component';
 import { TaskChecklistComponent } from './task-checklist/task-checklist.component';
 import { Contact } from '../../shared/models/contact.model';
+import { ContactService } from '../../shared/services/contact.service';
 import { FormsModule } from '@angular/forms';
+import { LabelService, Label, CreateLabelDto } from '../../shared/services/label.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { forkJoin, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-add-task',
@@ -53,18 +58,21 @@ import { FormsModule } from '@angular/forms';
     trigger('fadeInOut', [
       transition(':enter', [style({ opacity: 0 }), animate('200ms ease-in', style({ opacity: 1 }))]),
       transition(':leave', [animate('200ms ease-out', style({ opacity: 0 }))])
-    ])
+    ]),
   ]
 })
 
-export class AddTaskComponent implements OnInit, OnDestroy  {
+export class AddTaskComponent implements OnInit, OnDestroy {
   @ViewChild(TaskHeaderComponent, { read: ElementRef }) taskHeaderElementRef!: ElementRef;
   @ViewChild(CoverMenuComponent, { read: ElementRef }) coverMenuElementRef!: ElementRef;
   @ViewChildren('editorContainer') editorContainerRef!: QueryList<ElementRef>;
   @ViewChild('descriptionPreview') descriptionPreviewRef!: ElementRef<HTMLDivElement>;
   @ViewChild('dateDropdownRef') dateDropdownRef!: DropdownComponent;
-  @Output() checklistDeleted = new EventEmitter<void>();
   @ViewChild(TaskToolbarComponent) private taskToolbar!: TaskToolbarComponent;
+  @ViewChildren(TaskChecklistComponent) private checklistComponents!: QueryList<TaskChecklistComponent>;
+  @Input() taskToEdit: Task | null = null;
+  @Output() checklistDeleted = new EventEmitter<void>();
+  @Output() taskSavedOrCancelled = new EventEmitter<void>();
   
   editor!: Editor;
   isMenuOpen = false;
@@ -88,21 +96,22 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   originalDescription: string = '';
   isEditingDescription: boolean = false;
   attachments: any[] = [];
-  isGuestUser: boolean = true;
-  loggedInUserId: string | null = null; 
-  authService: any;
   savedDescription: string = '';
   safeSavedDescription: SafeHtml = '';
   isDescriptionOverflowing = false;
   isDescriptionExpanded = false;
   isLabelDropdownOpen = false;
-  availableLabels: any[] = [];
-  selectedLabels: string[] = [];
+  selectedLabelIds: string[] = [];
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
-  checklists: { title: string }[] = [];
-  selectedMembers: Contact[] = [];
+  checklists: { title: string; items: { text: string; isCompleted: boolean }[] }[] = [];
   taskTitle: string = '';
+  availableLabels: Label[] = [];
+  loggedInUserId: string | null = null;
+  isGuestUser: boolean = true;
+  allContacts: Contact[] = []; 
+  selectedMembers: Contact[] = [];
+  private initialDataLoaded: Promise<void> | null = null;
   
   readonly colors = TaskModels.coverColors;
   readonly imageDisplayLimit = TaskModels.imageDisplayLimit;
@@ -116,20 +125,75 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   constructor(
     private cdr: ChangeDetectorRef,
     private taskService: TaskService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private labelService: LabelService,
+    private authService: AuthService,
+    private contactService: ContactService
   ) {}
   
   ngOnInit(): void {
     this.updateDisplayedImages();
+    const user = this.authService.getUser();
+    this.isGuestUser = !user || user.id === 'guest';
+    this.loggedInUserId = this.isGuestUser ? null : user?.id ?? null;
+    this.initialDataLoaded = this.loadInitialData();
+  }
+
+  private async loadInitialData(): Promise<void> {
+      const user = this.authService.getUser();
+      this.isGuestUser = !user || user.id === 'guest';
+      const userId = this.isGuestUser ? 'guest' : user?.id;
+
+      if (!userId) {
+          this.availableLabels = [];
+          this.allContacts = [];
+          return;
+      }
+
+      const [dbLabels, contacts] = await firstValueFrom(forkJoin([
+          this.labelService.getLabelsForUser(userId),
+          this.contactService.getUserContacts(userId) 
+      ]));
+
+      const defaultLabels: Label[] = [
+          { id: 'default-1', title: 'Low', color: '#4bce97' },
+          { id: 'default-2', title: 'Medium', color: '#9f8fef' },
+          { id: 'default-3', title: 'Urgent', color: '#c9372c' },
+      ];
+      const combinedLabels = [...dbLabels];
+      defaultLabels.forEach(defaultLabel => {
+          const exists = dbLabels.some(dbLabel => dbLabel.title.toLowerCase() === defaultLabel.title.toLowerCase());
+          if (!exists) {
+              combinedLabels.push(defaultLabel);
+          }
+      });
+      this.availableLabels = combinedLabels.sort((a, b) => a.title.localeCompare(b.title));
+
+      this.allContacts = contacts;
+
+      if (this.taskToEdit) {
+          this.populateFormWithTaskData(this.taskToEdit);
+      }
+      
+      this.cdr.detectChanges();
   }
   
-  showEditor(): void {
-    this.editorVisible = true;
+  async ngOnChanges(changes: SimpleChanges): Promise<void> { 
+    if (this.initialDataLoaded) {
+      await this.initialDataLoaded;
+    }
+    if (changes['taskToEdit'] && this.taskToEdit) {
+      this.populateFormWithTaskData(this.taskToEdit);
+    }
   }
   
   ngOnDestroy(): void {
     this.editor?.destroy();
     this.editorSubscription?.unsubscribe();
+  }
+  
+  showEditor(): void {
+    this.editorVisible = true;
   }
   
   @HostListener('document:click', ['$event'])
@@ -229,6 +293,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
       this.editor.destroy();
       this.editor = undefined!;
     }
+    this.taskSavedOrCancelled.emit();
   }
   
   saveDescription(newContent: string): void {
@@ -238,25 +303,6 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
     this.runOverflowCheckWhenReady();
     this.editorVisible = false;
   }
-  
-  /* submitTask(): void {
-    const taskPayload = {
-      description: this.editor?.getHTML() || '',
-      coverColor: this.selectedColor?.base || null,
-      coverImage: this.selectedCoverImageForHeader || null,
-      attachments: this.attachments || [],
-      isGuest: this.isGuestUser ?? true,
-      ownerId: this.loggedInUserId ?? null
-    };
-    this.taskService.createTask(taskPayload).subscribe({
-      next: (response) => {
-        console.log('✅ Task gespeichert:', response);
-      },
-      error: (error) => {
-        console.error('❌ Fehler beim Speichern:', error);
-      }
-    });
-  } */
   
   editDescription(): void {
     this.editorVisible = true;
@@ -310,32 +356,28 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   }
   
   selectLabel(label: { name: string; color: string }): void {
-    if (!this.selectedLabels.includes(label.name)) {
-      this.selectedLabels.push(label.name);
+    if (!this.selectedLabelIds.includes(label.name)) {
+      this.selectedLabelIds.push(label.name);
     }
     this.isLabelDropdownOpen = false;
   }
   
   onLabelSelect(labelName: string): void {
-    if (this.selectedLabels.includes(labelName)) {
-      this.selectedLabels = this.selectedLabels.filter(l => l !== labelName);
+    if (this.selectedLabelIds.includes(labelName)) {
+      this.selectedLabelIds = this.selectedLabelIds.filter(l => l !== labelName);
     } else {
-      this.selectedLabels.push(labelName);
+      this.selectedLabelIds.push(labelName);
     }
-  }
-  
-  
-  public getLabelByName(name: string): LabelItem | undefined {
-    return this.availableLabels.find(label => label.name === name);
   }
   
   public onAvailableLabelsChange(labels: any[]): void {
     this.availableLabels = labels;
   }
   
-  onDatesReceived(dates: { startDate: Date | null; endDate: Date | null }) {
+  onDatesReceived(dates: { startDate: Date | null; endDate: Date | null }): void {
     this.selectedStartDate = dates.startDate;
     this.selectedEndDate = dates.endDate;
+    this.cdr.detectChanges();
     this.dateDropdownRef?.close();
   }
   
@@ -346,7 +388,7 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
   }
   
   addChecklist(title: string): void {
-    this.checklists.push({ title });
+    this.checklists.push({ title, items: [] });
   }
   
   public removeChecklist(index: number): void {
@@ -365,31 +407,123 @@ export class AddTaskComponent implements OnInit, OnDestroy  {
     this.taskToolbar.openMemberDropdown();
   }
   
-  submitTask(): void {
-    const taskPayload = {
+  async submitTask(): Promise<void> {
+    const labelsToCreate = this.selectedLabelIds
+      .map(title => this.availableLabels.find(label => label.title === title))
+      .filter((label): label is Label => !!label && label.id.startsWith('default-'));
+    if (labelsToCreate.length > 0) {
+      console.log('Erstelle folgende Default-Labels in der DB:', labelsToCreate.map(l => l.title));
+      const createLabelObservables = labelsToCreate.map(label => {
+        const payload: CreateLabelDto = {
+          title: label.title,
+          color: label.color,
+          isGuest: this.isGuestUser,
+          ownerId: this.isGuestUser ? undefined : this.loggedInUserId!,
+        };
+        return this.labelService.createLabel(payload);
+      });
+      try {
+        const newLabels = await firstValueFrom(forkJoin(createLabelObservables));
+        const oldDefaultIds = labelsToCreate.map(l => l.id);
+        const updatedAvailable = this.availableLabels.filter(l => !oldDefaultIds.includes(l.id));
+        this.availableLabels = [...updatedAvailable, ...newLabels];
+        console.log('Label-Liste erfolgreich aktualisiert.');
+      } catch (error) {
+        console.error('❌ Fehler beim Erstellen der Default-Labels:', error);
+        return;
+      }
+    }
+    const finalLabelIds = this.selectedLabelIds
+      .map(selectedTitle => {
+        const foundLabel = this.availableLabels.find(label => label.title === selectedTitle);
+        return foundLabel ? foundLabel.id : null;
+      })
+      .filter((id): id is string => id !== null);
+    const checklistPayload = this.checklistComponents.map(comp => {
+      return {
+        title: comp.title,
+        items: comp.tasks.map(task => ({
+          text: task.text,
+          isCompleted: task.checked
+        }))
+      };
+    });
+    const taskPayload: Partial<CreateTaskDto> = {
       title: this.taskTitle,
       description: this.savedDescription || '',
-      coverColor: this.selectedColor?.base || undefined,
-      coverImage: this.selectedCoverImageForHeader || undefined,
       isGuest: this.isGuestUser,
-      ownerId: this.loggedInUserId || undefined,
+      coverColor: this.selectedColor?.base,
+      coverImage: this.selectedCoverImageForHeader,
       startDate: this.selectedStartDate ? this.selectedStartDate.toISOString() : undefined,
       dueDate: this.selectedEndDate ? this.selectedEndDate.toISOString() : undefined,
-      labelIds: [], 
-      memberIds: [],
-      checklists: this.checklists.map(checklist => ({
-        title: checklist.title,
-        items: []
-      }))
+      labelIds: finalLabelIds,
+      memberIds: this.selectedMembers.map(member => member.id),
+      checklists: checklistPayload
     };
-    console.log('Sende Payload an das Backend:', taskPayload);
-    this.taskService.createTask(taskPayload).subscribe({
-      next: (response) => {
-        console.log('✅ Task erfolgreich im Backend gespeichert:', response);
-      },
-      error: (error) => {
-        console.error('❌ Fehler beim Speichern des Tasks:', error);
-      }
-    });
+
+    if (this.taskToEdit) {
+      // UPDATE-MODUS
+      console.log('Sende Update-Payload an das Backend:', taskPayload);
+      this.taskService.updateTask(this.taskToEdit.id, taskPayload).subscribe({
+        next: (response) => {
+          console.log('✅ Task erfolgreich aktualisiert:', response);
+          this.taskSavedOrCancelled.emit();
+        },
+        error: (error) => {
+          console.error('❌ Fehler beim Aktualisieren des Tasks:', error);
+        }
+      });
+    } else {
+      // CREATE-MODUS
+      console.log('Sende Create-Payload an das Backend:', taskPayload);
+      this.taskService.createTask(taskPayload as CreateTaskDto).subscribe({
+        next: (response) => {
+          console.log('✅ Task erfolgreich erstellt:', response);
+          this.taskSavedOrCancelled.emit();
+        },
+        error: (error) => {
+          console.error('❌ Fehler beim Erstellen des Tasks:', error);
+        }
+      });
+    }
+  }
+  
+  private populateFormWithTaskData(task: Task): void {
+    this.taskTitle = task.title;
+    this.savedDescription = task.description || '';
+    this.safeSavedDescription = this.sanitizer.bypassSecurityTrustHtml(this.savedDescription);
+    this.selectedLabelIds = task.labels ? task.labels.map(label => label.title) : [];
+    this.selectedStartDate = task.startDate ? new Date(task.startDate) : null;
+    this.selectedEndDate = task.dueDate ? new Date(task.dueDate) : null;
+    this.selectedColor = task.coverColor ? { base: task.coverColor, hover: '' } : null;
+    this.selectedCoverImageForHeader = task.coverImage || null;
+    this.checklists = task.checklists || [];
+    if (task.members && task.members.length > 0 && this.allContacts.length > 0) {
+      this.selectedMembers = this.allContacts.filter(contact => 
+        task.members!.some(member => member.id === contact.id)
+      );
+    } else {
+      this.selectedMembers = [];
+    }    
+    this.cdr.detectChanges();
+  }
+  
+  deleteTask(): void {
+    if (!this.taskToEdit || !this.taskToEdit.id) {
+      console.error('Kein Task zum Löschen ausgewählt.');
+      return;
+    }
+    const confirmation = confirm('Bist du sicher, dass du diesen Task endgültig löschen möchtest?');
+    if (confirmation) {
+      this.taskService.deleteTask(this.taskToEdit.id).subscribe({
+        next: () => {
+          console.log('✅ Task erfolgreich gelöscht');
+          this.taskSavedOrCancelled.emit(); 
+        },
+        error: (err) => {
+          console.error('❌ Fehler beim Löschen des Tasks:', err);
+        }
+      });
+    }
   }
 }

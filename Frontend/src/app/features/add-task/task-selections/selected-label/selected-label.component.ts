@@ -16,7 +16,7 @@ export class SelectedLabelComponent {
   showAllLabels = false;
   
   public getLabelByName(name: string): LabelItem | undefined {
-    return this.availableLabels.find(label => label.name === name);
+    return this.availableLabels.find(label => label.title === name);
   }
   
   toggleShowAll() {

@@ -2,7 +2,8 @@
     <app-task-header
         [selectedColor]="selectedColor"
         [selectedCoverImageForHeader]="selectedCoverImageForHeader"
-        (menuToggle)="toggleMenu()">
+        (menuToggle)="toggleMenu()"
+        (closeRequest)="cancelDescription()">
     </app-task-header>
     <app-cover-menu
         *ngIf="isMenuOpen"
@@ -23,23 +24,29 @@
         (predefinedImageSelected)="selectPredefinedImage($event)">
     </app-cover-menu>
     <section>
-        <input 
-            type="text" 
-            [(ngModel)]="taskTitle" 
-            placeholder="Task Title" 
-            class="task-title-input"
-        >
+        <div class="titel">
+            <input 
+                type="text" 
+                [(ngModel)]="taskTitle" 
+                placeholder="Task Title" 
+                class="task-title-input"
+            >
+        </div>
         <app-task-toolbar
-            [(selectedLabels)]="selectedLabels"
+            [availableLabels]="availableLabels"  
+            [(selectedLabels)]="selectedLabelIds" 
             (availableLabelsChange)="onAvailableLabelsChange($event)"
+            [initialMembers]="selectedMembers" 
             (dateSelected)="onDatesReceived($event)"
             (dateCleared)="onDatesCleared()"
             (checklistCreated)="addChecklist($event)"
-            (selectedMembersChange)="selectedMembers = $event">
+            (selectedMembersChange)="selectedMembers = $event"
+            [startDate]="selectedStartDate"
+            [endDate]="selectedEndDate">
         </app-task-toolbar>
         <app-task-selections
-            *ngIf="(selectedLabels && selectedLabels.length > 0) || selectedStartDate || selectedEndDate || (selectedMembers && selectedMembers.length > 0)"
-            [selectedLabels]="selectedLabels"
+            *ngIf="(selectedLabelIds && selectedLabelIds.length > 0) || selectedStartDate || selectedEndDate || (selectedMembers && selectedMembers.length > 0)"
+            [selectedLabels]="selectedLabelIds"
             [availableLabels]="availableLabels"
             [startDate]="selectedStartDate"
             [endDate]="selectedEndDate"
@@ -52,11 +59,13 @@
             [initialDescription]="savedDescription"
             (descriptionSaved)="saveDescription($event)">
         </app-task-description>
-        <ng-container *ngIf="checklists.length > 0">
+        <ng-container 
+        *ngIf="checklists.length > 0">
             <app-task-checklist
                 *ngFor="let checklist of checklists; let i = index"
                 (checklistDeleted)="removeChecklist(i)"
-                [title]="checklist.title">
+                [title]="checklist.title"
+                [items]="checklist.items">
             </app-task-checklist>
         </ng-container>
         <div class="button-wrapper">
@@ -73,6 +82,14 @@
                 <div class="img-wrapper">
                     <img class="icon-default" src="assets/images/close.png" alt="Cancel">
                     <img class="icon-hover" src="assets/images/close-hover.png" alt="Cancel Hover">
+                </div>
+            </button>
+            <button class="secondary-btn delete"
+            >
+                Delete
+                <div class="img-wrapper">
+                    <img class="icon-default" src="assets/images/delete.png" alt="Delete">
+                    <img class="icon-hover" src="assets/images/delete-hover.png" alt="Delete Hover">
                 </div>
             </button>
         </div>

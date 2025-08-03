@@ -9,7 +9,7 @@
     }">
     <div class="title"></div>
     <div class="header-options">
-        <button class="add-cover"
+        <!-- <button class="add-cover"
             type="button"
             (click)="toggleMenu()"
             [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
@@ -19,9 +19,28 @@
         <button class="close"
             type="button"
             [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
-            [style.--hover-color]="selectedColor?.hover">
+            [style.--hover-color]="selectedColor?.hover"
+            (click)="onCloseClick()">
             <img src="assets/images/close.png" alt="Close Task">
-        </button>
+        </button> -->
+        <button
+  class="add-cover"
+  type="button"
+  (click)="toggleMenu()"
+  [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
+  [style.--hover-color]="!selectedCoverImageForHeader && selectedColor?.hover || null">
+  <img src="assets/images/background-img.png" alt="Add Cover" />
+</button>
+
+<button
+  class="close"
+  type="button"
+  [ngClass]="{ 'has-cover-img-bg': selectedCoverImageForHeader }"
+  [style.--hover-color]="!selectedCoverImageForHeader && selectedColor?.hover || null"
+  (click)="onCloseClick()">
+  <img src="assets/images/close.png" alt="Close Task" />
+</button>
+
         <ng-content></ng-content>
     </div>
 </div>
