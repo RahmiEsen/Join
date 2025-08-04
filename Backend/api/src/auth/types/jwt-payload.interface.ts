@@ -4,4 +4,5 @@ export interface JwtPayload {
   name?: string;
   role?: string;
   picture?: string | null;
+  background?: string;
 }

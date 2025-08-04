@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, ParseUUIDPipe, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, ParseUUIDPipe, Patch, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -25,5 +25,11 @@ export class TaskController {
     @Get('guest')
     findAllForGuest() {
         return this.taskService.findAllForGuest();
+    }
+    
+    @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    remove(@Param('id', ParseUUIDPipe) id: string) {
+        return this.taskService.remove(id);
     }
 }

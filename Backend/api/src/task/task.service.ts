@@ -7,7 +7,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
-
+  
   private readonly _includeRelations: Prisma.TaskInclude = {
     labels: true,
     members: true,
@@ -16,7 +16,7 @@ export class TaskService {
     },
     owner: true, 
   };
-
+  
   async create(dto: CreateTaskDto) {
     const { ownerId, labelIds, memberIds, checklists, ...taskData } = dto;
     const data: Prisma.TaskCreateInput = {
@@ -40,46 +40,38 @@ export class TaskService {
       include: this._includeRelations,
     });
   }
-
+  
   async update(id: string, dto: UpdateTaskDto) {
     const { ownerId, labelIds, memberIds, checklists, ...taskData } = dto;
     const data: Prisma.TaskUpdateInput = { ...taskData };
-
     if (ownerId) {
       data.owner = { connect: { id: ownerId } };
     }
-
     if (labelIds) {
-      // "set" überschreibt die vorhandenen Labels mit der neuen Liste
       data.labels = { set: labelIds.map((id) => ({ id })) };
     }
-
     if (memberIds) {
-      // "set" überschreibt die vorhandenen Members mit der neuen Liste
       data.members = { set: memberIds.map((id) => ({ id })) };
     }
-
     if (checklists) {
-      // Einfacher Ansatz: Alte Checklisten löschen und neue erstellen.
       await this.prisma.checklist.deleteMany({ where: { taskId: id } });
       data.checklists = this._prepareChecklistData(checklists);
     }
-
     return this.prisma.task.update({
       where: { id },
       data,
       include: this._includeRelations,
     });
   }
-
+  
   async findAllForUser(userId: string) {
     return this._findMany({ ownerId: userId, isGuest: false });
   }
-
+  
   async findAllForGuest() {
     return this._findMany({ isGuest: true });
   }
-
+  
   private _findMany(where: Prisma.TaskWhereInput) {
     return this.prisma.task.findMany({
       where,
@@ -87,7 +79,7 @@ export class TaskService {
       include: this._includeRelations,
     });
   }
-
+  
   private _prepareChecklistData(
     checklists: ChecklistDto[],
   ): Prisma.ChecklistCreateNestedManyWithoutTaskInput {
@@ -102,5 +94,20 @@ export class TaskService {
         },
       })),
     };
+  }
+  
+  async remove(id: string) {
+    const task = await this.prisma.task.findUnique({
+      where: { id },
+    });
+    if (!task) {
+      throw new NotFoundException(`Task with ID "${id}" not found.`);
+    }
+    await this.prisma.checklist.deleteMany({
+      where: { taskId: id },
+    });
+    return this.prisma.task.delete({
+      where: { id },
+    });
   }
 }

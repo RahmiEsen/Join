@@ -1,0 +1,52 @@
+<div class="background"
+    [@openClose]="menuState">
+    <header (click)="currentView !== 'main' ? setView('main') : toggleMenu()">
+        <div class="img-wrapper">
+            <img 
+                [src]="currentView === 'main' 
+                    ? 'assets/images/background.png' 
+                    : 'assets/images/go-back.png'" 
+                [ngClass]="{'back': currentView !== 'main'}">
+        </div>
+        <p *ngIf="isMenuOpen" @fadeInContent>Change background</p>
+        <button 
+        *ngIf="isMenuOpen"
+        @fadeInContent
+        (click)="toggleMenu(); $event.stopPropagation()">
+            <img src="assets/images/close.png" alt="Close">
+        </button> 
+    </header>
+    <section 
+    *ngIf="isMenuOpen && currentView === 'main'" @fadeInContent>
+        <div class="option-grid">
+            <div class="option-wrapper"
+            *ngFor="let option of backgroundOptions"
+            (click)="setView(option.view)">
+                <div class="option-card" 
+                [ngClass]="option.styleClass"></div>
+                <p>{{ option.label }}</p>
+            </div>
+        </div>
+    </section>
+    <section class="pictur-grid"
+    *ngIf="isMenuOpen && currentView === 'pictures'"
+    @fadeInContent>
+        <button 
+        *ngFor="let image of imageOptions" 
+        [style.backgroundImage]="'url(' + image.url + ')'"
+        (click)="selectBackground('url(' + image.url + ')')">
+            <img *ngIf="'url(' + image.url + ')' === currentBackground" src="assets/images/check-hover.png">
+        </button>
+    </section>
+    <section class="color-grid" 
+    *ngIf="isMenuOpen && currentView === 'colors'" 
+    @fadeInContent>
+        <button 
+        *ngFor="let color of colorOptions" 
+        [style.background]="color.background"
+        (click)="selectBackground(color.background)">
+            <p>{{ color.emoji }}</p>
+            <img *ngIf="color.background === currentBackground" src="assets/images/check-hover.png">
+        </button>
+    </section>
+</div>

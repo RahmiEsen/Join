@@ -6,6 +6,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { ContactService } from '../../shared/services/contact.service';
 import { forkJoin } from 'rxjs';
+import { BackgroundComponent } from '../background/background.component';
 
 @Component({
   selector: 'app-board',
@@ -13,7 +14,8 @@ import { forkJoin } from 'rxjs';
   imports: [
     CommonModule, 
     FormsModule,
-    AddTaskComponent
+    AddTaskComponent,
+    BackgroundComponent
   ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],

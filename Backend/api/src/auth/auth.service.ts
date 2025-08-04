@@ -13,14 +13,13 @@ import { MailService } from '../mail/mail.service';
 import { JwtPayload } from './types/jwt-payload.interface';
 
 @Injectable()
-
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
-    private mailService: MailService
+    private mailService: MailService,
   ) {}
-  
+
   async signup(dto: SignupDto) {
     const hash = await bcrypt.hash(dto.password, 10);
     const user = await this.prisma.user.create({
@@ -33,7 +32,7 @@ export class AuthService {
 
     return { message: 'User created', userId: user.id };
   }
-  
+
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
 
@@ -51,12 +50,13 @@ export class AuthService {
       email: user.email,
       name: user.name,
       role: 'user',
+      background: user.background, // Dieser Teil ist bereits korrekt
     };
 
     const token = await this.jwt.signAsync(payload);
     return { access_token: token };
   }
-  
+
   async guestLogin(): Promise<{ access_token: string; user: any }> {
     const guestId = 'guest';
     let guest = await this.prisma.user.findUnique({
@@ -76,14 +76,17 @@ export class AuthService {
       sub: guest.id,
       role: guest.role,
       name: guest.name,
+      background: guest.background, // HIER IST DIE KORREKTUR FÜR DEN GAST
     };
-    const access_token = await this.jwt.signAsync(payload, { expiresIn: '24h' });
+    const access_token = await this.jwt.signAsync(payload, {
+      expiresIn: '24h',
+    });
     return {
       access_token,
       user: guest,
     };
   }
-  
+
   async resetPassword(token: string, newPassword: string) {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -111,7 +114,7 @@ export class AuthService {
 
     return { message: 'Password changed successfully' };
   }
-  
+
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('Nutzer nicht gefunden');
@@ -130,7 +133,7 @@ export class AuthService {
     const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
     await this.mailService.sendResetEmail(email, resetLink);
   }
-  
+
   async validateOAuthLogin(profile: {
     email: string;
     firstName: string;
@@ -144,7 +147,9 @@ export class AuthService {
 
       if (existingUser) return existingUser;
 
-      const fullName = `${profile.firstName ?? ''} ${profile.lastName ?? ''}`.trim();
+      const fullName = `${profile.firstName ?? ''} ${
+        profile.lastName ?? ''
+      }`.trim();
 
       const user = await this.prisma.user.create({
         data: {
@@ -163,15 +168,15 @@ export class AuthService {
       throw error;
     }
   }
-  
+
   async generateToken(payload: JwtPayload): Promise<string> {
     return this.jwt.signAsync(payload);
   }
-  
+
   async findUserByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
-  
+
   async setResetToken(email: string, token: string) {
     const expiry = new Date(Date.now() + 1000 * 60 * 60);
     await this.prisma.user.update({

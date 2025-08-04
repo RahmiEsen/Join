@@ -80,6 +80,12 @@
     align-items: start;
 }
 
+@mixin start-end {
+    display: flex;
+    justify-content: start;
+    align-items: end;
+}
+
 @mixin center-start {
     display: flex;
     justify-content: start;

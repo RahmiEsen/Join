@@ -6,10 +6,11 @@ header {
     @include space-between;
     width: 100%;
     top: 0;
-    background: #ffffff3d;
+    background: rgba(255, 255, 255, 0.1);
     padding: 12px 40px;
     box-shadow: $shadow;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(3px);
+    z-index: 1;
     .logo {
         width: auto;
         height: 48px;
@@ -40,9 +41,6 @@ header {
                 font-size: 18px;
                 font-weight: 600;
             }
-            &:hover {
-                background-color: $avatar-hover;
-            }
             img {
                 width: 100%;
                 height: 100%;
@@ -67,7 +65,7 @@ header {
         visibility: hidden;
         transform: translateX(40px);
         transition: all 0.3s ease;
-        z-index: 1;
+        z-index: 10;
         &.visible {
             opacity: 1;
             visibility: visible;

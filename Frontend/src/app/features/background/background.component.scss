@@ -1,0 +1,126 @@
+@use '../../../styles/mixins' as *;
+@use '../../../styles/variables' as *;
+
+.background {
+    position: fixed;
+    @include column-start;
+    bottom: 15px;
+    right: 8px;
+    background-color: $white;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    border: 1px solid $border-color;
+    box-shadow: $shadow;
+    gap: 10px;
+    overflow: hidden;
+    header {
+        @include space-between;
+        width: 100%;
+        padding: 6px 12px;
+        gap: 6px;
+        cursor: pointer;
+        .img-wrapper {
+            @include center;
+            height: 26px;
+            width: 26px;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            img {
+                @include center;
+                height: 18px;
+                width: 18px;
+            }
+            &:has(img.back):hover {
+                background-color: $close-menu-hover;
+            }
+            .back:hover {
+                background-color: unset;
+            }
+        }
+        button {
+            all: unset;
+            @include center;
+            height: 26px;
+            width: 26px;
+            border-radius: 8px;
+            cursor: pointer;
+            img {
+                width: 20px;
+                height: 20px;
+            }
+            &:hover {
+                background-color: $close-menu-hover;
+            }
+        }
+    }
+    section {
+        @include column;
+        width: 100%;
+        padding: 6px 12px;
+        gap: 10px;
+        .option-grid {
+            @include center;
+            width: 100%;
+            gap: 10px;
+            .option-wrapper {
+                @include column-center;
+                width: 100%;
+                gap: 10px;
+            }
+            .option-card {
+                width: 100%;
+                height: 96px;
+                border-radius: 10px;
+                background-position: center;
+                background-size: cover;
+                cursor: pointer;
+                &:hover {
+                    opacity: 0.7;
+                }
+                &--pictures {
+                    background-image: url(/assets/images.jpg);
+                }
+                &--colors {
+                    background-image: url(/assets/colors.png);
+                }
+                &--add {
+                    @include center;
+                    background-color: #091e420f;
+                    img {
+                        height: 26px;
+                        width: 26px;
+                    }
+                }
+            }
+        }
+    }
+    .color-grid, .pictur-grid {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 1fr 1fr;
+        padding: 6px 8px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        gap: 8px;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        button {
+            all: unset;
+            position: relative;
+            @include center;
+            height: 96px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            p {
+                position: absolute;
+                bottom: 16px;
+                left: 10px;
+            }
+        }
+    }
+}

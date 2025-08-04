@@ -15,6 +15,7 @@ model User {
   firstName        String?
   lastName         String?
   picture          String?
+  background       String?
   provider         String?
   googleId         String?
   resetToken       String?
