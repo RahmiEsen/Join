@@ -1,0 +1,22 @@
+<button class="add-task" 
+  *ngIf="!isFormVisible"
+  (click)="toggleFormVisibility()">
+    <img src="assets/images/add.png" alt="Add Task">
+    <span>Add a Task</span>
+</button>
+
+<div class="task-titel"
+  *ngIf="isFormVisible">
+    <input 
+        #taskTitleInput
+        placeholder="Insert title"
+        [(ngModel)]="newTaskTitle"
+        (keyup.enter)="emitAddTask()">
+    <div class="button-wrapper">
+        <button (click)="emitAddTask()">Add Task</button>
+        <button class="close"
+        (click)="toggleFormVisibility()">
+            <img src="assets/images/close.png" alt="Close">
+        </button>
+    </div>
+</div>

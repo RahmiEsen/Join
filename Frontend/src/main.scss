@@ -6,6 +6,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: none; 
+    ::-webkit-scrollbar {
+    display: none;
+    }
 }
 
 body {
@@ -116,6 +120,9 @@ main {
     width: 100%;
     top: 72px;
     right: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: #fff6 #00000026;
 }
 
 .secondary-btn {
@@ -245,7 +252,7 @@ app-success-popup {
     @include center;
 }
 
-app-contact-item, app-contact-list, app-contact-details, app-task-header, app-task-description, app-toolbar, app-task-toolbar, app-task-checklist, app-task-selections {
+app-contact-item, app-contact-list, app-contact-details, app-task-header, app-task-description, app-toolbar, app-task-toolbar, app-task-checklist, app-task-selections, app-add-task-form, app-task-card {
     width: 100%;
 }
 
@@ -259,7 +266,7 @@ app-add-task {
 }
 
 app-board {
-    @include center;
+    @include start;
     width: 100%;
     height: 100%;
     padding: 12px 8px;

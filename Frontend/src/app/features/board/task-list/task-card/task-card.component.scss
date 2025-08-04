@@ -1,0 +1,149 @@
+@use '../../../../../styles/mixins' as *;
+@use '../../../../../styles/variables' as *;
+
+.task {
+    position: relative;
+    @include column-align;
+    width: 100%;
+    min-height: fit-content;
+    background-color: $white;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    box-shadow: $shadow;
+    overflow: hidden;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+    header {
+        position: relative !important;
+        all: unset;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        &.image-cover {
+            height: 160px;
+        }
+        &.color-cover {
+            height: 36px;
+        }
+        &.image-cover .titel {
+            background: linear-gradient(180deg, rgb(175 175 175 / 10%) 20%, #ffffff 100%);
+        }
+        .titel {
+            position: absolute;
+            @include start;
+            width: 100%;
+            bottom: 0;
+            font-weight: 600;
+            padding:  8px 12px;
+            background: none;
+            overflow: visible;
+            button {
+                all: unset;
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+                border: 1px solid $black;
+                transform: translateX(-30px);
+                transition: transform 450ms ease, opacity 900ms ease;
+                opacity: 0;
+            }
+            span {
+                font-size: 14px;
+                transform: translateX(-18px);
+                transition: transform 450ms ease;
+                margin: 0;
+            }
+        }
+    }
+    section {
+        @include column-align;
+        width: 100%;
+        padding: 8px 12px;
+        gap: 10px;
+        .labels {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            width: 100%;
+            margin-bottom: 4px;
+            gap: 8px;
+            span {
+                height: 8px;
+                font-size: 11px;
+                font-weight: 600;
+                border-radius: 10px;
+                margin: 0;
+                transition: all 0.2s ease-in-out;
+                &:hover {
+                    filter: brightness(.85);
+                }
+                &.active {
+                    @include center;
+                    width: auto;
+                    height: 18px;
+                    padding: 4px 8px;
+                    &:hover {
+                        filter: brightness(1);
+                    }
+                }
+            }
+        }
+        .wrapper {
+            @include center-start;
+            width: 100%;
+            gap: 20px;
+            span {
+                font-size: 12px;
+                margin: 0;
+            }
+            .date {
+                @include center;
+                gap: 5px;
+            }
+            img {
+                width: 16px;
+                height: 16px;
+            }
+        }
+        .assigned-contacts {
+            @include start;
+            width: 100%;
+            padding-left: 8px;
+            .contact-avatar {
+                @include center;
+                height: 24px;
+                width: 24px;
+                color: #FFF;
+                font-size: 11px;
+                border: unset;
+                border-radius: 50%;
+                margin-left: -8px;
+                box-shadow: 0 0 0 1px #ffffff, 0 0 0 2px #e1e1e1;
+                cursor: pointer;
+                span {
+                    margin: 0;
+                }
+            }
+        }
+    }
+    &:hover {
+        border-color: #388bff;
+        box-shadow: 0px 0px 0px 1px #388bff;
+        header .titel button {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        header .titel span {
+            transform: translateX(8px);
+            margin: 0;
+        }
+        .titel button {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .titel span {
+            transform: translateX(8px);
+            margin: 0;
+        }
+    }
+}

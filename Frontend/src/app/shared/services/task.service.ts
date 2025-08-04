@@ -19,6 +19,7 @@ export interface Task {
     members?: { id: string; firstName: string; lastName: string }[];
     assignedContacts?: { id: string; name: string; color: string; initials: string; avatarUrl?: string }[];
     checklists?: { id: string; title: string; items: { id: string; text: string; isCompleted: boolean }[] }[];
+    status?: string;
 }
 
 export interface CreateChecklistItemDto {
@@ -42,6 +43,7 @@ export interface CreateTaskDto {
   labelIds?: string[];
   memberIds?: string[];
   checklists?: CreateChecklistDto[];
+  status: string
 }
 
 @Injectable({

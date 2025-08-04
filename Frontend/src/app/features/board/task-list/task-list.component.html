@@ -1,0 +1,12 @@
+<div class="list-wrapper">
+    <span>{{ title }}</span>
+    <div class="task-wrapper"
+    *ngIf="tasks && tasks.length > 0;">
+        <app-task-card 
+            *ngFor="let task of tasks"
+            [task]="task" 
+            (openEditRequest)="onOpenTaskEdit($event)">
+        </app-task-card>
+    </div>
+    <app-add-task-form (taskAdded)="onAddTask($event)"></app-add-task-form>
+</div>

@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
     localStorage.setItem('role', payload.role);
     localStorage.setItem('name', payload.name);
     localStorage.setItem('isGuest', payload.role === 'guest' ? 'true' : 'false');
-    this.router.navigate(['/summary']);
+    this.router.navigate(['/board']);
   }
   
   private handleLoginError(error: any): void {
@@ -143,7 +143,7 @@ export class LoginComponent implements OnInit {
     next: (res) => {
       localStorage.setItem('token', res.access_token);
       localStorage.setItem('isGuest', res.user.role === 'guest' ? 'true' : 'false');
-      this.router.navigate(['/summary']);
+      this.router.navigate(['/board']);
       console.clear();
       console.log('%c✅ Guest Login erfolgreich', 'color: green; font-weight: bold;');
       console.table(res.user);

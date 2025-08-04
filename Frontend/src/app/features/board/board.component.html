@@ -8,88 +8,35 @@
         (click)="$event.stopPropagation()">
     </app-add-task>
 </div>
-<div class="list-wrapper">
-    <span>Test</span>
-    <div class="task-wrapper">
-        <div class="task"
-        *ngFor="let task of tasks"
-        (click)="openTaskForEdit(task)">
-            <header
-                *ngIf="task.coverImage || task.coverColor"
-                [ngClass]="{
-                    'image-cover': task.coverImage, 
-                    'color-cover': task.coverColor && !task.coverImage
-                }"
-                [style.backgroundImage]="task.coverImage ? 'url(' + task.coverImage + ')' : null"
-                [style.backgroundColor]="task.coverColor">
-                <div class="titel">
-                    <button></button>
-                    <span>{{ task.title }}</span>
-                </div>
-            </header>
-            <!-- <div class="titel" *ngIf="!task.coverImage && !task.coverColor">
-                <button></button>
-                <span>{{ task.title }}</span>
-            </div> -->
-            <section>
-                <div class="labels"
-                (click)="$event.stopPropagation()"
-                (click)="toggleTaskLabels(task.id)">
-                    <span 
-                        *ngFor="let label of task.labels"
-                        [style.backgroundColor]="label.color"
-                        [ngClass]="{'active': activeTaskId === task.id}">
-                        <ng-container *ngIf="activeTaskId === task.id">
-                            {{ label.title }}
-                        </ng-container>
-                    </span>
-                </div>
-                <div class="wrapper">
-                    <div class="date" *ngIf="task.dueDate">
-                        <img src="assets/images/date.png" alt="Date">
-                        <span>{{ formatDateRange(task) }}</span>
-                    </div>
-                    <div class="description" 
-                    *ngIf="task.description">
-                        <img src="assets/images/description.png" alt="Description">
-                    </div>
-                    <div class="checklist"
-                    *ngIf="task.checklists && task.checklists.length > 0">
-                        <img src="assets/images/checklist.png" alt="Checklist">
-                        <span>{{ getChecklistProgress(task) }}</span>
-                    </div>
-                </div>
-                <div class="assigned-contacts" 
-                *ngIf="task.assignedContacts && task.assignedContacts.length > 0">
-                    <div class="contact-avatar"
-                        *ngFor="let contact of task.assignedContacts"
-                        [style.backgroundColor]="contact.color"
-                        [title]="contact.name"> <img *ngIf="contact.avatarUrl" [src]="contact.avatarUrl" alt="Avatar">
-                        {{ contact.initials }}
-                    </div>
-                </div>
-            </section>
-        </div>
-    </div>
-    <button class="add-task" 
-    *ngIf="!showTaskInput"
-    (click)="toggleTaskInput()">
-        <img src="assets/images/add.png" alt="Add Task">
+<div class="board-wrapper">
+    <app-task-list
+        *ngFor="let list of taskLists"
+        [title]="list.title"
+        [tasks]="list.tasks"
+        (editTaskRequest)="openTaskForEdit($event)"
+        (addTaskRequest)="addTask($event, list.status)">
+    </app-task-list>
+    <button class="add-list"
+    *ngIf="!isAddListFormVisible"
+    (click)="toggleAddListForm()">
+        <img src="assets/images/plus-active.png" alt="Add Task">
         <span>Add a Task</span>
     </button>
-    <div class="task-titel"
-    *ngIf="showTaskInput">
+    <div class="add-task-list"
+    *ngIf="isAddListFormVisible">
+        <div class="list-titel">
         <input 
-            placeholder="Insert title"
-            [(ngModel)]="newTaskTitle"
-            (keyup.enter)="addTask()">
+            placeholder="Enter list title..."
+            [(ngModel)]="newListName"
+            (keyup.enter)="addNewList()">
         <div class="button-wrapper">
-            <button (click)="addTask()">Add Task</button>
+            <button (click)="addNewList()">Add Task</button>
             <button class="close"
-            (click)="toggleTaskInput()">
+            (click)="toggleAddListForm()">
                 <img src="assets/images/close.png" alt="Close">
             </button>
         </div>
+    </div>
     </div>
 </div>
 <app-background></app-background>

@@ -1,0 +1,49 @@
+<div class="task" (click)="onOpenEdit()">
+    <header
+        *ngIf="task.coverImage || task.coverColor"
+        [ngClass]="{
+            'image-cover': task.coverImage, 
+            'color-cover': task.coverColor && !task.coverImage
+        }"
+        [style.backgroundImage]="task.coverImage ? 'url(' + task.coverImage + ')' : null"
+        [style.backgroundColor]="task.coverColor">
+        <div class="titel">
+            <button></button>
+            <span>{{ task.title }}</span>
+        </div>
+    </header>
+    <section>
+        <div class="labels" (click)="toggleLabels($event)">
+            <span 
+                *ngFor="let label of task.labels"
+                [style.backgroundColor]="label.color"
+                [ngClass]="{'active': areLabelsVisible}">
+                <ng-container *ngIf="areLabelsVisible">
+                    {{ label.title }}
+                </ng-container>
+            </span>
+        </div>
+        <div class="wrapper">
+            <div class="date" *ngIf="task.dueDate">
+                <img src="assets/images/date.png" alt="Date">
+                <span>{{ formatDateRange(task) }}</span>
+            </div>
+            <div class="description" *ngIf="task.description">
+                <img src="assets/images/description.png" alt="Description">
+            </div>
+            <div class="checklist" *ngIf="task.checklists && task.checklists.length > 0">
+                <img src="assets/images/checklist.png" alt="Checklist">
+                <span>{{ getChecklistProgress(task) }}</span>
+            </div>
+        </div>
+        <div class="assigned-contacts" *ngIf="task.assignedContacts && task.assignedContacts.length > 0">
+            <div class="contact-avatar"
+                *ngFor="let contact of task.assignedContacts"
+                [style.backgroundColor]="contact.color"
+                [title]="contact.name">
+                <img *ngIf="contact.avatarUrl" [src]="contact.avatarUrl" alt="Avatar">
+                {{ contact.initials }}
+            </div>
+        </div>
+    </section>
+</div>

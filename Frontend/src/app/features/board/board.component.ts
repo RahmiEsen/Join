@@ -1,34 +1,42 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task, TaskService, CreateTaskDto } from '../../shared/services/task.service';
-import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
-import { AddTaskComponent } from '../add-task/add-task.component';
 import { ContactService } from '../../shared/services/contact.service';
 import { forkJoin } from 'rxjs';
+
+// Komponenten-Imports
+import { AddTaskComponent } from '../add-task/add-task.component';
 import { BackgroundComponent } from '../background/background.component';
+import { TaskListComponent } from './task-list/task-list.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-board',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     FormsModule,
     AddTaskComponent,
-    BackgroundComponent
+    BackgroundComponent,
+    TaskListComponent,
   ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
 })
 
 export class BoardComponent implements OnInit {
-  tasks: Task[] = [];
-  public activeTaskId: string | null = null;
-  public showTaskInput: boolean = false;
-  public newTaskTitle: string = '';
-  private isGuestUser: boolean = true;
+  public taskLists: { title: string, status: string, tasks: Task[] }[] = [
+    { title: 'To Do', status: 'todo', tasks: [] },
+    { title: 'In Progress', status: 'inProgress', tasks: [] },
+    { title: 'Awaiting Feedback', status: 'awaitingFeedback', tasks: [] },
+    { title: 'Done', status: 'done', tasks: [] },
+  ];
   public selectedTaskForEdit: Task | null = null; 
   public isModalVisible = false;
+  private isGuestUser: boolean = true;
+  public isAddListFormVisible: boolean = false;
+  public newListName: string = '';
   
   constructor(
     private taskService: TaskService,
@@ -45,129 +53,77 @@ export class BoardComponent implements OnInit {
   loadTasks(): void {
     const tasks$ = this.taskService.getGuestTasks();
     const contacts$ = this.contactService.getGuestContacts();
-    forkJoin([tasks$, contacts$]).subscribe(([tasks, contacts]) => {
-      const tasksWithAssignedContacts = tasks.map(task => {
-        const assignedContacts = task.members
-          ? task.members.map(member => {
-              const foundContact = contacts.find(c => c.id === member.id);
-              const fullName = `${member.firstName} ${member.lastName}`;
-              return {
-                id: member.id,
-                name: fullName,
-                color: foundContact?.color || '#808080',
-                initials: this.getInitials(fullName),
-              };
-            })
-          : [];
-        return { ...task, assignedContacts };
+    forkJoin({ tasks: tasks$, contacts: contacts$ }).subscribe(({ tasks, contacts }) => {
+      const allTasks = tasks.map(task => ({
+        ...task,
+        assignedContacts: task.members?.map(member => {
+          const foundContact = contacts.find(c => c.id === member.id);
+          const fullName = `${member.firstName} ${member.lastName}`;
+          return {
+            id: member.id,
+            name: fullName,
+            color: foundContact?.color || '#808080',
+            initials: this.getInitials(fullName),
+          };
+        }) || []
+      }));
+      this.taskLists.forEach(list => {
+        list.tasks = allTasks.filter(task => (task.status || 'todo') === list.status);
       });
-      this.tasks = tasksWithAssignedContacts;
     });
   }
   
   getInitials(name: string): string {
-      if (!name) return '';
-      const parts = name.trim().split(' ');
-      return parts.length === 1
-        ? parts[0][0].toUpperCase()
-        : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    if (!name) return '';
+    const parts = name.trim().split(' ');
+    return parts.length === 1 ? parts[0][0].toUpperCase() : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
   
-  addTask(): void {
-    const title = this.newTaskTitle.trim();
-    if (!title) {
-      return; // Verhindert das Erstellen von leeren Tasks
-    }
-
+  addTask(title: string, status: string): void {
     const taskPayload: CreateTaskDto = {
       title: title,
+      status: status,
       isGuest: this.isGuestUser,
     };
-
     this.taskService.createTask(taskPayload).subscribe({
-      next: () => {
-        this.loadTasks(); // Lädt die Tasks neu, um die Liste zu aktualisieren
-        this.newTaskTitle = ''; // Setzt das Eingabefeld zurück
-        this.showTaskInput = false; // Schließt das Eingabefeld
-      },
-      error: (error) => {
-        console.error('Fehler beim Erstellen des Tasks:', error);
-      },
+      next: () => this.loadTasks(),
+      error: (error) => console.error('Fehler beim Erstellen des Tasks:', error),
     });
   }
   
-  public formatDateRange(task: Task): string {
-    const formattedStart = this.getFormattedDate(task.startDate);
-    const formattedDue = this.getFormattedDate(task.dueDate);
-    if (formattedStart && formattedDue) {
-      return `${formattedStart} - ${formattedDue}`;
-    }
-    const singleDate = formattedDue || formattedStart;
-    return singleDate ? singleDate : '';
-  }
-  
-  private getFormattedDate(dateString?: string | null): string {
-    if (!dateString) {
-      return '';
-    }
-    const date = new Date(dateString);
-    const currentYear = new Date().getFullYear();
-    const year = date.getFullYear();
-    const day = date.getDate();
-    const month = new Intl.DateTimeFormat('en-GB', { month: 'short' }).format(
-      date
-    );
-    if (year === currentYear) {
-      return `${day}.${month}`;
-    } else {
-      return `${day}.${month}. ${year}`;
-    }
-  }
-  
-  public getChecklistProgress(task: Task): string {
-    if (!task.checklists || task.checklists.length === 0) {
-      return '';
-    }
-    const totalItems = task.checklists.reduce(
-      (sum, checklist) => sum + checklist.items.length,
-      0
-    );
-    const completedItems = task.checklists.reduce(
-      (sum, checklist) =>
-        sum + checklist.items.filter((item) => item.isCompleted).length,
-      0
-    );
-    return `${completedItems}/${totalItems}`;
-  }
-  
-  public toggleTaskLabels(taskId: string): void {
-    if (this.activeTaskId === taskId) {
-      this.activeTaskId = null; // Bei erneutem Klick zuklappen
-    } else {
-      this.activeTaskId = taskId;
-    }
-  }
-  
-  public toggleTaskInput(): void {
-    this.showTaskInput = !this.showTaskInput;
-  }
-  
-  public openTaskForEdit(task: Task): void {
+  openTaskForEdit(task: Task): void {
     this.selectedTaskForEdit = task;
-    setTimeout(() => {
-      this.isModalVisible = true;
-    }, 10); 
+    setTimeout(() => { this.isModalVisible = true; }, 10); 
   }
   
-  public closeEditMode(): void {
+  closeEditMode(): void {
     this.isModalVisible = false;
-    setTimeout(() => {
-      this.selectedTaskForEdit = null;
-    }, 400); 
+    setTimeout(() => { this.selectedTaskForEdit = null; }, 400); 
   }
   
-  public onTaskSaved(): void {
+  onTaskSaved(): void {
     this.closeEditMode();
     this.loadTasks();
+  }
+  
+  toggleAddListForm(): void {
+    this.isAddListFormVisible = !this.isAddListFormVisible;
+    this.newListName = '';
+  }
+  
+  addNewList(): void {
+    const listName = this.newListName.trim();
+    if (listName) {
+      this.taskLists.push({
+        title: listName,
+        status: this.generateStatusId(listName), 
+        tasks: []
+      });
+      this.toggleAddListForm();
+    }
+  }
+  
+  private generateStatusId(name: string): string {
+    return name.replace(/\s+/g, '-').toLowerCase();
   }
 }
