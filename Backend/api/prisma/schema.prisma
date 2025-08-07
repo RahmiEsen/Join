@@ -59,6 +59,7 @@ model Task {
   labels      Label[]
   checklists  Checklist[]
   members     Contact[]
+  status      String?
 }
 
 model Label {
