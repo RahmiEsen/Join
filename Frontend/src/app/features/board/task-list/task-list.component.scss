@@ -11,6 +11,17 @@
     box-shadow: $shadow;
     padding: 8px;
     gap: 10px;
+    input {
+        width: 100%;
+        font-size: 16px;
+        font-weight: 600;
+        background-color: transparent;
+        padding: 8px 12px;
+        border: none;
+        &:focus {
+            box-shadow: 0 0 0 2px #0c66e4;
+        }
+    }
     span {
         font-size: 16px;
         font-weight: 600;

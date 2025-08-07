@@ -42,6 +42,13 @@ model Contact {
   tasks       Task[]
 }
 
+model TaskList {
+  id    String @id @default(uuid())
+  title String
+  createdAt DateTime @default(now())
+  tasks Task[]
+}
+
 model Task {
   id          String   @id @default(uuid())
   description String?
@@ -59,7 +66,8 @@ model Task {
   labels      Label[]
   checklists  Checklist[]
   members     Contact[]
-  status      String?
+  taskList    TaskList?  @relation(fields: [taskListId], references: [id], onDelete: Cascade)
+  taskListId  String?
 }
 
 model Label {

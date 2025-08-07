@@ -43,7 +43,18 @@ export interface CreateTaskDto {
   labelIds?: string[];
   memberIds?: string[];
   checklists?: CreateChecklistDto[];
-  status: string
+  taskListId: string
+}
+
+export interface TaskList {
+  id: string;
+  title: string;
+  createdAt: string;
+  tasks: Task[];
+}
+
+export interface CreateTaskListDto {
+  title: string;
 }
 
 @Injectable({
@@ -52,8 +63,15 @@ export interface CreateTaskDto {
 
 export class TaskService {
     private readonly apiUrl = 'http://localhost:3000/tasks';
+    private readonly listsApiUrl = 'http://localhost:3000/tasklists';
     
     constructor(private http: HttpClient) {}
+    
+    getTaskLists(): Observable<TaskList[]> {
+        return this.http
+        .get<TaskList[]>(this.listsApiUrl)
+        .pipe(catchError(this.handleError));
+    }
     
     getGuestTasks(): Observable<Task[]> {
         return this.http
@@ -73,6 +91,11 @@ export class TaskService {
         .pipe(catchError(this.handleError));
     }
     
+    createTaskList(listData: CreateTaskListDto): Observable<TaskList> {
+        return this.http
+        .post<TaskList>(this.listsApiUrl, listData)
+        .pipe(catchError(this.handleError));
+    }
     
     deleteTask(id: string): Observable<{ message: string }> {
         return this.http
@@ -93,5 +116,11 @@ export class TaskService {
     
     updateTask(id: string, taskData: Partial<CreateTaskDto>): Observable<Task> {
         return this.http.patch<Task>(`${this.apiUrl}/${id}`, taskData);
+    }
+    
+    updateTaskList(id: string, newTitle: string): Observable<TaskList> {
+        const url = `${this.listsApiUrl}/${id}`;
+        const body = { title: newTitle };
+        return this.http.patch<TaskList>(url, body).pipe(catchError(this.handleError));
     }
 }

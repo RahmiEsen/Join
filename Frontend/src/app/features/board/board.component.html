@@ -13,8 +13,10 @@
         *ngFor="let list of taskLists"
         [title]="list.title"
         [tasks]="list.tasks"
+        [listId]="list.id"
+        (titleChanged)="onListTitleChanged($event)"
         (editTaskRequest)="openTaskForEdit($event)"
-        (addTaskRequest)="addTask($event, list.status)">
+        (addTaskRequest)="addTask($event, list.id)">
     </app-task-list>
     <button class="add-list"
     *ngIf="!isAddListFormVisible"
@@ -27,8 +29,7 @@
         <div class="list-titel">
         <input 
             placeholder="Enter list title..."
-            [(ngModel)]="newListName"
-            (keyup.enter)="addNewList()">
+            [(ngModel)]="newListName">
         <div class="button-wrapper">
             <button (click)="addNewList()">Add Task</button>
             <button class="close"

@@ -1,5 +1,11 @@
 <div class="list-wrapper">
-    <span>{{ title }}</span>
+    <span *ngIf="!isEditing" (click)="startEditing()">{{ title }}</span>
+    <input 
+        *ngIf="isEditing"
+        type="text"
+        [(ngModel)]="editedTitle"
+        (blur)="saveTitle()"
+        (keyup.enter)="saveTitle()">
     <div class="task-wrapper"
     *ngIf="tasks && tasks.length > 0;">
         <app-task-card 

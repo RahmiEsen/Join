@@ -8,6 +8,7 @@ import { MailModule } from './mail/mail.module';
 import { ContactModule } from './contacts/contact.module';
 import { TaskModule } from './task/task.module';
 import { LabelModule } from './label/label.module';
+import { TaskListModule } from './tasklist/tasklist.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { LabelModule } from './label/label.module';
     ContactModule, 
     TaskModule,
     LabelModule,
+    TaskListModule,
   ],
   controllers: [AppController],
   providers: [AppService],

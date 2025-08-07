@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task, TaskService, CreateTaskDto } from '../../shared/services/task.service';
+import { Task, TaskService, CreateTaskDto, TaskList, CreateTaskListDto } from '../../shared/services/task.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ContactService } from '../../shared/services/contact.service';
 import { forkJoin } from 'rxjs';
-
-// Komponenten-Imports
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { BackgroundComponent } from '../background/background.component';
 import { TaskListComponent } from './task-list/task-list.component';
@@ -26,12 +24,7 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class BoardComponent implements OnInit {
-  public taskLists: { title: string, status: string, tasks: Task[] }[] = [
-    { title: 'To Do', status: 'todo', tasks: [] },
-    { title: 'In Progress', status: 'inProgress', tasks: [] },
-    { title: 'Awaiting Feedback', status: 'awaitingFeedback', tasks: [] },
-    { title: 'Done', status: 'done', tasks: [] },
-  ];
+  public taskLists: TaskList[] = [];
   public selectedTaskForEdit: Task | null = null; 
   public isModalVisible = false;
   private isGuestUser: boolean = true;
@@ -45,31 +38,48 @@ export class BoardComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    this.loadTasks();
+    this.loadLists();
     const user = this.authService.getUser();
     this.isGuestUser = !user || user.id === 'guest';
   }
   
-  loadTasks(): void {
-    const tasks$ = this.taskService.getGuestTasks();
-    const contacts$ = this.contactService.getGuestContacts();
-    forkJoin({ tasks: tasks$, contacts: contacts$ }).subscribe(({ tasks, contacts }) => {
-      const allTasks = tasks.map(task => ({
-        ...task,
-        assignedContacts: task.members?.map(member => {
-          const foundContact = contacts.find(c => c.id === member.id);
-          const fullName = `${member.firstName} ${member.lastName}`;
-          return {
-            id: member.id,
-            name: fullName,
-            color: foundContact?.color || '#808080',
-            initials: this.getInitials(fullName),
-          };
-        }) || []
-      }));
-      this.taskLists.forEach(list => {
-        list.tasks = allTasks.filter(task => (task.status || 'todo') === list.status);
+  loadLists(): void {
+    // Wir holen uns wieder beide Datenströme gleichzeitig
+    const lists$ = this.taskService.getTaskLists();
+    const contacts$ = this.contactService.getGuestContacts(); // Oder getContactsForUser, je nach Logik
+
+    forkJoin({ lists: lists$, contacts: contacts$ }).subscribe(({ lists, contacts }) => {
+      
+      // Jetzt verarbeiten wir die Listen, die vom Backend kommen
+      const processedLists = lists.map(list => {
+        
+        // Für jede Liste verarbeiten wir ihre Tasks
+        const processedTasks = list.tasks.map(task => {
+          
+          // Und für jeden Task erstellen wir die 'assignedContacts'
+          const assignedContacts = task.members?.map(member => {
+            const foundContact = contacts.find(c => c.id === member.id);
+            const fullName = `${member.firstName} ${member.lastName}`;
+            
+            return {
+              id: member.id,
+              name: fullName,
+              color: foundContact?.color || '#808080', // Standardfarbe, falls Kontakt nicht gefunden
+              initials: this.getInitials(fullName),
+              // avatarUrl: foundContact?.avatarUrl // Falls du später Profilbilder hast
+            };
+          }) || []; // Leeres Array, falls keine Members vorhanden
+
+          // Gib den Task mit den hinzugefügten assignedContacts zurück
+          return { ...task, assignedContacts };
+        });
+
+        // Gib die Liste mit den verarbeiteten Tasks zurück
+        return { ...list, tasks: processedTasks };
       });
+
+      // Speichere das Endergebnis im State
+      this.taskLists = processedLists;
     });
   }
   
@@ -79,14 +89,14 @@ export class BoardComponent implements OnInit {
     return parts.length === 1 ? parts[0][0].toUpperCase() : (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
   
-  addTask(title: string, status: string): void {
+  addTask(title: string, taskListId: string): void { 
     const taskPayload: CreateTaskDto = {
       title: title,
-      status: status,
+      taskListId: taskListId, // Backend erwartet 'taskListId'
       isGuest: this.isGuestUser,
     };
     this.taskService.createTask(taskPayload).subscribe({
-      next: () => this.loadTasks(),
+      next: () => this.loadLists(), // Lade die Listen neu, um den neuen Task anzuzeigen
       error: (error) => console.error('Fehler beim Erstellen des Tasks:', error),
     });
   }
@@ -103,7 +113,7 @@ export class BoardComponent implements OnInit {
   
   onTaskSaved(): void {
     this.closeEditMode();
-    this.loadTasks();
+    this.loadLists();
   }
   
   toggleAddListForm(): void {
@@ -114,16 +124,28 @@ export class BoardComponent implements OnInit {
   addNewList(): void {
     const listName = this.newListName.trim();
     if (listName) {
-      this.taskLists.push({
-        title: listName,
-        status: this.generateStatusId(listName), 
-        tasks: []
+      const listPayload: CreateTaskListDto = { title: listName };
+
+      this.taskService.createTaskList(listPayload).subscribe({
+        next: () => {
+          this.loadLists(); // Lade alle Listen neu, um die neue anzuzeigen
+          this.toggleAddListForm();
+        },
+        error: (err) => console.error('Fehler beim Erstellen der Liste:', err)
       });
-      this.toggleAddListForm();
     }
   }
   
-  private generateStatusId(name: string): string {
-    return name.replace(/\s+/g, '-').toLowerCase();
+  onListTitleChanged(event: { listId: string; newTitle: string }): void {
+    this.taskService.updateTaskList(event.listId, event.newTitle).subscribe({
+      next: (updatedList) => {
+        // UI sofort aktualisieren, ohne neuladen zu müssen
+        const listInComponent = this.taskLists.find(l => l.id === event.listId);
+        if (listInComponent) {
+          listInComponent.title = updatedList.title;
+        }
+      },
+      error: (err) => console.error('Fehler beim Aktualisieren des Titels:', err),
+    });
   }
 }
