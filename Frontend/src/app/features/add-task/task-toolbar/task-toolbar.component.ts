@@ -41,6 +41,7 @@ export class TaskToolbarComponent {
   @Input() initialMembers: Contact[] = [];
   @Input() startDate: Date | null = null;
   @Input() endDate: Date | null = null;
+  @Output() labelsChanged = new EventEmitter<void>();
   
   labelTitle = 'Labels';
   selectedMembers: Contact[] = [];

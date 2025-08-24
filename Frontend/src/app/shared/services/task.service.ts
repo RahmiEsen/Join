@@ -55,6 +55,8 @@ export interface TaskList {
 
 export interface CreateTaskListDto {
   title: string;
+  ownerId?: string;
+  isGuest?: boolean;
 }
 
 @Injectable({
@@ -66,12 +68,6 @@ export class TaskService {
     private readonly listsApiUrl = 'http://localhost:3000/tasklists';
     
     constructor(private http: HttpClient) {}
-    
-    getTaskLists(): Observable<TaskList[]> {
-        return this.http
-        .get<TaskList[]>(this.listsApiUrl)
-        .pipe(catchError(this.handleError));
-    }
     
     getGuestTasks(): Observable<Task[]> {
         return this.http
@@ -122,5 +118,9 @@ export class TaskService {
         const url = `${this.listsApiUrl}/${id}`;
         const body = { title: newTitle };
         return this.http.patch<TaskList>(url, body).pipe(catchError(this.handleError));
+    }
+    
+    deleteTaskList(listId: string): Observable<any> {
+        return this.http.delete(`${this.listsApiUrl}/${listId}`);
     }
 }

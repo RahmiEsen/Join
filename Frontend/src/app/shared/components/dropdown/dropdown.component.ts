@@ -2,11 +2,15 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewC
 import { CommonModule } from '@angular/common';
 import { LabelSelectorComponent } from '../../../features/add-task/task-toolbar/label-selector/label-selector.component';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-dropdown',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    OverlayModule
+  ],
   templateUrl: './dropdown.component.html',
   styleUrls: ['./dropdown.component.scss'],
   animations: [
@@ -29,7 +33,7 @@ export class DropdownComponent {
   
   isOpen = false;
   
-  constructor(private elementRef: ElementRef) {}
+  /* constructor(private elementRef: ElementRef) {}
   
   @HostListener('document:click', ['$event.target'])
   onDocumentClick(target: HTMLElement): void {
@@ -37,7 +41,7 @@ export class DropdownComponent {
     if (!clickedInside) {
       this.close();
     }
-  }
+  } */
   
   toggle(): void {
     this.isOpen = !this.isOpen;

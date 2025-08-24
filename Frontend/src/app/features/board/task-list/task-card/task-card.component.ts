@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Für *ngIf, *ngFor, etc.
+import { CommonModule } from '@angular/common';
 import { Task } from '../../../../shared/services/task.service';
 
 @Component({
@@ -26,8 +26,18 @@ export class TaskCardComponent {
   }
   
   public formatDateRange(task: Task): string {
+    const formattedStart = this.getFormattedDate(task.startDate);
     const formattedDue = this.getFormattedDate(task.dueDate);
-    return formattedDue ? formattedDue : '';
+    if (formattedStart && formattedDue) {
+      return `${formattedStart} - ${formattedDue}`;
+    }
+    if (formattedDue) {
+      return formattedDue;
+    }
+    if (formattedStart) {
+      return formattedStart;
+    }
+    return '';
   }
   
   private getFormattedDate(dateString?: string | null): string {

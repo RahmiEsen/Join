@@ -17,6 +17,7 @@
         position: relative !important;
         all: unset;
         width: 100%;
+        min-height: 45px;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
@@ -27,7 +28,7 @@
             height: 36px;
         }
         &.image-cover .titel {
-            background: linear-gradient(180deg, rgb(175 175 175 / 10%) 20%, #ffffff 100%);
+            background: linear-gradient(180deg, #ffffff00 0%, #ffffff 75%);
         }
         .titel {
             position: absolute;
@@ -35,7 +36,7 @@
             width: 100%;
             bottom: 0;
             font-weight: 600;
-            padding:  8px 12px;
+            padding: 12px;
             background: none;
             overflow: visible;
             button {
@@ -66,7 +67,7 @@
             grid-template-columns: repeat(5, 1fr);
             width: 100%;
             margin-bottom: 4px;
-            gap: 8px;
+            gap: 4px;
             span {
                 height: 8px;
                 font-size: 11px;
@@ -79,7 +80,7 @@
                 }
                 &.active {
                     @include center;
-                    width: auto;
+                    width: max-content;
                     height: 18px;
                     padding: 4px 8px;
                     &:hover {

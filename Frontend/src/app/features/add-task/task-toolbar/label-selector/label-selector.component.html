@@ -3,28 +3,22 @@
         <ul class="label-list">
             <li class="label-item"
                 *ngFor="let label of availableLabels"
-                (click)="toggleLabel(label.title)">
-                <div class="img-wrapper" (click)="toggleLabel(label.title); $event.stopPropagation()">
+                (click)="toggleLabel(label.id)"> <div class="img-wrapper" (click)="toggleLabel(label.id); $event.stopPropagation()">
                     <img
-                        *ngIf="!selectedLabels.includes(label.title)"
-                        src="assets/images/unchecked.png"
+                        *ngIf="!selectedLabels.includes(label.id)" src="assets/images/unchecked.png"
                         alt="unchecked"
                     />
                     <img
-                        *ngIf="selectedLabels.includes(label.title)"
-                        src="assets/images/checked.png"
+                        *ngIf="selectedLabels.includes(label.id)" src="assets/images/checked.png"
                         alt="checked"
                     />
                 </div>
                 <span class="label"
-                [ngStyle]="{
-                    '--base-color': label.color,
-                }"
-                (click)="toggleLabel(label.title); $event.stopPropagation()">
+                    [ngStyle]="{ '--base-color': label.color }"
+                    (click)="toggleLabel(label.id); $event.stopPropagation()">
                     {{ label.title }}
                 </span>
-                <button class="img-wrapper edit-icon"
-                    (click)="onEdit(label); $event.stopPropagation()">
+                <button class="img-wrapper edit-icon" (click)="onEdit(label); $event.stopPropagation()">
                     <img src="assets/images/edit.png" alt="edit" />
                 </button>
             </li>

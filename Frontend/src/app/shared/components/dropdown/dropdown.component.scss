@@ -32,17 +32,20 @@
 }
 
 .dropdown-content {
-    position: fixed;
-    @include column;
-    top: 210px;
+    position: absolute;
+    @include column-start;
+    top: 5px;
     width: 304px;
+    max-height: 330px;
     background-color: $white;
     border-radius: 10px;
     border: 1px solid $border-color;
     box-shadow: $shadow;
     z-index: 2;
+    overflow-y: auto;
     .menu-header {
         position: relative;
+        width: 100%;
         padding: 4px 8px;
         p {
             @include center;

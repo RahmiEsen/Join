@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { LabelItem } from '../../add-task.models';
+import { Label } from '../../../../shared/services/label.service';
 
 @Component({
   selector: 'app-selected-label',
@@ -12,11 +13,11 @@ import { LabelItem } from '../../add-task.models';
 
 export class SelectedLabelComponent {
   @Input() selectedLabels: string[] = [];
-  @Input() availableLabels: any[] = [];
+  @Input() availableLabels: Label[] = [];
   showAllLabels = false;
   
-  public getLabelByName(name: string): LabelItem | undefined {
-    return this.availableLabels.find(label => label.title === name);
+  public getLabelById(id: string): Label | undefined {
+    return this.availableLabels.find(label => label.id === id);
   }
   
   toggleShowAll() {

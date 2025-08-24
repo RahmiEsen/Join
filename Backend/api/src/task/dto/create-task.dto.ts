@@ -5,6 +5,7 @@ import {
   IsBoolean,
   ValidateNested,
   IsISO8601,
+  IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -76,4 +77,12 @@ export class CreateTaskDto {
   @IsOptional()
   @IsBoolean()
   isGuest?: boolean;
+
+  @IsString()
+  @IsOptional()
+  taskListId?: string; // Um die Aufgabe einer anderen Liste zuzuordnen
+
+  @IsNumber()
+  @IsOptional()
+  order?: number;
 }

@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Task, TaskService, CreateTaskDto, TaskList, CreateTaskListDto } from '../../shared/services/task.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { ContactService } from '../../shared/services/contact.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import { BackgroundComponent } from '../background/background.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { FormsModule } from '@angular/forms';
+import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem  } from '@angular/cdk/drag-drop';
+import { BoardService } from '../../shared/services/board.service';
 
 @Component({
   selector: 'app-board',
@@ -18,6 +20,7 @@ import { FormsModule } from '@angular/forms';
     AddTaskComponent,
     BackgroundComponent,
     TaskListComponent,
+    DragDropModule,
   ],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss'],
@@ -30,11 +33,13 @@ export class BoardComponent implements OnInit {
   private isGuestUser: boolean = true;
   public isAddListFormVisible: boolean = false;
   public newListName: string = '';
+  public openListMenuId: string | null = null;
   
   constructor(
     private taskService: TaskService,
     private authService: AuthService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private boardService: BoardService
   ) {}
   
   ngOnInit(): void {
@@ -44,19 +49,26 @@ export class BoardComponent implements OnInit {
   }
   
   loadLists(): void {
-    // Wir holen uns wieder beide Datenströme gleichzeitig
-    const lists$ = this.taskService.getTaskLists();
-    const contacts$ = this.contactService.getGuestContacts(); // Oder getContactsForUser, je nach Logik
+    const user = this.authService.getUser();
+    const isGuest = !user || user.id === 'guest';
 
+    // 1. Wähle den richtigen Observable basierend auf dem User-Status aus
+    let lists$: Observable<TaskList[]>;
+    if (isGuest) {
+      lists$ = this.boardService.getGuestTaskLists();
+    } else {
+      lists$ = this.boardService.getTaskListsForUser(user.id);
+    }
+    
+    // Wir passen auch das Abrufen der Kontakte an
+    const contacts$ = isGuest 
+      ? this.contactService.getGuestContacts() 
+      : this.contactService.getUserContacts(user.id);
+
+    // 2. Der Rest der Logik bleibt fast gleich, nutzt aber den richtigen `lists$` Stream
     forkJoin({ lists: lists$, contacts: contacts$ }).subscribe(({ lists, contacts }) => {
-      
-      // Jetzt verarbeiten wir die Listen, die vom Backend kommen
       const processedLists = lists.map(list => {
-        
-        // Für jede Liste verarbeiten wir ihre Tasks
         const processedTasks = list.tasks.map(task => {
-          
-          // Und für jeden Task erstellen wir die 'assignedContacts'
           const assignedContacts = task.members?.map(member => {
             const foundContact = contacts.find(c => c.id === member.id);
             const fullName = `${member.firstName} ${member.lastName}`;
@@ -64,21 +76,17 @@ export class BoardComponent implements OnInit {
             return {
               id: member.id,
               name: fullName,
-              color: foundContact?.color || '#808080', // Standardfarbe, falls Kontakt nicht gefunden
+              color: foundContact?.color || '#808080',
               initials: this.getInitials(fullName),
-              // avatarUrl: foundContact?.avatarUrl // Falls du später Profilbilder hast
             };
-          }) || []; // Leeres Array, falls keine Members vorhanden
+          }) || [];
 
-          // Gib den Task mit den hinzugefügten assignedContacts zurück
           return { ...task, assignedContacts };
         });
 
-        // Gib die Liste mit den verarbeiteten Tasks zurück
         return { ...list, tasks: processedTasks };
       });
 
-      // Speichere das Endergebnis im State
       this.taskLists = processedLists;
     });
   }
@@ -124,11 +132,19 @@ export class BoardComponent implements OnInit {
   addNewList(): void {
     const listName = this.newListName.trim();
     if (listName) {
-      const listPayload: CreateTaskListDto = { title: listName };
-
+      const user = this.authService.getUser();
+      const isGuest = !user || user.id === 'guest';
+      const listPayload: CreateTaskListDto = {
+        title: listName,
+      };
+      if (isGuest) {
+        listPayload.isGuest = true;
+      } else {
+        listPayload.ownerId = user.id;
+      }
       this.taskService.createTaskList(listPayload).subscribe({
         next: () => {
-          this.loadLists(); // Lade alle Listen neu, um die neue anzuzeigen
+          this.loadLists();
           this.toggleAddListForm();
         },
         error: (err) => console.error('Fehler beim Erstellen der Liste:', err)
@@ -147,5 +163,67 @@ export class BoardComponent implements OnInit {
       },
       error: (err) => console.error('Fehler beim Aktualisieren des Titels:', err),
     });
+  }
+  
+  toggleListMenu(listId: string): void {
+    // Verhindert, dass ein Klick auf den Hintergrund das Menü schließt, wenn es gerade geöffnet wurde
+    if (listId) {
+      this.openListMenuId = this.openListMenuId === listId ? null : listId;
+    } else {
+      this.openListMenuId = null; // Schließt alle Menüs bei Klick auf den Hintergrund
+    }
+  }
+  
+  onDeleteList(listId: string): void {
+    this.taskService.deleteTaskList(listId).subscribe({
+      next: () => {
+        this.taskLists = this.taskLists.filter(list => list.id !== listId);
+        console.log(`List with ID ${listId} deleted successfully.`);
+      },
+      error: (err) => {
+        console.error('Failed to delete the list:', err);
+      }
+    });
+  }
+  
+  dropList(event: CdkDragDrop<TaskList[]>) {
+    moveItemInArray(this.taskLists, event.previousIndex, event.currentIndex);
+    const orderedIds = this.taskLists.map(list => list.id);
+    this.boardService.updateTaskListOrder(orderedIds).subscribe({
+      next: () => {
+        console.log('Reihenfolge der Listen erfolgreich im Backend gespeichert.');
+      },
+      error: (err) => {
+        console.error('Fehler beim Speichern der neuen Reihenfolge:', err);
+      }
+    });
+  }
+  
+  dropTask(event: CdkDragDrop<Task[]>) {
+    const movedTask = event.item.data;
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+    const newListId = event.container.id; 
+    const newOrder = event.currentIndex; 
+    const updatePayload = {
+      taskListId: newListId,
+      order: newOrder
+    };
+    this.taskService.updateTask(movedTask.id, updatePayload).subscribe({
+      next: () => console.log(`Task-Position erfolgreich gespeichert!`),
+      error: (err) => console.error('Fehler beim Speichern der Task-Position:', err)
+    });
+  }
+  
+  getAllListIds(): string[] {
+    return this.taskLists.map(list => list.id);
   }
 }

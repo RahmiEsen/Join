@@ -2,12 +2,10 @@
     <span>Labels</span>
     <div class="choosen-labels">
         <span class="label"
-        *ngFor="let labelName of selectedLabels"
-        [ngStyle]="{
-            '--base-color': getLabelByName(labelName)?.color,
-            '--hover-color': getLabelByName(labelName)?.hover
-        }">
-            {{ labelName }}
-        </span>
+            *ngFor="let labelId of selectedLabels" [ngStyle]="{
+                '--base-color': getLabelById(labelId)?.color,
+                '--hover-color': getLabelById(labelId)?.hover
+            }">
+            {{ getLabelById(labelId)?.title }} </span>
     </div>
 </div>

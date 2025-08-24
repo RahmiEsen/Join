@@ -11,7 +11,9 @@
             <app-label-selector 
                 [availableLabels]="availableLabels"
                 [selectedLabels]="selectedLabels"
-                (selectedLabelsChange)="selectedLabelsChange.emit($event)"#labelSelector>
+                (selectedLabelsChange)="selectedLabelsChange.emit($event)"
+                (labelsChanged)="labelsChanged.emit()" 
+                #labelSelector>
             </app-label-selector>
         </div>
     </app-dropdown>

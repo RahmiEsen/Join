@@ -25,6 +25,7 @@ model User {
   contacts         Contact[]
   tasks            Task[]
   labels           Label[]
+  taskLists        TaskList[]
   @@map("User")
 }
 
@@ -43,10 +44,14 @@ model Contact {
 }
 
 model TaskList {
-  id    String @id @default(uuid())
-  title String
-  createdAt DateTime @default(now())
-  tasks Task[]
+  id          String @id @default(uuid())
+  title       String
+  createdAt   DateTime @default(now())
+  tasks       Task[]
+  order       Float    @default(0)
+  ownerId   String?
+  owner     User?    @relation(fields: [ownerId], references: [id])
+  isGuest   Boolean  @default(false)
 }
 
 model Task {
@@ -67,7 +72,8 @@ model Task {
   checklists  Checklist[]
   members     Contact[]
   taskList    TaskList?  @relation(fields: [taskListId], references: [id], onDelete: Cascade)
-  taskListId  String?
+  taskListId   String? 
+  order       Float      @default(0)
 }
 
 model Label {

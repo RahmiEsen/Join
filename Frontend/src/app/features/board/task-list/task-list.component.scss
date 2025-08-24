@@ -2,6 +2,7 @@
 @use '../../../../styles/variables' as *;
 
 .list-wrapper {
+    position: relative;
     @include column;
     width: 272px;
     max-height: 715px;
@@ -11,24 +12,107 @@
     box-shadow: $shadow;
     padding: 8px;
     gap: 10px;
-    input {
+    cursor: pointer;
+    header {
+        @include space-between;
         width: 100%;
-        font-size: 16px;
-        font-weight: 600;
-        background-color: transparent;
-        padding: 8px 12px;
-        border: none;
-        &:focus {
-            box-shadow: 0 0 0 2px #0c66e4;
+        input {
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: transparent;
+            padding: 8px 12px;
+            border: none;
+            pointer-events: none;
+            &:focus {
+                box-shadow: 0 0 0 2px #0c66e4;
+            }
+            &.editable {
+                pointer-events: auto;
+            }
+        }
+        button {
+            all: unset;
+            @include center;
+            padding: 2px;
+            border-radius: 8px;
+            transition: opacity 0.2s ease-in-out;
+            opacity: 0;
+            cursor: pointer;
+            &:hover {
+                box-shadow: none;
+                background-color: #dcdfe4;
+            }
+            &.active {
+                opacity: 1;
+                background-color: $primary;
+            }
+        }
+        &:hover button {
+            opacity: 1;
         }
     }
-    span {
-        font-size: 16px;
-        font-weight: 600;
-        margin: 8px 12px;
-        cursor: pointer;
+    .dropdown {
+        position: absolute;
+        @include column;
+        top: 42px;
+        right: -192px;
+        width: 230px;
+        background-color: #FFF;
+        border-radius: 10px;
+        border: 1px solid #D1D1D1;
+        padding: 6px 8px;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1019607843);
+        overflow: hidden;
+        z-index: 2;
+        transition: all 100ms ease-in-out;
+        gap: 5px;
+        .menu-header {
+            @include space-between;
+            width: 100%;
+            p {
+                width: 100%;
+                font-size: 14px;
+                font-weight: 600;
+                text-align: center;
+            }
+            button {
+                all: unset;
+                padding: 2px 4px;
+                transition: all 100ms ease-in-out;
+                img {
+                    height: 16px;
+                }
+                &:hover {
+                    border-radius: 8px;
+                    box-shadow: none;
+                    background-color: #dcdfe4;
+                }
+            }
+        }
+        .content {
+            @include space-between;
+            width: 100%;
+            border-radius: 5px;
+            padding: 4px 6px;
+            transition: all 100ms ease-in-out;
+            cursor: pointer;
+            span {
+                font-size: 12px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+            img {
+                width: 14px;
+                height: 14px;
+            }
+            &:hover {
+                background-color: #dcdfe4;
+            }
+        }
     }
     .task-wrapper {
+        flex-grow: 1;
         @include column-start;
         width: 100%;
         padding: 1px;

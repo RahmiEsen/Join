@@ -19,7 +19,7 @@ export class AuthService {
     private jwt: JwtService,
     private mailService: MailService,
   ) {}
-
+  
   async signup(dto: SignupDto) {
     const hash = await bcrypt.hash(dto.password, 10);
     const user = await this.prisma.user.create({
@@ -29,34 +29,41 @@ export class AuthService {
         name: dto.name,
       },
     });
-
+    const defaultListTitles = ['To Do', 'In Progress', 'Awaiting Feedback', 'Done'];
+    for (let i = 0; i < defaultListTitles.length; i++) {
+      await this.prisma.taskList.create({
+        data: {
+          title: defaultListTitles[i],
+          ownerId: user.id,
+          isGuest: false,
+          order: i,
+        },
+      });
+    }
     return { message: 'User created', userId: user.id };
   }
-
+  
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
-
     if (!user) {
       throw new ForbiddenException('EMAIL_NOT_FOUND');
     }
-
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new ForbiddenException('WRONG_PASSWORD');
     }
-
     const payload = {
       sub: user.id,
       email: user.email,
       name: user.name,
       role: 'user',
-      background: user.background, // Dieser Teil ist bereits korrekt
+      background: user.background,
     };
 
     const token = await this.jwt.signAsync(payload);
     return { access_token: token };
   }
-
+  
   async guestLogin(): Promise<{ access_token: string; user: any }> {
     const guestId = 'guest';
     let guest = await this.prisma.user.findUnique({
@@ -76,7 +83,7 @@ export class AuthService {
       sub: guest.id,
       role: guest.role,
       name: guest.name,
-      background: guest.background, // HIER IST DIE KORREKTUR FÜR DEN GAST
+      background: guest.background,
     };
     const access_token = await this.jwt.signAsync(payload, {
       expiresIn: '24h',
@@ -86,7 +93,7 @@ export class AuthService {
       user: guest,
     };
   }
-
+  
   async resetPassword(token: string, newPassword: string) {
     const user = await this.prisma.user.findFirst({
       where: {
@@ -94,14 +101,11 @@ export class AuthService {
         resetTokenExpiry: { gt: new Date() },
       },
     });
-
     if (!user) throw new BadRequestException('Invalid or expired token');
-
     const isSamePassword = await bcrypt.compare(newPassword, user.password);
     if (isSamePassword) {
       throw new BadRequestException('SAME_PASSWORD');
     }
-
     const hashed = await bcrypt.hash(newPassword, 10);
     await this.prisma.user.update({
       where: { id: user.id },
@@ -111,17 +115,14 @@ export class AuthService {
         resetTokenExpiry: null,
       },
     });
-
     return { message: 'Password changed successfully' };
   }
-
+  
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('Nutzer nicht gefunden');
-
     const token = randomBytes(32).toString('hex');
-    const expiry = new Date(Date.now() + 1000 * 60 * 60); // 1 Stunde
-
+    const expiry = new Date(Date.now() + 1000 * 60 * 60);
     await this.prisma.user.update({
       where: { email },
       data: {
@@ -129,11 +130,10 @@ export class AuthService {
         resetTokenExpiry: expiry,
       },
     });
-
     const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
     await this.mailService.sendResetEmail(email, resetLink);
   }
-
+  
   async validateOAuthLogin(profile: {
     email: string;
     firstName: string;
@@ -144,13 +144,10 @@ export class AuthService {
       const existingUser = await this.prisma.user.findUnique({
         where: { email: profile.email },
       });
-
       if (existingUser) return existingUser;
-
       const fullName = `${profile.firstName ?? ''} ${
         profile.lastName ?? ''
       }`.trim();
-
       const user = await this.prisma.user.create({
         data: {
           email: profile.email,
@@ -161,22 +158,21 @@ export class AuthService {
           provider: 'google',
         },
       });
-
       return user;
     } catch (error) {
       console.error('❌ Fehler beim Google-Login:', error);
       throw error;
     }
   }
-
+  
   async generateToken(payload: JwtPayload): Promise<string> {
     return this.jwt.signAsync(payload);
   }
-
+  
   async findUserByEmail(email: string) {
     return this.prisma.user.findUnique({ where: { email } });
   }
-
+  
   async setResetToken(email: string, token: string) {
     const expiry = new Date(Date.now() + 1000 * 60 * 60);
     await this.prisma.user.update({

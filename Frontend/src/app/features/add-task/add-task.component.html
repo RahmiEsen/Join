@@ -40,6 +40,7 @@
             (dateSelected)="onDatesReceived($event)"
             (dateCleared)="onDatesCleared()"
             (checklistCreated)="addChecklist($event)"
+            (labelsChanged)="loadInitialData()"
             (selectedMembersChange)="selectedMembers = $event"
             [startDate]="selectedStartDate"
             [endDate]="selectedEndDate">

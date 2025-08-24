@@ -8,13 +8,25 @@
         (click)="$event.stopPropagation()">
     </app-add-task>
 </div>
-<div class="board-wrapper">
+<div class="board-wrapper" 
+    cdkDropListGroup 
+    cdkDropList 
+    [cdkDropListData]="taskLists"
+    cdkDropListOrientation="horizontal"
+    (cdkDropListDropped)="dropList($event)"
+    (click)="toggleListMenu('')">
     <app-task-list
         *ngFor="let list of taskLists"
+        cdkDrag 
         [title]="list.title"
         [tasks]="list.tasks"
         [listId]="list.id"
-        (titleChanged)="onListTitleChanged($event)"
+        [isMenuOpen]="list.id === openListMenuId"
+        [connectedListIds]="getAllListIds()"
+        (taskDropped)="dropTask($event)"
+        (menuToggled)="toggleListMenu($event)"
+        (deleteListRequested)="onDeleteList($event)"
+        (titleChanged)="onTitleChanged($event)"
         (editTaskRequest)="openTaskForEdit($event)"
         (addTaskRequest)="addTask($event, list.id)">
     </app-task-list>
