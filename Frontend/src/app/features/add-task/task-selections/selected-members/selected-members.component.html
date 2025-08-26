@@ -6,9 +6,14 @@
             <div class="avatar"
                 *ngFor="let member of members | slice:0:4"
                 (click)="onMembersClick(); $event.stopPropagation()"
-                [style.backgroundColor]="getMemberColor(member)"
+                [style.backgroundColor]="!member.profilePicture ? getMemberColor(member) : 'transparent'"
                 [title]="member.firstName + ' ' + member.lastName">
-                {{ getInitials(member) }}
+                <img *ngIf="member.profilePicture" 
+                    [src]="'http://localhost:3000/' + member.profilePicture" 
+                    alt="{{ member.firstName }}">
+                <ng-container *ngIf="!member.profilePicture">
+                    {{ getInitials(member) }}
+                </ng-container>
             </div>
         </div>
         <p class="rest" *ngIf="members.length > 4">

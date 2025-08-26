@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Patch,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -8,7 +19,14 @@ export class ContactController {
   constructor(private readonly contactService: ContactService) {}
   
   @Post()
-  create(@Body() createContactDto: CreateContactDto) {
+  @UseInterceptors(FileInterceptor('profilePicture'))
+  create(
+    @Body() createContactDto: CreateContactDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (file) {
+      createContactDto.profilePicture = file.path.replace(/\\/g, '/');
+    }
     return this.contactService.create(createContactDto);
   }
   
@@ -28,10 +46,15 @@ export class ContactController {
   }
   
   @Patch(':id')
+  @UseInterceptors(FileInterceptor('profilePicture'))
   updateContact(
     @Param('id') id: string,
-    @Body() updateContactDto: UpdateContactDto
+    @Body() updateContactDto: UpdateContactDto,
+    @UploadedFile() file: Express.Multer.File,
   ) {
+    if (file) {
+      updateContactDto.profilePicture = file.path.replace(/\\/g, '/');
+    }
     return this.contactService.update(id, updateContactDto);
   }
 }

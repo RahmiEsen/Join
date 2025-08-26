@@ -1,8 +1,13 @@
 <div class="contact-card" [ngClass]="{ 'slide-out': isSlidingOut }">
     <div class="contact-header">
         <div class="avatar" 
-        [ngStyle]="{ 'background-color': contact.color }">
+        [ngStyle]="!contact.profilePicture ? { 'background-color': contact.color } : {}">
+            <img *ngIf="contact.profilePicture" 
+                [src]="'http://localhost:3000/' + contact.profilePicture" 
+                alt="{{ contact.firstName }} {{ contact.lastName }}">
+            <ng-container *ngIf="!contact.profilePicture">
             {{ getInitials(contact.firstName, contact.lastName) }}
+            </ng-container>
         </div>
         <div class="contact-headline">
             <h2>{{ contact.firstName }} {{ contact.lastName }}</h2>

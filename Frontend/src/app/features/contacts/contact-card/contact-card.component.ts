@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { FormFieldComponent } from '../../../shared/components/form-field/form-field.component';
@@ -18,8 +18,7 @@ import { getRandomColor } from '../../../shared/utils/color.util';
   templateUrl: './contact-card.component.html',
   styleUrls: ['./contact-card.component.scss']
 })
-
-export class ContactCardComponent {
+export class ContactCardComponent implements OnChanges {
   @Input() showOverlay = false;
   @Input() isOverlaySlidingOut = false;
   @Input() contactForm!: FormGroup;
@@ -35,6 +34,37 @@ export class ContactCardComponent {
   
   getInitials = getInitials;
   newContactColor = getRandomColor();
+
+  public selectedFile: File | null = null;
+  public imagePreviewUrl: string | null = null;
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['showOverlay'] && !this.showOverlay) {
+      this.resetFileInput();
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedFile = input.files[0];
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreviewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  hasImage(): boolean {
+    return !!this.imagePreviewUrl || !!this.contactToEdit?.profilePicture;
+  }
+
+  private resetFileInput(): void {
+    this.selectedFile = null;
+    this.imagePreviewUrl = null;
+  }
   
   closeOverlay() {
     this.close.emit();

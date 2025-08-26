@@ -19,16 +19,18 @@
                 <form [formGroup]="contactForm" 
                 (ngSubmit)="isEditMode ? updateContact() : createContact()" 
                 class="contact-form">
+                    <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept="image/*">
                     <div class="avatar"
-                    [ngStyle]="isEditMode && contactToEdit ? { 'background-color': contactToEdit.color || '#ccc' } : {}">
-                        <ng-container *ngIf="isEditMode && contactToEdit">
-                            <div class="avatar-initials">
+                        (click)="fileInput.click()"
+                        [ngStyle]="!hasImage() ? { 'background-color': contactToEdit?.color || newContactColor } : {}">
+                        <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Avatar Preview">
+                        <img *ngIf="!imagePreviewUrl && contactToEdit?.profilePicture" 
+                            [src]="'http://localhost:3000/' + contactToEdit.profilePicture" 
+                            alt="Contact Avatar">
+                        <div *ngIf="!hasImage() && isEditMode && contactToEdit" class="avatar-initials">
                             {{ getInitials(contactToEdit.firstName, contactToEdit.lastName) }}
-                            </div>
-                        </ng-container>
-                        <ng-container *ngIf="!isEditMode">
-                            <img src="assets/images/person-hover.png" alt="Avatar" />
-                        </ng-container>
+                        </div>
+                        <img *ngIf="!hasImage() && !isEditMode" src="assets/images/person-hover.png" alt="Avatar Icon" />
                     </div>
                     <div class="contact-section">
                         <app-form-field

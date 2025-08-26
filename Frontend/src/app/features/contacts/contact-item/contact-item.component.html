@@ -1,8 +1,16 @@
 <div class="contact" 
 [class.active]="isActive" 
 (click)="contactClicked.emit()">
-  <div class="avatar" [ngStyle]="{ 'background-color': contact.color }">
-    {{ getInitials(contact.firstName, contact.lastName) }}
+  <div class="avatar" 
+  [ngStyle]="!contact.profilePicture ? { 'background-color': contact.color } : {}">
+    <img 
+    *ngIf="contact.profilePicture" 
+    [src]="'http://localhost:3000/' + contact.profilePicture" 
+    alt="{{ contact.firstName }} {{ contact.lastName }}">
+    <ng-container 
+    *ngIf="!contact.profilePicture">
+      {{ getInitials(contact.firstName, contact.lastName) }}
+    </ng-container>
   </div>
   <div class="info-wrapper">
     <span class="contact-name">

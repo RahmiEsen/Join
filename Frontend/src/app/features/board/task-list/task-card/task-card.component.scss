@@ -120,7 +120,13 @@
                 border-radius: 50%;
                 margin-left: -8px;
                 box-shadow: 0 0 0 1px #ffffff, 0 0 0 2px #e1e1e1;
+                overflow: hidden;
                 cursor: pointer;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
                 span {
                     margin: 0;
                 }

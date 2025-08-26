@@ -6,7 +6,6 @@ import { Contact } from '../models/contact.model';
 @Injectable({
   providedIn: 'root'
 })
-
 export class ContactService {
   private apiUrl = 'http://localhost:3000/contacts';
   
@@ -20,17 +19,35 @@ export class ContactService {
     return this.http.get<Contact[]>(`${this.apiUrl}/user/${userId}`);
   }
   
-  createContact(contact: Partial<Contact>): Observable<Contact> {
-    const payload = { ...contact };
-    if (!payload.ownerId) delete payload.ownerId;
-    return this.http.post<Contact>(this.apiUrl, payload);
+  createContact(contact: Partial<Contact>, profilePicture?: File): Observable<Contact> {
+    const formData = new FormData();
+    Object.keys(contact).forEach(key => {
+      const value = (contact as any)[key];
+      if (value !== undefined && value !== null) {
+        formData.append(key, value);
+      }
+    });
+    if (profilePicture) {
+      formData.append('profilePicture', profilePicture, profilePicture.name);
+    }
+    return this.http.post<Contact>(this.apiUrl, formData);
   }
   
   deleteContact(id: string) {
     return this.http.delete(`http://localhost:3000/contacts/${id}`);
   }
   
-  editContact(id: string, contact: Partial<Contact>): Observable<Contact> {
-    return this.http.patch<Contact>(`${this.apiUrl}/${id}`, contact);
+  editContact(id: string, contact: Partial<Contact>, profilePicture?: File): Observable<Contact> {
+    const formData = new FormData();
+    Object.keys(contact).forEach(key => {
+      const value = (contact as any)[key];
+      if (value !== undefined && value !== null) {
+        formData.append(key, value);
+      }
+    });
+    if (profilePicture) {
+      formData.append('profilePicture', profilePicture, profilePicture.name);
+    }
+    return this.http.patch<Contact>(`${this.apiUrl}/${id}`, formData);
   }
 }

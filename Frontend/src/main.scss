@@ -259,6 +259,8 @@ app-contact-item, app-contact-list, app-contact-details, app-task-header, app-ta
 app-contacts {
     display: flex;
     height: 100%;
+    width: 100%;
+    padding: 12px 16px 64px;
 }
 
 app-add-task {

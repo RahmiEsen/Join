@@ -9,6 +9,8 @@ import { ContactModule } from './contacts/contact.module';
 import { TaskModule } from './task/task.module';
 import { LabelModule } from './label/label.module';
 import { TaskListModule } from './tasklist/tasklist.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -20,8 +22,13 @@ import { TaskListModule } from './tasklist/tasklist.module';
     TaskModule,
     LabelModule,
     TaskListModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule {}

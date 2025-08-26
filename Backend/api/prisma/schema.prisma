@@ -40,6 +40,7 @@ model Contact {
   owner       User?    @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
   color       String?
+  profilePicture String?
   tasks       Task[]
 }
 

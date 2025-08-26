@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ContactService } from '../../shared/services/contact.service';
 import { ContactListComponent } from './contact-list/contact-list.component';
@@ -28,6 +28,8 @@ import { getRandomColor } from '../../shared/utils/color.util';
 })
 
 export class ContactsComponent implements OnInit {
+  @ViewChild(ContactCardComponent) contactCardComponent!: ContactCardComponent;
+  
   contacts: Contact[] = [];
   groupedContacts: { [key: string]: Contact[] } = {};
   selectedContact: Contact | null = null;
@@ -289,10 +291,16 @@ export class ContactsComponent implements OnInit {
     this.contactForm.reset();
     this.submitted = false;
     this.isSubmitting = false;
+    // **WICHTIG:** Setzt auch die Dateiauswahl in der Kind-Komponente zurück
+    if (this.contactCardComponent) {
+      this.contactCardComponent['resetFileInput']();
+    }
   }
   
   editContact() {
     if (!this.contactToEdit) return;
+    this.submitted = true;
+    if (this.contactForm.invalid) return;
     const formData = this.contactForm.value;
     const { firstName, lastName } = this.splitName(formData.name);
     const payload = {
@@ -300,23 +308,47 @@ export class ContactsComponent implements OnInit {
       lastName,
       email: formData.email,
       phoneNumber: formData.phone,
-      color: this.contactToEdit.color,
-      ownerId: this.contactToEdit.ownerId
     };
-    this.contactService.editContact(this.contactToEdit.id, payload).subscribe({
-      next: (editContact) => {
-        const index = this.contacts.findIndex(c => c.id === editContact.id);
-        if (index !== -1) this.contacts[index] = editContact;
+    const selectedFile = this.contactCardComponent.selectedFile;
+    this.contactService.editContact(this.contactToEdit.id, payload, selectedFile ?? undefined).subscribe({
+      next: (updatedContact) => {
+        const index = this.contacts.findIndex(c => c.id === updatedContact.id);
+        if (index !== -1) this.contacts[index] = updatedContact;
         this.groupedContacts = this.groupByInitial(this.contacts);
+        this.selectedContact = updatedContact;
         this.closeOverlay();
-        this.resetContactFormState();
+        this.showSuccessSlide('Contact successfully updated');
       },
-      error: () => alert('Kontakt konnte nicht aktualisiert werden.')
+      error: (err) => {
+        console.error('Fehler beim Bearbeiten des Kontakts:', err);
+        alert('Kontakt konnte nicht aktualisiert werden.');
+      }
     });
   }
   
   createContact() {
-    this.onSubmit();
+    if (this.isSubmitting) return;
+    this.isSubmitting = true;
+    this.submitted = true;
+    if (this.contactForm.invalid) {
+      this.isSubmitting = false;
+      return;
+    }
+    const formData = this.contactForm.value;
+    const { firstName, lastName } = this.splitName(formData.name);
+    const payload = this.buildPayload(firstName, lastName, formData);
+    const selectedFile = this.contactCardComponent.selectedFile;
+    this.contactService.createContact(payload, selectedFile ?? undefined).subscribe({
+      next: (newContact) => {
+        this.handleSuccess(newContact);
+        this.isSubmitting = false;
+      },
+      error: (err) => {
+        console.error('Fehler beim Erstellen des Kontakts:', err);
+        alert('Kontakt konnte nicht erstellt werden.');
+        this.isSubmitting = false;
+      }
+    });
   }
   
   checkScreenSize() {

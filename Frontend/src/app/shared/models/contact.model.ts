@@ -7,6 +7,7 @@ export interface Contact {
   color?: string;
   isGuest: boolean;
   ownerId: string;
+  profilePicture?: string;
 }
 
 export type NewContact = Omit<Contact, 'id'>;

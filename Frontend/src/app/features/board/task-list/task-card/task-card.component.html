@@ -43,12 +43,16 @@
         <div class="assigned-contacts" 
         *ngIf="task.assignedContacts && task.assignedContacts.length > 0">
             <div class="contact-avatar"
-                *ngFor="let contact of task.assignedContacts"
-                [style.backgroundColor]="contact.color"
-                [title]="contact.name">
-                <img *ngIf="contact.avatarUrl" [src]="contact.avatarUrl" alt="Avatar">
-                {{ contact.initials }}
-            </div>
+            *ngFor="let contact of task.members"
+            [style.backgroundColor]="!contact.profilePicture ? contact.color : 'transparent'"
+            [title]="contact.firstName + ' ' + contact.lastName">
+            <img *ngIf="contact.profilePicture" 
+                [src]="'http://localhost:3000/' + contact.profilePicture" 
+                alt="{{ contact.firstName }}">
+            <ng-container *ngIf="!contact.profilePicture">
+                {{ getInitials(contact.firstName, contact.lastName) }}
+            </ng-container>
+        </div>
         </div>
     </section>
 </div>
