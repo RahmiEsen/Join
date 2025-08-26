@@ -8,7 +8,7 @@ import { TaskList } from './task.service';
 })
 
 export class BoardService {
-  private apiUrl = 'http://localhost:3000/tasklists';
+  private apiUrl = 'https://join-qrpi.vercel.app/tasklists';
   
   constructor(private http: HttpClient) { }
   

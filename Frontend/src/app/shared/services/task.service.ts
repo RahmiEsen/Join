@@ -64,8 +64,8 @@ export interface CreateTaskListDto {
 })
 
 export class TaskService {
-    private readonly apiUrl = 'http://localhost:3000/tasks';
-    private readonly listsApiUrl = 'http://localhost:3000/tasklists';
+    private readonly apiUrl = 'https://join-qrpi.vercel.app/tasks';
+    private readonly listsApiUrl = 'https://join-qrpi.vercel.app/tasklists';
     
     constructor(private http: HttpClient) {}
     

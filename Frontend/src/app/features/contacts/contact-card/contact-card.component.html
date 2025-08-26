@@ -25,7 +25,7 @@
                         [ngStyle]="!hasImage() ? { 'background-color': contactToEdit?.color || newContactColor } : {}">
                         <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Avatar Preview">
                         <img *ngIf="!imagePreviewUrl && contactToEdit?.profilePicture" 
-                            [src]="'http://localhost:3000/' + contactToEdit.profilePicture" 
+                            [src]="'https://join-qrpi.vercel.app/' + contactToEdit.profilePicture" 
                             alt="Contact Avatar">
                         <div *ngIf="!hasImage() && isEditMode && contactToEdit" class="avatar-initials">
                             {{ getInitials(contactToEdit.firstName, contactToEdit.lastName) }}

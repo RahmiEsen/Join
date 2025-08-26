@@ -23,7 +23,7 @@ export interface CreateLabelDto {
 })
 
 export class LabelService {
-  private apiUrl = 'http://localhost:3000/labels';
+  private apiUrl = 'https://join-qrpi.vercel.app/labels';
   
   constructor(private http: HttpClient) {}
   

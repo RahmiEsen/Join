@@ -47,7 +47,7 @@
             [style.backgroundColor]="!contact.profilePicture ? contact.color : 'transparent'"
             [title]="contact.firstName + ' ' + contact.lastName">
             <img *ngIf="contact.profilePicture" 
-                [src]="'http://localhost:3000/' + contact.profilePicture" 
+                [src]="'https://join-qrpi.vercel.app/' + contact.profilePicture" 
                 alt="{{ contact.firstName }}">
             <ng-container *ngIf="!contact.profilePicture">
                 {{ getInitials(contact.firstName, contact.lastName) }}

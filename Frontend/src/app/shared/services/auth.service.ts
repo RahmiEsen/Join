@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:3000/auth';
+  private readonly apiUrl = 'https://join-qrpi.vercel.app/auth';
   private currentUserSubject = new BehaviorSubject<any>(this.getUserFromLocalStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
   
@@ -86,7 +86,7 @@ export class AuthService {
   }
   
   updateUserBackground(backgroundValue: string): Observable<any> {
-    const endpoint = `http://localhost:3000/user/me/background`; 
+    const endpoint = `https://join-qrpi.vercel.app/user/me/background`; 
     return this.http.patch(endpoint, { background: backgroundValue }).pipe(
       tap(() => {
         const currentUser = this.getUser();
