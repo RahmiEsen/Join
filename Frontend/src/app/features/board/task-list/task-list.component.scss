@@ -110,6 +110,71 @@
                 background-color: #dcdfe4;
             }
         }
+        .list {
+            @include space-between;
+            width: 100%;
+            border: 1px solid #D1D1D1;
+            border-radius: 6px;
+            padding: 6px 8px;
+            transition: all 100ms ease-in-out;
+            .selection {
+                width: 100%;
+                height: 100%;
+                font-size: 12px;
+            }
+            .img-wrapper {
+                @include center;
+                height: 18px;
+                width: 18px;
+            }
+            &.focused  {
+                border: 1px solid #0c66e4;
+            }
+            &:hover {
+                background-color: #f1f2f4;
+            }
+        }
+        .list-dropdown {
+            @include column;
+            width: 100%;
+            border: 1px solid #D1D1D1;
+            border-radius: 6px;
+            padding: 6px 0;
+            overflow: hidden;
+            transition: all 100ms ease-in;
+            span {
+                font-size: 12px;
+                padding: 6px 8px;
+                border-left: 2px solid transparent;
+                cursor: pointer;
+                &:hover {
+                    border-left: 2px solid #0c66e4;
+                    background-color: #f1f2f4;
+                }
+                &.active {
+                    color: #0c66e4;
+                    background-color: #e9f2ff;
+                    border-left: 2px solid #0c66e4;
+                    &:hover {
+                        background-color: #cce0ff;
+                    }
+                }
+            }
+        }
+        button {
+            width: fit-content;
+            font-size: 14px;
+            padding: 6px 12px;
+            gap: 5px;
+            .img-wrapper {
+                @include center;
+                height: 18px;
+                width: 18px;
+                img {
+                    height: 100%;
+                }
+            }
+        }
     }
     .task-wrapper {
         flex-grow: 1;

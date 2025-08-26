@@ -1,4 +1,5 @@
-<div class="list-wrapper">
+<div class="list-wrapper"
+(click)="$event.stopPropagation()">
     <header
     (click)="enableTitleEdit()">
         <input 
@@ -18,20 +19,62 @@
     <div class="dropdown"
     *ngIf="isMenuOpen">
         <div class="menu-header">
-            <p>List actions</p>
+            <button class="back" 
+            *ngIf="dropdownState === 'move'" 
+            (click)="goBackToMainMenu($event)">
+                <img src="assets/images/go-back.png" alt="back">
+            </button>
+            <p>{{ dropdownState === 'main' ? 'List actions' : 'Move list' }}</p>
             <button class="close"
             (click)="toggleDropdown($event)">
                 <img src="assets/images/close.png" alt="Close">
             </button>
         </div>
-        <div class="content" (click)="onDeleteList()">
-            <span>Delete</span>
-            <img src="assets/images/delete.png" alt="Delete">
-        </div>
-        <div class="content" (click)="onDeleteList()">
-            <span>Delete</span>
-            <img src="assets/images/delete.png" alt="Delete">
-        </div>
+        <ng-container 
+        *ngIf="dropdownState === 'main'">
+            <div class="content" 
+            (click)="onDeleteList()">
+                <span>Delete</span>
+                <img src="assets/images/delete.png" alt="Delete">
+            </div>
+            <div class="content" 
+            (click)="openMoveList($event)">
+                <span>Move list</span>
+                <img src="assets/images/move-list.png" alt="Move">
+            </div>
+        </ng-container>
+        <ng-container 
+        *ngIf="dropdownState === 'move'">
+            <div class="list" 
+            [class.focused]="isPositionSelectorOpen"
+            (click)="togglePositionSelector($event)">
+                <div class="selection">
+                    {{ selectedPosition }}
+                </div>
+                <div class="img-wrapper"> 
+                    <img [src]="isPositionSelectorOpen ? 'assets/images/arrow-dropdown-up.png' : 'assets/images/arrow-dropdown-down.png'" alt="Toggle Selection">
+                </div>
+            </div>
+            <div class="list-dropdown" 
+            *ngIf="isPositionSelectorOpen">
+                <span
+                *ngFor="let pos of availablePositions"
+                (click)="selectPosition(pos, $event)"
+                [class.active]="pos === currentPosition">
+                    {{ pos }}
+                    <ng-container *ngIf="pos === currentPosition"> 
+                        (currently)
+                    </ng-container>
+                </span>
+            </div>
+            <button 
+            (click)="onMoveList()">
+                Move
+                <div class="img-wrapper">
+                    <img src="assets/images/check-hover.png" alt="Submit">
+                </div>
+            </button>
+        </ng-container>
     </div>
     <div class="task-wrapper"
         cdkDropList

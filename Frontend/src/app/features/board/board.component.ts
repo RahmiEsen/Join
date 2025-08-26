@@ -51,28 +51,21 @@ export class BoardComponent implements OnInit {
   loadLists(): void {
     const user = this.authService.getUser();
     const isGuest = !user || user.id === 'guest';
-
-    // 1. Wähle den richtigen Observable basierend auf dem User-Status aus
     let lists$: Observable<TaskList[]>;
     if (isGuest) {
       lists$ = this.boardService.getGuestTaskLists();
     } else {
       lists$ = this.boardService.getTaskListsForUser(user.id);
     }
-    
-    // Wir passen auch das Abrufen der Kontakte an
     const contacts$ = isGuest 
       ? this.contactService.getGuestContacts() 
       : this.contactService.getUserContacts(user.id);
-
-    // 2. Der Rest der Logik bleibt fast gleich, nutzt aber den richtigen `lists$` Stream
     forkJoin({ lists: lists$, contacts: contacts$ }).subscribe(({ lists, contacts }) => {
       const processedLists = lists.map(list => {
         const processedTasks = list.tasks.map(task => {
           const assignedContacts = task.members?.map(member => {
             const foundContact = contacts.find(c => c.id === member.id);
             const fullName = `${member.firstName} ${member.lastName}`;
-            
             return {
               id: member.id,
               name: fullName,
@@ -80,13 +73,10 @@ export class BoardComponent implements OnInit {
               initials: this.getInitials(fullName),
             };
           }) || [];
-
           return { ...task, assignedContacts };
         });
-
         return { ...list, tasks: processedTasks };
       });
-
       this.taskLists = processedLists;
     });
   }
@@ -100,11 +90,11 @@ export class BoardComponent implements OnInit {
   addTask(title: string, taskListId: string): void { 
     const taskPayload: CreateTaskDto = {
       title: title,
-      taskListId: taskListId, // Backend erwartet 'taskListId'
+      taskListId: taskListId,
       isGuest: this.isGuestUser,
     };
     this.taskService.createTask(taskPayload).subscribe({
-      next: () => this.loadLists(), // Lade die Listen neu, um den neuen Task anzuzeigen
+      next: () => this.loadLists(),
       error: (error) => console.error('Fehler beim Erstellen des Tasks:', error),
     });
   }
@@ -155,7 +145,6 @@ export class BoardComponent implements OnInit {
   onListTitleChanged(event: { listId: string; newTitle: string }): void {
     this.taskService.updateTaskList(event.listId, event.newTitle).subscribe({
       next: (updatedList) => {
-        // UI sofort aktualisieren, ohne neuladen zu müssen
         const listInComponent = this.taskLists.find(l => l.id === event.listId);
         if (listInComponent) {
           listInComponent.title = updatedList.title;
@@ -166,11 +155,10 @@ export class BoardComponent implements OnInit {
   }
   
   toggleListMenu(listId: string): void {
-    // Verhindert, dass ein Klick auf den Hintergrund das Menü schließt, wenn es gerade geöffnet wurde
     if (listId) {
       this.openListMenuId = this.openListMenuId === listId ? null : listId;
     } else {
-      this.openListMenuId = null; // Schließt alle Menüs bei Klick auf den Hintergrund
+      this.openListMenuId = null;
     }
   }
   
@@ -225,5 +213,19 @@ export class BoardComponent implements OnInit {
   
   getAllListIds(): string[] {
     return this.taskLists.map(list => list.id);
+  }
+
+  handleMoveList(event: { listId: string; newPosition: number }): void {
+    const originalIndex = this.taskLists.findIndex(list => list.id === event.listId);
+    moveItemInArray(this.taskLists, originalIndex, event.newPosition);
+    const orderedIds = this.taskLists.map(list => list.id);
+    this.boardService.updateTaskListOrder(orderedIds).subscribe({
+      next: () => {
+        console.log('Reihenfolge der Listen erfolgreich durch Menü-Aktion gespeichert.');
+      },
+      error: (err) => {
+        console.error('Fehler beim Speichern der neuen Reihenfolge:', err);
+      }
+    });
   }
 }

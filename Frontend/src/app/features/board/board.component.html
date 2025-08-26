@@ -16,20 +16,23 @@
     (cdkDropListDropped)="dropList($event)"
     (click)="toggleListMenu('')">
     <app-task-list
-        *ngFor="let list of taskLists"
-        cdkDrag 
-        [title]="list.title"
-        [tasks]="list.tasks"
-        [listId]="list.id"
-        [isMenuOpen]="list.id === openListMenuId"
-        [connectedListIds]="getAllListIds()"
-        (taskDropped)="dropTask($event)"
-        (menuToggled)="toggleListMenu($event)"
-        (deleteListRequested)="onDeleteList($event)"
-        (titleChanged)="onTitleChanged($event)"
-        (editTaskRequest)="openTaskForEdit($event)"
-        (addTaskRequest)="addTask($event, list.id)">
-    </app-task-list>
+    *ngFor="let list of taskLists; let i = index"
+    cdkDrag 
+    [title]="list.title"
+    [tasks]="list.tasks"
+    [listId]="list.id"
+    [currentPosition]="i + 1"
+    [totalLists]="taskLists.length"
+    (moveListRequest)="handleMoveList($event)"
+    [isMenuOpen]="list.id === openListMenuId"
+    [connectedListIds]="getAllListIds()"
+    (taskDropped)="dropTask($event)"
+    (menuToggled)="toggleListMenu($event)"
+    (deleteListRequested)="onDeleteList($event)"
+    (titleChanged)="onListTitleChanged($event)"
+    (editTaskRequest)="openTaskForEdit($event)"
+    (addTaskRequest)="addTask($event, list.id)">
+</app-task-list>
     <button class="add-list"
     *ngIf="!isAddListFormVisible"
     (click)="toggleAddListForm()">

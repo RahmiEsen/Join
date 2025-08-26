@@ -24,18 +24,25 @@ export class TaskListComponent implements OnInit, OnChanges {
   @Input() title: string = '';
   @Input() tasks: Task[] = [];
   @Input() listId: string = '';
+  @Input() isMenuOpen: boolean = false;
+  @Input() connectedListIds: string[] = [];
+  @Input() currentPosition: number = 1;
+  @Input() totalLists: number = 0;
   @Output() editTaskRequest = new EventEmitter<Task>();
   @Output() addTaskRequest = new EventEmitter<string>();
   @Output() titleChanged = new EventEmitter<{ listId: string; newTitle: string }>();
-  @Input() isMenuOpen: boolean = false;
   @Output() menuToggled = new EventEmitter<string>();
   @Output() deleteListRequested = new EventEmitter<string>();
-  @Input() connectedListIds: string[] = [];
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();
+  @Output() moveListRequest = new EventEmitter<{ listId: string; newPosition: number }>();
   @ViewChild('titleInput') titleInput!: ElementRef;
   
   public isEditingTitle: boolean = false;
   public editedTitle: string = '';
+  public dropdownState: 'main' | 'move' = 'main';
+  public isPositionSelectorOpen: boolean = false;
+  public selectedPosition: number = 1;
+  public availablePositions: number[] = [];
   
   constructor() {}
   
@@ -46,6 +53,14 @@ export class TaskListComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['title']) {
       this.editedTitle = this.title;
+    }
+    if (changes['isMenuOpen'] && !changes['isMenuOpen'].currentValue) {
+      this.dropdownState = 'main';
+      this.isPositionSelectorOpen = false;
+    }
+    if (changes['currentPosition'] || changes['totalLists']) {
+      this.selectedPosition = this.currentPosition;
+      this.availablePositions = Array.from({ length: this.totalLists }, (_, i) => i + 1);
     }
   }
   
@@ -70,6 +85,22 @@ export class TaskListComponent implements OnInit, OnChanges {
     this.menuToggled.emit(this.listId);
   }
   
+  openMoveList(event: MouseEvent): void {
+    event.stopPropagation();
+    this.dropdownState = 'move';
+  }
+  
+  goBackToMainMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    this.dropdownState = 'main';
+    this.isPositionSelectorOpen = false;
+  }
+  
+  togglePositionSelector(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isPositionSelectorOpen = !this.isPositionSelectorOpen;
+  }
+  
   onOpenTaskEdit(task: Task): void {
     this.editTaskRequest.emit(task);
   }
@@ -84,5 +115,21 @@ export class TaskListComponent implements OnInit, OnChanges {
   
   onTaskDropped(event: CdkDragDrop<Task[]>): void {
     this.taskDropped.emit(event);
+  }
+  
+  selectPosition(position: number, event: MouseEvent): void {
+    event.stopPropagation();
+    this.selectedPosition = position;
+    this.isPositionSelectorOpen = false;
+  }
+  
+  onMoveList(): void {
+    if (this.selectedPosition !== this.currentPosition) {
+      this.moveListRequest.emit({
+        listId: this.listId,
+        newPosition: this.selectedPosition - 1,
+      });
+    }
+    this.menuToggled.emit(this.listId);
   }
 }
