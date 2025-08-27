@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+/* import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -14,4 +14,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
-bootstrap();
+bootstrap(); */
+
+export default function handler(req, res) {
+  const message = 'Test erfolgreich: Vercel führt diesen Code aus!';
+  console.log(message);
+  res.status(200).send(message);
+}
