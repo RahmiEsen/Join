@@ -22,7 +22,7 @@ bootstrap(); */
   res.status(200).send(message);
 } */
 
-import { NestFactory } from '@nestjs/core';
+/* import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -54,4 +54,9 @@ async function bootstrap() {
 }
 
 console.log('[Checkpoint 0] Die Datei main.ts wird jetzt ausgeführt.');
-bootstrap();
+bootstrap(); */
+
+export default function handler(req, res) {
+  const message = 'Der Index-Test war erfolgreich!';
+  res.status(200).send(message);
+}
