@@ -13,7 +13,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: 'https://join-backend-flix.vercel/auth/google/redirect',
+      callbackURL: 'https://join-backend-flix.vercel.app/auth/google/redirect',
       scope: ['email', 'profile'],
     });
   }

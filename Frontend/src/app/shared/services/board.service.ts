@@ -8,7 +8,7 @@ import { TaskList } from './task.service';
 })
 
 export class BoardService {
-  private apiUrl = 'https://join-backend-flix.vercel/tasklists';
+  private apiUrl = 'https://join-backend-flix.vercel.app/tasklists';
   
   constructor(private http: HttpClient) { }
   

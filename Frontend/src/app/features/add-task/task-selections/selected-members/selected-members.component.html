@@ -9,7 +9,7 @@
                 [style.backgroundColor]="!member.profilePicture ? getMemberColor(member) : 'transparent'"
                 [title]="member.firstName + ' ' + member.lastName">
                 <img *ngIf="member.profilePicture" 
-                    [src]="'https://join-backend-flix.vercel/' + member.profilePicture" 
+                    [src]="'https://join-backend-flix.vercel.app/' + member.profilePicture" 
                     alt="{{ member.firstName }}">
                 <ng-container *ngIf="!member.profilePicture">
                     {{ getInitials(member) }}

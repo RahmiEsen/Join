@@ -23,7 +23,7 @@ export interface CreateLabelDto {
 })
 
 export class LabelService {
-  private apiUrl = 'https://join-backend-flix.vercel/labels';
+  private apiUrl = 'https://join-backend-flix.vercel.app/labels';
   
   constructor(private http: HttpClient) {}
   

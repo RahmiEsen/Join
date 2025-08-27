@@ -3,7 +3,7 @@
         <div class="avatar" 
         [ngStyle]="!contact.profilePicture ? { 'background-color': contact.color } : {}">
             <img *ngIf="contact.profilePicture" 
-                [src]="'https://join-backend-flix.vercel/' + contact.profilePicture" 
+                [src]="'https://join-backend-flix.vercel.app/' + contact.profilePicture" 
                 alt="{{ contact.firstName }} {{ contact.lastName }}">
             <ng-container *ngIf="!contact.profilePicture">
             {{ getInitials(contact.firstName, contact.lastName) }}

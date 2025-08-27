@@ -47,7 +47,7 @@
             [style.backgroundColor]="!contact.profilePicture ? contact.color : 'transparent'"
             [title]="contact.firstName + ' ' + contact.lastName">
             <img *ngIf="contact.profilePicture" 
-                [src]="'https://join-backend-flix.vercel/' + contact.profilePicture" 
+                [src]="'https://join-backend-flix.vercel.app/' + contact.profilePicture" 
                 alt="{{ contact.firstName }}">
             <ng-container *ngIf="!contact.profilePicture">
                 {{ getInitials(contact.firstName, contact.lastName) }}

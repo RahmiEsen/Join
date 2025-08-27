@@ -131,7 +131,7 @@ export class LoginComponent implements OnInit {
   }
   
   loginWithGoogle(): void {
-    window.location.href = 'https://join-backend-flix.vercel/auth/google';
+    window.location.href = 'https://join-backend-flix.vercel.app/auth/google';
   }
   
   goToForgotPassword(): void {
