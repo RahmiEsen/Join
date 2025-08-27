@@ -131,7 +131,7 @@ export class LoginComponent implements OnInit {
   }
   
   loginWithGoogle(): void {
-    window.location.href = 'https://join-qrpi.vercel.app/auth/google';
+    window.location.href = 'https://join-orpin.vercel.app/auth/google';
   }
   
   goToForgotPassword(): void {

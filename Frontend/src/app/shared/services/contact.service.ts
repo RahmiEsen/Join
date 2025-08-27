@@ -7,7 +7,7 @@ import { Contact } from '../models/contact.model';
   providedIn: 'root'
 })
 export class ContactService {
-  private apiUrl = 'https://join-qrpi.vercel.app/contacts';
+  private apiUrl = 'https://join-orpin.vercel.app/contacts';
   
   constructor(private http: HttpClient) {}
   
@@ -34,7 +34,7 @@ export class ContactService {
   }
   
   deleteContact(id: string) {
-    return this.http.delete(`https://join-qrpi.vercel.app/contacts/${id}`);
+    return this.http.delete(`https://join-orpin.vercel.app/contacts/${id}`);
   }
   
   editContact(id: string, contact: Partial<Contact>, profilePicture?: File): Observable<Contact> {

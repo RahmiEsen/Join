@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://join-qrpi.vercel.app' // URL des LIVE Backends
+    apiUrl: 'https://join-orpin.vercel.app' // URL des LIVE Backends
 };

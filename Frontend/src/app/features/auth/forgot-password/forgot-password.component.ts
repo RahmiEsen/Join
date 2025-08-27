@@ -58,7 +58,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
   
   private sendPasswordResetRequest(email: string): void {
-    const apiEndpoint = 'https://join-qrpi.vercel.app/auth/request-reset';
+    const apiEndpoint = 'https://join-orpin.vercel.app/auth/request-reset';
     const requestPayload = { email };
     
     this.http.post(apiEndpoint, requestPayload).subscribe({

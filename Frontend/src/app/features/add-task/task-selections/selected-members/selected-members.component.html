@@ -9,7 +9,7 @@
                 [style.backgroundColor]="!member.profilePicture ? getMemberColor(member) : 'transparent'"
                 [title]="member.firstName + ' ' + member.lastName">
                 <img *ngIf="member.profilePicture" 
-                    [src]="'https://join-qrpi.vercel.app/' + member.profilePicture" 
+                    [src]="'https://join-orpin.vercel.app/' + member.profilePicture" 
                     alt="{{ member.firstName }}">
                 <ng-container *ngIf="!member.profilePicture">
                     {{ getInitials(member) }}
