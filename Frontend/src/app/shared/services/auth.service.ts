@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly apiUrl = 'https://join-backend-flix.vercel.app/auth';
+  private readonly apiUrl = environment.apiUrl + '/auth';
   private currentUserSubject = new BehaviorSubject<any>(this.getUserFromLocalStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
   
@@ -86,7 +87,7 @@ export class AuthService {
   }
   
   updateUserBackground(backgroundValue: string): Observable<any> {
-    const endpoint = `https://join-backend-flix.vercel.app/user/me/background`; 
+    const endpoint = `${environment.apiUrl}/user/me/background`; 
     return this.http.patch(endpoint, { background: backgroundValue }).pipe(
       tap(() => {
         const currentUser = this.getUser();

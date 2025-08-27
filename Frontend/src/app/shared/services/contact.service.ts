@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Contact } from '../models/contact.model';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
-  private apiUrl = 'https://join-backend-flix.vercel.app/contacts';
+  private apiUrl = environment.apiUrl + '/contacts';
   
   constructor(private http: HttpClient) {}
   
@@ -34,7 +35,7 @@ export class ContactService {
   }
   
   deleteContact(id: string) {
-    return this.http.delete(`https://join-backend-flix.vercel.app/contacts/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
   
   editContact(id: string, contact: Partial<Contact>, profilePicture?: File): Observable<Contact> {

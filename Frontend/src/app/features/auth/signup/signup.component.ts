@@ -8,6 +8,7 @@ import { AuthFormComponent } from '../../../shared/components/auth-form/auth-for
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 import { FormHelperService } from '../services/form-utils.service';
 import { SuccessPopupComponent } from '../../../shared/components/success-popup/success-popup.component';
+import { environment } from '../../../../environments/environment.prod';
 
 
 @Component({
@@ -75,7 +76,7 @@ export class SignupComponent implements OnInit {
   }
 
   private registerUser(data: { name: string; email: string; password: string }): void {
-    this.http.post('https://join-backend-flix.vercel.app/auth/signup', data).subscribe({
+    this.http.post(`${environment.apiUrl}/auth/signup`, data).subscribe({
       next: (res) => this.handleSuccess(res),
       error: (err) => this.handleError(err),
     });

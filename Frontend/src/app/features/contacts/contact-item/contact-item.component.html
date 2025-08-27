@@ -1,14 +1,14 @@
 <div class="contact" 
-[class.active]="isActive" 
-(click)="contactClicked.emit()">
+  [class.active]="isActive" 
+  (click)="contactClicked.emit()">
   <div class="avatar" 
-  [ngStyle]="!contact.profilePicture ? { 'background-color': contact.color } : {}">
+    [ngStyle]="!contact.profilePicture ? { 'background-color': contact.color } : {}">
     <img 
-    *ngIf="contact.profilePicture" 
-    [src]="'https://join-backend-flix.vercel.app/' + contact.profilePicture" 
-    alt="{{ contact.firstName }} {{ contact.lastName }}">
+      *ngIf="contact.profilePicture" 
+      [src]="backendUrl + '/' + contact.profilePicture" 
+      alt="{{ contact.firstName }} {{ contact.lastName }}">
     <ng-container 
-    *ngIf="!contact.profilePicture">
+      *ngIf="!contact.profilePicture">
       {{ getInitials(contact.firstName, contact.lastName) }}
     </ng-container>
   </div>

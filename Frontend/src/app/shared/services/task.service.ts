@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
 
 export interface Task {
     id: string;
@@ -64,8 +65,8 @@ export interface CreateTaskListDto {
 })
 
 export class TaskService {
-    private readonly apiUrl = 'https://join-backend-flix.vercel.app/tasks';
-    private readonly listsApiUrl = 'https://join-backend-flix.vercel.app/tasklists';
+    private readonly apiUrl = environment.apiUrl + '/tasks';
+    private readonly listsApiUrl = environment.apiUrl + '/tasklists';
     
     constructor(private http: HttpClient) {}
     

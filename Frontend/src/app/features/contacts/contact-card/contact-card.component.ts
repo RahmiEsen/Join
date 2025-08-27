@@ -5,6 +5,7 @@ import { FormFieldComponent } from '../../../shared/components/form-field/form-f
 import { ContactButtonWrapperComponent } from '../contact-button-wrapper/contact-button-wrapper.component';
 import { Contact, getInitials } from '../../../shared/models/contact.model';
 import { getRandomColor } from '../../../shared/utils/color.util';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-contact-card',
@@ -31,6 +32,7 @@ export class ContactCardComponent implements OnChanges {
   @Output() delete = new EventEmitter<void>();
   @Output() edit = new EventEmitter<void>();
   @Output() create = new EventEmitter<void>();
+  public backendUrl = environment.apiUrl;
   
   getInitials = getInitials;
   newContactColor = getRandomColor();

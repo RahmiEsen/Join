@@ -7,6 +7,7 @@ import { AuthFormComponent } from '../../../shared/components/auth-form/auth-for
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 import { FormHelperService } from '../services/form-utils.service';
 import { AuthService } from '../../../shared/services/auth.service';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-login',
@@ -79,7 +80,7 @@ export class LoginComponent implements OnInit {
   
   private handleRememberEmail(email: string, remember: boolean): void {
     remember ? localStorage.setItem('rememberedEmail', email) 
-              : localStorage.removeItem('rememberedEmail');
+             : localStorage.removeItem('rememberedEmail');
   }
   
   private getFormCredentials(): { email: string; password: string; remember: boolean } {
@@ -131,7 +132,7 @@ export class LoginComponent implements OnInit {
   }
   
   loginWithGoogle(): void {
-    window.location.href = 'https://join-backend-flix.vercel.app/auth/google';
+    window.location.href = `${environment.apiUrl}/auth/google`;
   }
   
   goToForgotPassword(): void {

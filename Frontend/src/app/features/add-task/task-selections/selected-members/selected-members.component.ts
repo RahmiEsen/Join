@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../../shared/models/contact.model';
+import { environment } from '../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-selected-members',
@@ -13,7 +14,7 @@ import { Contact } from '../../../../shared/models/contact.model';
 export class SelectedMembersComponent {
   @Input() members: Contact[] = [];
   @Output() memberAreaClicked = new EventEmitter<void>();
-  
+  public backendUrl = environment.apiUrl;
   private colorCache: { [key: string]: string } = {};
   
   getInitials(contact: Contact): string {

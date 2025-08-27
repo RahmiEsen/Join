@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TaskList } from './task.service';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class BoardService {
-  private apiUrl = 'https://join-backend-flix.vercel.app/tasklists';
+  private apiUrl = environment.apiUrl + '/tasklists';
   
   constructor(private http: HttpClient) { }
   
