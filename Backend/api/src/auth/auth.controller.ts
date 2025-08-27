@@ -11,7 +11,7 @@ import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { Public } from './guard/public.decorator';
 
-const FRONTEND_URL = 'http://localhost:4200';
+const FRONTEND_URL = 'https://join.rahmiesen.de';
 const RESET_EMAIL_SENT_MSG = 'Reset-Mail gesendet';
 const USER_NOT_FOUND_MSG = 'Nutzer nicht gefunden';
 
@@ -73,7 +73,7 @@ export class AuthController {
       throw new NotFoundException('User token not found');
     }
 
-    const redirectUrl = `http://localhost:4200/auth-callback?token=${user.token}`;
+    const redirectUrl = `https://join.rahmiesen.de/auth-callback?token=${user.token}`;
     console.log('🔁 Weiterleitung an Frontend mit Token:', user.token);
     res.redirect(redirectUrl);
   }

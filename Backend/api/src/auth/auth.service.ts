@@ -130,7 +130,7 @@ export class AuthService {
         resetTokenExpiry: expiry,
       },
     });
-    const resetLink = `http://localhost:4200/auth/reset-password?token=${token}`;
+    const resetLink = `https://join.rahmiesen.de/auth/reset-password?token=${token}`;
     await this.mailService.sendResetEmail(email, resetLink);
   }
   
