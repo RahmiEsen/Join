@@ -87,7 +87,9 @@ export class TaskService {
       create: checklists.map((checklist) => ({
         title: checklist.title,
         items: {
-          create: checklist.items.map((item) => ({
+          // Die Änderung stellt sicher, dass der Code nicht abstürzt,
+          // wenn eine Checklist keine 'items' hat.
+          create: (checklist.items ?? []).map((item) => ({
             text: item.text,
             isCompleted: item.isCompleted ?? false,
           })),
