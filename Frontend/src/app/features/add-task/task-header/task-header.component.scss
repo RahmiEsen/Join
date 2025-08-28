@@ -169,3 +169,14 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .header {
+        &.has-cover-color {
+            min-height: 120px;
+        }
+        &.has-cover-img {
+            min-height: 180px;
+        }
+    }
+}

@@ -240,3 +240,26 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .checklist-wrapper .checklist-header .checklist-titel button {
+        width: max-content;
+    }
+    .checklist-wrapper .checklist-header {
+        width: 100%;
+    }
+    .checklist-wrapper .checklist-header .checklist-titel {
+        input {
+            width: 50%;
+        }
+        .button-wrapper {
+            gap: 8px;
+        }
+    }
+    .checklist-wrapper .add-element {
+        margin-left: 0;
+    }
+    .checklist-wrapper .add-element-wrapper {
+        padding-left: 0;
+    }
+}

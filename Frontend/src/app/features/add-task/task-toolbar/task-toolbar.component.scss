@@ -18,3 +18,10 @@
     padding: 0 8px 12px;
     gap: 8px;
 }
+
+
+@media (max-width: 768px) {
+    .option-section {
+        padding: 0;
+    }
+}

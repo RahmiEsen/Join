@@ -82,7 +82,7 @@ export class TaskService {
         .pipe(catchError(this.handleError));
     }
     
-    createTask(taskData: CreateTaskDto): Observable<Task> {
+    createTask(taskData: CreateTaskDto | FormData): Observable<Task> {
         return this.http
         .post<Task>(this.apiUrl, taskData)
         .pipe(catchError(this.handleError));
@@ -111,7 +111,7 @@ export class TaskService {
         );
     }
     
-    updateTask(id: string, taskData: Partial<CreateTaskDto>): Observable<Task> {
+    updateTask(id: string, taskData: Partial<CreateTaskDto> | FormData): Observable<Task> {
         return this.http.patch<Task>(`${this.apiUrl}/${id}`, taskData);
     }
     

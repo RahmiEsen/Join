@@ -13,7 +13,8 @@
   [cdkConnectedOverlayOrigin]="trigger"
   [cdkConnectedOverlayOpen]="isOpen"
   (overlayOutsideClick)="close()">
-<div class="dropdown-content" 
+<div class="dropdown-content"
+[ngClass]="[customClass]"
 [@fadeInOut]
 *ngIf="isOpen">
     <div class="menu-header">

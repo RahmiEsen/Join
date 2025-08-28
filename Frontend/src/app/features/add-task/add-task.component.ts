@@ -80,6 +80,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   isImageLoading = false;
   selectedColor: ColorConfig | null = null;
   selectedCoverImageForHeader: string | null = null;
+  selectedCoverFile: File | null = null;
   selectedCoverImages: CoverImage[] = [];
   displayedCoverImages: CoverImage[] = [];
   activeEditorButton: string | null = null;
@@ -245,6 +246,17 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   
   onCoverImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.selectedCoverFile = file;
+      this.selectedCoverImageForHeader = URL.createObjectURL(file);
+      this.selectedColor = null;
+      this.cdr.detectChanges();
+    }
+  }
+  
+  /* onCoverImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
     if (!input.files) return;
     const files = Array.from(input.files);
     let loaded = 0;
@@ -256,9 +268,9 @@ export class AddTaskComponent implements OnInit, OnDestroy {
     };
     this.isImageLoading = true;
     files.forEach((file) => this.readImage(file, checkDone));
-  }
+  } */
   
-  private readImage(file: File, onDone: () => void): void {
+  /* private readImage(file: File, onDone: () => void): void {
     const reader = new FileReader();
     reader.onload = () => {
       const image: CoverImage = { name: file.name, dataUrl: reader.result as string };
@@ -271,7 +283,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
       onDone();
     };
     reader.readAsDataURL(file);
-  }
+  } */
   
   toggleImageDisplay(): void {
     this.showAllImages = !this.showAllImages;
@@ -406,8 +418,113 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   public onMemberSelectionClicked(): void {
     this.taskToolbar.openMemberDropdown();
   }
-  
+
   async submitTask(): Promise<void> {
+    // ========================================================================
+    // DEIN VORHANDENER CODE ZUR LABEL-ERSTELLUNG (BLEIBT UNVERÄNDERT)
+    // ========================================================================
+    const labelsToCreate = this.selectedLabelIds
+        .map(id => this.availableLabels.find(label => label.id === id))
+        .filter((label): label is Label => !!label && label.id.startsWith('default-'));
+    
+    if (labelsToCreate.length > 0) {
+        console.log('Creating the following default labels in the DB:', labelsToCreate.map(l => l.title));
+        const createLabelObservables = labelsToCreate.map(label => {
+            const payload: CreateLabelDto = {
+                title: label.title,
+                color: label.color,
+                isGuest: this.isGuestUser,
+                ownerId: this.isGuestUser ? undefined : this.loggedInUserId!,
+            };
+            return this.labelService.createLabel(payload);
+        });
+        try {
+            const newLabels = await firstValueFrom(forkJoin(createLabelObservables));
+            const newLabelMap = new Map(newLabels.map(nl => [nl.title, nl.id]));
+            const oldDefaultLabels = new Map(labelsToCreate.map(l => [l.id, l.title]));
+            this.selectedLabelIds = this.selectedLabelIds.map(id => {
+                const oldTitle = oldDefaultLabels.get(id);
+                return oldTitle ? newLabelMap.get(oldTitle) || id : id;
+            });
+            const oldDefaultIds = labelsToCreate.map(l => l.id);
+            this.availableLabels = [
+                ...this.availableLabels.filter(l => !oldDefaultIds.includes(l.id)),
+                ...newLabels
+            ];
+            console.log('Label lists updated successfully.');
+        } catch (error) {
+            console.error('❌ Error creating default labels:', error);
+            return;
+        }
+    }
+
+    // ========================================================================
+    // START DER ÄNDERUNGEN: PAYLOAD WIRD JETZT ALS FORMDATA ERSTELLT
+    // ========================================================================
+    
+    const formData = new FormData();
+
+    // 1. Einfache Text-Daten hinzufügen
+    formData.append('title', this.taskTitle);
+    formData.append('description', this.savedDescription || '');
+    formData.append('isGuest', String(this.isGuestUser)); // Booleans als String senden
+
+    // 2. Optionale Daten nur hinzufügen, wenn sie existieren
+    if (this.selectedColor) {
+        formData.append('coverColor', this.selectedColor.base);
+    }
+    if (this.selectedStartDate) {
+        formData.append('startDate', this.selectedStartDate.toISOString());
+    }
+    if (this.selectedEndDate) {
+        formData.append('dueDate', this.selectedEndDate.toISOString());
+    }
+
+    // 3. Arrays und komplexe Objekte als JSON-String hinzufügen
+    formData.append('labelIds', JSON.stringify(this.selectedLabelIds));
+    formData.append('memberIds', JSON.stringify(this.selectedMembers.map(member => member.id)));
+    
+    const checklistPayload = this.checklistComponents.map(comp => ({
+        title: comp.title,
+        items: comp.tasks.map(task => ({
+            text: task.text,
+            isCompleted: task.checked
+        }))
+    }));
+    formData.append('checklists', JSON.stringify(checklistPayload));
+
+    // 4. Die Bild-Datei hinzufügen, falls eine ausgewählt wurde
+    //    'this.selectedCoverFile' ist die neue Variable aus dem vorherigen Schritt
+    if (this.selectedCoverFile) {
+        formData.append('coverImage', this.selectedCoverFile);
+    }
+
+    // ========================================================================
+    // DATENVERSAND MIT DEM NEUEN FORMDATA-OBJEKT
+    // ========================================================================
+    if (this.taskToEdit) {
+        console.log('Sending update payload (FormData) to backend');
+        this.taskService.updateTask(this.taskToEdit.id, formData).subscribe({
+            next: (response) => {
+                console.log('✅ Task updated successfully:', response);
+                this.taskSavedOrCancelled.emit();
+            },
+            error: (error) => console.error('❌ Error updating task:', error)
+        });
+    } else {
+        console.log('Sending create payload (FormData) to backend');
+        // 'as any' wird hier verwendet, weil FormData nicht exakt dem Typ CreateTaskDto entspricht
+        this.taskService.createTask(formData as any).subscribe({
+            next: (response) => {
+                console.log('✅ Task created successfully:', response);
+                this.taskSavedOrCancelled.emit();
+            },
+            error: (error) => console.error('❌ Error creating task:', error)
+        });
+    }
+}
+  
+  /* async submitTask(): Promise<void> {
       const labelsToCreate = this.selectedLabelIds
           .map(id => this.availableLabels.find(label => label.id === id))
           .filter((label): label is Label => !!label && label.id.startsWith('default-'));
@@ -479,7 +596,7 @@ export class AddTaskComponent implements OnInit, OnDestroy {
               error: (error) => console.error('❌ Error creating task:', error)
           });
       }
-  }
+  } */
   
   private populateFormWithTaskData(task: Task): void {
       this.taskTitle = task.title;

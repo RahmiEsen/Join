@@ -85,3 +85,12 @@
         gap: 8px;
     }
 }
+
+@media (max-width: 768px) {
+    .dropdown-content {
+        width: 280px;
+    }
+    .checklist-dropdown, .members-dropdown {
+        right: -105px;
+    }
+}

@@ -62,3 +62,33 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .add-task {
+        gap: 10px;
+        img {
+            height: 18px;
+            width: 18px;
+        }
+        span {
+            font-size: 16px;
+        }
+    }
+    .task-titel {
+        input {
+            font-size: 16px;
+        }
+        .button-wrapper {
+            align-items: center;
+            button {
+                font-size: 16px;
+            }
+            .close {
+                img {
+                    height: 24px;
+                    width: 24px;
+                }
+            }
+        }
+    }
+}

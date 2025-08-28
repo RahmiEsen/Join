@@ -101,9 +101,22 @@
     }
 }
 
-
-@media (max-width: 670px) {
+@media (max-width: 768px) {
     .task-form {
         width: 95%;
+        section {
+            align-items: center;
+            padding: 20px 14px;
+            gap: 15px;
+            .titel {
+                padding: 0;
+                input {
+                    font-size: 32px;
+                }
+            }
+            .button-wrapper {
+                padding-left: 0;
+            }
+        }
     }
 }

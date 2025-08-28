@@ -9,3 +9,9 @@
     column-gap: 25px;
     row-gap: 8px;
 }
+
+@media (max-width: 768px) {
+    .options-container {
+        padding: 0;
+    }
+}

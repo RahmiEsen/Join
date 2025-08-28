@@ -256,6 +256,12 @@ app-contact-item, app-contact-list, app-contact-details, app-task-header, app-ta
     width: 100%;
 }
 
+/* @media (max-width: 768px) {
+    app-task-toolbar, app-task-selections, app-task-description {
+        width: fit-content;
+    }
+} */
+
 app-contacts {
     display: flex;
     height: 100%;

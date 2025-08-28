@@ -192,3 +192,64 @@
         
     }
 }
+
+@media (max-width: 768px) {
+    .list-wrapper {
+        width: 90vw;
+        .dropdown {
+            top: 50px;
+            right: 0px;
+            padding: 8px;
+            gap: 12px;
+            .menu-header {
+                p {
+                    font-size: 16px;
+                }
+                .close img {
+                    height: 22px;
+                }
+                .back img {
+                    height: 22px;
+                }
+            }
+            .content {
+                span {
+                    font-size: 14px;
+                }
+                img {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+            .list {
+                .selection {
+                    font-size: 14px;
+                }
+            }
+            .list-dropdown {
+                padding: 8px 0;
+                span {
+                    font-size: 14px;
+                }
+            }
+            button {
+                font-size: 16px;
+                padding: 6px 12px;
+                gap: 8px;
+            }
+        }
+        header {
+            input {
+                width: 90%;
+                font-size: 20px;
+            }
+            .more-options-btn {
+                opacity: 1;
+                img {
+                    height: 28px;
+                    width: 28px;
+                }
+            }
+        }
+    }
+}

@@ -86,3 +86,13 @@ header {
         }
     }
 }
+
+@media (max-width: 768px) {
+    header {
+        padding: 12px 23px;
+        .dropdown-menu {
+            right: 21px;
+            transform: translateX(21px);
+        }
+    }
+}

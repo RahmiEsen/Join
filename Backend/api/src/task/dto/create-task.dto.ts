@@ -7,7 +7,8 @@ import {
   IsISO8601,
   IsNumber,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+// Import the 'Transform' decorator
+import { Type, Transform } from 'class-transformer';
 
 export class ChecklistItemDto {
   @IsString()
@@ -50,6 +51,8 @@ export class CreateTaskDto {
   @IsString()
   ownerId?: string;
 
+  // ADDED @Transform
+  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
@@ -63,17 +66,28 @@ export class CreateTaskDto {
   @IsISO8601()
   dueDate?: string;
 
+  // ADDED @Transform
+  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   memberIds?: string[];
 
+  // ADDED @Transform
+  @Transform(({ value }) => (typeof value === 'string' ? JSON.parse(value) : value))
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ChecklistDto)
   checklists?: ChecklistDto[];
 
+  // ADDED @Transform to correctly handle 'true'/'false' strings
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value.toLowerCase() === 'true';
+    }
+    return value;
+  })
   @IsOptional()
   @IsBoolean()
   isGuest?: boolean;
