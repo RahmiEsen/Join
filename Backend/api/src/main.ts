@@ -1,13 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-// BENÖTIGTE IMPORTE HINZUGEFÜGT
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 
 async function bootstrap() {
-  // APP-TYP GEÄNDERT, UM useStaticAssets() NUTZEN ZU KÖNNEN
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: false });
+  const app = await NestFactory.create(AppModule, { cors: false });
   
   const allowFixed = new Set([
     'https://join.rahmiesen.de',
@@ -41,17 +37,7 @@ async function bootstrap() {
     next();
   });
   
-  // VALIDATIONPIPE MIT DEN NÖTIGEN OPTIONEN KONFIGURIERT
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true, // Diese Zeile ist entscheidend!
-  }));
-
-  // HINZUGEFÜGT: Stellt den 'uploads'-Ordner unter der URL /uploads bereit
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads/',
-  });
-
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT || 3000, '0.0.0.0');
 }
 bootstrap();
