@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
 
   app.enableCors({
-    origin: ['https://join.rahmiesen.de', 'http://localhost:4200'],
+    origin: ['https://join.rahmiesen.de', 'https://*.vercel.app'],
     methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
