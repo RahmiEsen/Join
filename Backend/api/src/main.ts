@@ -17,15 +17,18 @@ async function bootstrap() {
   
   app.enableCors({
     origin: (origin, cb) => {
-      if (!origin || allowFixed.has(origin) || vercelPreview.test(origin)) cb(null, true);
-      else cb(new Error('Not allowed by CORS'));
+      if (!origin) return cb(null, true); // z.B. native WebView
+      if (allowFixed.has(origin) || vercelPreview.test(origin)) return cb(null, true);
+      return cb(new Error('Not allowed by CORS'));
     },
     credentials: true,
     methods: ['GET','HEAD','PUT','PATCH','POST','DELETE','OPTIONS'],
+    allowedHeaders: ['Content-Type','Authorization','X-Requested-With'],
+    exposedHeaders: ['Set-Cookie'],
     maxAge: 86400,
   });
   
-  app.use((req, res, next) => {
+  /* app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
       const origin = req.headers.origin || '*';
       res.setHeader('Access-Control-Allow-Origin', origin);
@@ -39,7 +42,7 @@ async function bootstrap() {
       return res.sendStatus(204);
     }
     next();
-  });
+  }); */
   
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT || 3000, '0.0.0.0');
