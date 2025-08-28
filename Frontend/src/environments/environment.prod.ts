@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://join-backend-flax.vercel.app'
+    apiUrl: 'https://join-backend-07w.onrender.com'
 };
