@@ -408,99 +408,97 @@ export class AddTaskComponent implements OnInit, OnDestroy {
   }
   
   async submitTask(): Promise<void> {
-      const labelsToCreate = this.selectedLabelIds
-          .map(id => this.availableLabels.find(label => label.id === id))
-          .filter((label): label is Label => !!label && label.id.startsWith('default-'));
-      if (labelsToCreate.length > 0) {
-          console.log('Creating the following default labels in the DB:', labelsToCreate.map(l => l.title));
-          const createLabelObservables = labelsToCreate.map(label => {
-              const payload: CreateLabelDto = {
-                  title: label.title,
-                  color: label.color,
-                  isGuest: this.isGuestUser,
-                  ownerId: this.isGuestUser ? undefined : this.loggedInUserId!,
-              };
-              return this.labelService.createLabel(payload);
-          });
-          try {
-              const newLabels = await firstValueFrom(forkJoin(createLabelObservables));
-              const newLabelMap = new Map(newLabels.map(nl => [nl.title, nl.id]));
-              const oldDefaultLabels = new Map(labelsToCreate.map(l => [l.id, l.title]));
-              this.selectedLabelIds = this.selectedLabelIds.map(id => {
-                  const oldTitle = oldDefaultLabels.get(id);
-                  return oldTitle ? newLabelMap.get(oldTitle) || id : id;
-              });
-              const oldDefaultIds = labelsToCreate.map(l => l.id);
-              this.availableLabels = [
-                  ...this.availableLabels.filter(l => !oldDefaultIds.includes(l.id)),
-                  ...newLabels
-              ];
-              console.log('Label lists updated successfully.');
-          } catch (error) {
-              console.error('❌ Error creating default labels:', error);
-              return;
-          }
-      }
-      const checklistPayload = this.checklistComponents.map(comp => ({
-          title: comp.title,
-          items: comp.tasks.map(task => ({
-              text: task.text,
-              isCompleted: task.checked
-          }))
-      }));
-      const taskPayload: Partial<CreateTaskDto> = {
-          title: this.taskTitle,
-          description: this.savedDescription || '',
-          isGuest: this.isGuestUser,
-          coverColor: this.selectedColor?.base,
-          coverImage: this.selectedCoverImageForHeader,
-          startDate: this.selectedStartDate ? this.selectedStartDate.toISOString() : undefined,
-          dueDate: this.selectedEndDate ? this.selectedEndDate.toISOString() : undefined,
-          labelIds: this.selectedLabelIds,
-          memberIds: this.selectedMembers.map(member => member.id),
-          checklists: checklistPayload
-      };
-      if (this.taskToEdit) {
-          console.log('Sending update payload to backend:', taskPayload);
-          this.taskService.updateTask(this.taskToEdit.id, taskPayload).subscribe({
-              next: (response) => {
-                  console.log('✅ Task updated successfully:', response);
-                  this.taskSavedOrCancelled.emit();
-              },
-              error: (error) => console.error('❌ Error updating task:', error)
-          });
-      } else {
-          console.log('Sending create payload to backend:', taskPayload);
-          this.taskService.createTask(taskPayload as CreateTaskDto).subscribe({
-              next: (response) => {
-                  console.log('✅ Task created successfully:', response);
-                  this.taskSavedOrCancelled.emit();
-              },
-              error: (error) => console.error('❌ Error creating task:', error)
-          });
-      }
-  }
+    const labelsToCreate = this.selectedLabelIds
+        .map(id => this.availableLabels.find(label => label.id === id))
+        .filter((label): label is Label => !!label && label.id.startsWith('default-'));
+    if (labelsToCreate.length > 0) {
+        const createLabelObservables = labelsToCreate.map(label => {
+            const payload: CreateLabelDto = {
+                title: label.title,
+                color: label.color,
+                isGuest: this.isGuestUser,
+                ownerId: this.isGuestUser ? undefined : this.loggedInUserId!,
+            };
+            return this.labelService.createLabel(payload);
+        });
+        try {
+            const newLabels = await firstValueFrom(forkJoin(createLabelObservables));
+            const newLabelMap = new Map(newLabels.map(nl => [nl.title, nl.id]));
+            const oldDefaultLabels = new Map(labelsToCreate.map(l => [l.id, l.title]));
+            this.selectedLabelIds = this.selectedLabelIds.map(id => {
+                const oldTitle = oldDefaultLabels.get(id);
+                return oldTitle ? newLabelMap.get(oldTitle) || id : id;
+            });
+            const oldDefaultIds = labelsToCreate.map(l => l.id);
+            this.availableLabels = [
+                ...this.availableLabels.filter(l => !oldDefaultIds.includes(l.id)),
+                ...newLabels
+            ];
+        } catch (error) {
+            console.error('❌ Error creating default labels:', error);
+            return;
+        }
+    }
+    const checklistPayload = this.checklistComponents.map(comp => ({
+        title: comp.title,
+        items: comp.tasks.map(task => ({
+            text: task.text,
+            isCompleted: task.checked
+        }))
+    }));
+    const taskPayload: Partial<CreateTaskDto> = {
+        title: this.taskTitle,
+        description: this.savedDescription || '',
+        isGuest: this.isGuestUser,
+        coverColor: this.selectedColor?.base,
+        coverImage: this.selectedCoverImageForHeader,
+        attachments: this.selectedCoverImages.map(image => image.dataUrl),
+        startDate: this.selectedStartDate ? this.selectedStartDate.toISOString() : undefined,
+        dueDate: this.selectedEndDate ? this.selectedEndDate.toISOString() : undefined,
+        labelIds: this.selectedLabelIds,
+        memberIds: this.selectedMembers.map(member => member.id),
+        checklists: checklistPayload
+    };
+    if (this.taskToEdit) {
+        this.taskService.updateTask(this.taskToEdit.id, taskPayload).subscribe({
+            next: (response) => {
+                this.taskSavedOrCancelled.emit();
+            },
+            error: (error) => console.error('❌ Error updating task:', error)
+        });
+    } else {
+        this.taskService.createTask(taskPayload as CreateTaskDto).subscribe({
+            next: (response) => {
+                this.taskSavedOrCancelled.emit();
+            },
+            error: (error) => console.error('❌ Error creating task:', error)
+        });
+    }
+}
   
   private populateFormWithTaskData(task: Task): void {
-      this.taskTitle = task.title;
-      this.savedDescription = task.description || '';
-      this.safeSavedDescription = this.sanitizer.bypassSecurityTrustHtml(this.savedDescription);
-      // CRITICAL FIX: Use the label's ID, not its title
-      this.selectedLabelIds = task.labels ? task.labels.map(label => label.id) : [];
-      this.selectedStartDate = task.startDate ? new Date(task.startDate) : null;
-      this.selectedEndDate = task.dueDate ? new Date(task.dueDate) : null;
-      this.selectedColor = task.coverColor ? { base: task.coverColor, hover: '' } : null;
-      this.selectedCoverImageForHeader = task.coverImage || null;
-      this.checklists = task.checklists || [];
-      if (task.members && task.members.length > 0 && this.allContacts.length > 0) {
-          this.selectedMembers = this.allContacts.filter(contact => 
-              task.members!.some(member => member.id === contact.id)
-          );
-      } else {
-          this.selectedMembers = [];
-      }
-      this.cdr.detectChanges();
-  }
+    this.taskTitle = task.title;
+    this.savedDescription = task.description || '';
+    this.safeSavedDescription = this.sanitizer.bypassSecurityTrustHtml(this.savedDescription);
+    this.selectedLabelIds = task.labels ? task.labels.map(label => label.id) : [];
+    this.selectedStartDate = task.startDate ? new Date(task.startDate) : null;
+    this.selectedEndDate = task.dueDate ? new Date(task.dueDate) : null;
+    this.selectedColor = task.coverColor ? { base: task.coverColor, hover: '' } : null;
+    this.selectedCoverImageForHeader = task.coverImage || null;
+    this.selectedCoverImages = task.attachments
+        ? task.attachments.map(url => ({ name: 'attachment', dataUrl: url }))
+        : [];
+    this.updateDisplayedImages();
+    this.checklists = task.checklists || [];
+    if (task.members && task.members.length > 0 && this.allContacts.length > 0) {
+        this.selectedMembers = this.allContacts.filter(contact =>
+            task.members!.some(member => member.id === contact.id)
+        );
+    } else {
+        this.selectedMembers = [];
+    }
+    this.cdr.detectChanges();
+}
   
   deleteTask(): void {
     if (!this.taskToEdit || !this.taskToEdit.id) {

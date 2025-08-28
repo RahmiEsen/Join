@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 export interface Task {
     id: string;
@@ -11,6 +11,7 @@ export interface Task {
     isGuest: boolean;
     coverColor?: string | null;
     coverImage?: string | null;
+    attachments?: string[];
     createdAt: string;
     updatedAt: string;
     startDate?: string | null;
@@ -39,6 +40,7 @@ export interface CreateTaskDto {
   isGuest?: boolean;
   coverColor?: string | null;
   coverImage?: string | null;
+  attachments?: string[];
   startDate?: string;
   dueDate?: string;
   labelIds?: string[];
@@ -69,6 +71,16 @@ export class TaskService {
     private readonly listsApiUrl = environment.apiUrl + '/tasklists';
     
     constructor(private http: HttpClient) {}
+    
+    getUserImages(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.apiUrl}/user/images`)
+            .pipe(catchError(this.handleError));
+    }
+    
+    getGuestImages(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.apiUrl}/guest/images`)
+            .pipe(catchError(this.handleError));
+    }
     
     getGuestTasks(): Observable<Task[]> {
         return this.http

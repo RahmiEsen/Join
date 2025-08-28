@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact, getInitials } from '../../../shared/models/contact.model';
 import { getRandomColor } from '../../../shared/utils/color.util';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-contact-details',

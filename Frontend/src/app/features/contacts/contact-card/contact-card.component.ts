@@ -5,7 +5,7 @@ import { FormFieldComponent } from '../../../shared/components/form-field/form-f
 import { ContactButtonWrapperComponent } from '../contact-button-wrapper/contact-button-wrapper.component';
 import { Contact, getInitials } from '../../../shared/models/contact.model';
 import { getRandomColor } from '../../../shared/utils/color.util';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-contact-card',

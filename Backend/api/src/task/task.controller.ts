@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Get, Param, ParseUUIDPipe, Patch, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, ParseUUIDPipe, Patch, Delete, HttpCode, HttpStatus, Req, UseGuards } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('tasks')
 export class TaskController {
@@ -22,9 +23,21 @@ export class TaskController {
         return this.taskService.findAllForUser(userId);
     }
     
+    @UseGuards(AuthGuard('jwt'))
+    @Get('user/images')
+    findAllUserImages(@Req() req) {
+        const userId = req.user.id;
+        return this.taskService.findAllUserImages(userId);
+    }
+    
     @Get('guest')
     findAllForGuest() {
         return this.taskService.findAllForGuest();
+    }
+    
+    @Get('guest/images')
+    findAllGuestImages() {
+        return this.taskService.findAllGuestImages();
     }
     
     @Delete(':id')

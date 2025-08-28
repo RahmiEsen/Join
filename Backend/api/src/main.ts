@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
@@ -10,6 +11,9 @@ async function bootstrap() {
     'http://localhost:4200',
   ]);
   const vercelPreview = /^https:\/\/[a-z0-9-]+\.vercel\.app$/i;
+  
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   
   app.enableCors({
     origin: (origin, cb) => {

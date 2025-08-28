@@ -7,7 +7,7 @@ import { AuthLayoutComponent } from '../../../shared/components/auth-layout/auth
 import { AuthFormComponent } from '../../../shared/components/auth-form/auth-form.component';
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 import { FormHelperService } from '../services/form-utils.service';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-forgot-password',

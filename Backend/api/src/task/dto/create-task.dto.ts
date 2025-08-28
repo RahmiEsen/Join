@@ -44,7 +44,9 @@ export class CreateTaskDto {
   coverImage?: string;
 
   @IsOptional()
-  attachments?: any; // Besser: Prisma.JsonValue
+  @IsArray()
+  @IsString({ each: true })
+  attachments?: string[];
 
   @IsOptional()
   @IsString()

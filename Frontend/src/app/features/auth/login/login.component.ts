@@ -7,7 +7,7 @@ import { AuthFormComponent } from '../../../shared/components/auth-form/auth-for
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 import { FormHelperService } from '../services/form-utils.service';
 import { AuthService } from '../../../shared/services/auth.service';
-import { environment } from '../../../../environments/environment.prod';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',

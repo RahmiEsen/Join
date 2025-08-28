@@ -18,9 +18,10 @@ export class TaskService {
   };
   
   async create(dto: CreateTaskDto) {
-    const { ownerId, labelIds, memberIds, checklists, ...taskData } = dto;
+    const { ownerId, labelIds, memberIds, checklists, attachments, ...taskData } = dto;
     const data: Prisma.TaskCreateInput = {
       ...taskData,
+      attachments: attachments,
       isGuest: taskData.isGuest ?? false,
     };
     if (ownerId) {
@@ -42,8 +43,8 @@ export class TaskService {
   }
   
   async update(id: string, dto: UpdateTaskDto) {
-    const { ownerId, labelIds, memberIds, checklists, ...taskData } = dto;
-    const data: Prisma.TaskUpdateInput = { ...taskData };
+    const { ownerId, labelIds, memberIds, checklists, attachments, ...taskData } = dto;
+    const data: Prisma.TaskUpdateInput = { ...taskData, attachments: attachments };
     if (ownerId) {
       data.owner = { connect: { id: ownerId } };
     }
@@ -78,6 +79,35 @@ export class TaskService {
       orderBy: { createdAt: 'desc' },
       include: this._includeRelations,
     });
+  }
+  
+  async findAllUserImages(userId: string): Promise<string[]> {
+    const tasksWithImages = await this.prisma.task.findMany({
+      where: {
+        ownerId: userId,
+        isGuest: false,
+        coverImage: {
+          not: null,
+        },
+      },
+      distinct: ['coverImage'],
+      select: {
+        coverImage: true,
+      },
+    });
+    return tasksWithImages.map((task) => task.coverImage);
+  }
+  
+  async findAllGuestImages(): Promise<string[]> {
+    const tasksWithImages = await this.prisma.task.findMany({
+      where: {
+        isGuest: true,
+        coverImage: { not: null },
+      },
+      distinct: ['coverImage'],
+      select: { coverImage: true },
+    });
+    return tasksWithImages.map((task) => task.coverImage);
   }
   
   private _prepareChecklistData(
