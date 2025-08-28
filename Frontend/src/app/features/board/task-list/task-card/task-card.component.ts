@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task } from '../../../../shared/services/task.service';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-task-card',

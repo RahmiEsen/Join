@@ -8,7 +8,7 @@ import { AuthFormComponent } from '../../../shared/components/auth-form/auth-for
 import { AuthCardComponent } from '../../../shared/components/auth-card/auth-card.component';
 import { FormHelperService } from '../services/form-utils.service';
 import { SuccessPopupComponent } from '../../../shared/components/success-popup/success-popup.component';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 
 
 @Component({

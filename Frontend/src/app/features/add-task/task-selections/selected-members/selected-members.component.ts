@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../../shared/models/contact.model';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-selected-members',
