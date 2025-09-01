@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Task, TaskService, CreateTaskDto, TaskList, CreateTaskListDto } from '../../shared/services/task.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -34,6 +34,9 @@ export class BoardComponent implements OnInit {
   public isAddListFormVisible: boolean = false;
   public newListName: string = '';
   public openListMenuId: string | null = null;
+  public isDragDisabled = window.innerWidth <= 768;
+  public isLoading = true;
+  
   
   constructor(
     private taskService: TaskService,
@@ -49,6 +52,7 @@ export class BoardComponent implements OnInit {
   }
   
   loadLists(): void {
+    this.isLoading = true;
     const user = this.authService.getUser();
     const isGuest = !user || user.id === 'guest';
     let lists$: Observable<TaskList[]>;
@@ -60,24 +64,31 @@ export class BoardComponent implements OnInit {
     const contacts$ = isGuest 
       ? this.contactService.getGuestContacts() 
       : this.contactService.getUserContacts(user.id);
-    forkJoin({ lists: lists$, contacts: contacts$ }).subscribe(({ lists, contacts }) => {
-      const processedLists = lists.map(list => {
-        const processedTasks = list.tasks.map(task => {
-          const assignedContacts = task.members?.map(member => {
-            const foundContact = contacts.find(c => c.id === member.id);
-            const fullName = `${member.firstName} ${member.lastName}`;
-            return {
-              id: member.id,
-              name: fullName,
-              color: foundContact?.color || '#808080',
-              initials: this.getInitials(fullName),
-            };
-          }) || [];
-          return { ...task, assignedContacts };
+    forkJoin({ lists: lists$, contacts: contacts$ }).subscribe({
+      next: ({ lists, contacts }) => {
+        const processedLists = lists.map(list => {
+          const processedTasks = list.tasks.map(task => {
+            const assignedContacts = task.members?.map(member => {
+              const foundContact = contacts.find(c => c.id === member.id);
+              const fullName = `${member.firstName} ${member.lastName}`;
+              return {
+                id: member.id,
+                name: fullName,
+                color: foundContact?.color || '#808080',
+                initials: this.getInitials(fullName),
+              };
+            }) || [];
+            return { ...task, assignedContacts };
+          });
+          return { ...list, tasks: processedTasks };
         });
-        return { ...list, tasks: processedTasks };
-      });
-      this.taskLists = processedLists;
+        this.taskLists = processedLists;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Fehler beim Laden der Board-Daten:', err);
+        this.isLoading = false;
+      }
     });
   }
   
@@ -214,7 +225,7 @@ export class BoardComponent implements OnInit {
   getAllListIds(): string[] {
     return this.taskLists.map(list => list.id);
   }
-
+  
   handleMoveList(event: { listId: string; newPosition: number }): void {
     const originalIndex = this.taskLists.findIndex(list => list.id === event.listId);
     moveItemInArray(this.taskLists, originalIndex, event.newPosition);
@@ -227,5 +238,54 @@ export class BoardComponent implements OnInit {
         console.error('Fehler beim Speichern der neuen Reihenfolge:', err);
       }
     });
+  }
+  
+  handleMoveTask(event: { taskId: string; targetListId: string; newPosition: number }): void {
+    let sourceList: TaskList | undefined;
+    let taskToMove: Task | undefined;
+    let originalIndex = -1;
+
+    // Finde die Aufgabe und ihre ursprüngliche Liste
+    for (const list of this.taskLists) {
+      const taskIndex = list.tasks.findIndex(t => t.id === event.taskId);
+      if (taskIndex !== -1) {
+        sourceList = list;
+        taskToMove = list.tasks[taskIndex];
+        originalIndex = taskIndex;
+        break;
+      }
+    }
+
+    if (!sourceList || !taskToMove) {
+      console.error('Task oder Quell-Liste nicht gefunden!');
+      return;
+    }
+
+    // Entferne die Aufgabe aus der alten Liste
+    sourceList.tasks.splice(originalIndex, 1);
+
+    // Finde die neue Liste und füge die Aufgabe an der neuen Position hinzu
+    const targetList = this.taskLists.find(list => list.id === event.targetListId);
+    if (targetList) {
+      targetList.tasks.splice(event.newPosition, 0, taskToMove);
+    } else {
+      console.error('Ziel-Liste nicht gefunden!');
+      return;
+    }
+    
+    // Backend-Update anstoßen (ähnlich wie bei Drag & Drop)
+    const updatePayload = {
+      taskListId: event.targetListId,
+      order: event.newPosition
+    };
+    this.taskService.updateTask(taskToMove.id, updatePayload).subscribe({
+      next: () => console.log(`Task-Position erfolgreich via Menü gespeichert!`),
+      error: (err) => console.error('Fehler beim Speichern der Task-Position:', err)
+    });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.isDragDisabled = (event.target as Window).innerWidth <= 768;
   }
 }

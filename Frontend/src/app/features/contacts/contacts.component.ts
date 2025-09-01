@@ -28,8 +28,6 @@ import { getRandomColor } from '../../shared/utils/color.util';
 })
 
 export class ContactsComponent implements OnInit {
-  @ViewChild(ContactCardComponent) contactCardComponent!: ContactCardComponent;
-  
   contacts: Contact[] = [];
   groupedContacts: { [key: string]: Contact[] } = {};
   selectedContact: Contact | null = null;
@@ -58,6 +56,7 @@ export class ContactsComponent implements OnInit {
   isMobileView = false;
   showDetails = false;
   showDropdown = false;
+  @ViewChild(ContactCardComponent) contactCardComponent!: ContactCardComponent;
   
   constructor(
     private contactService: ContactService,

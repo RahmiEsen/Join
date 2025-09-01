@@ -1,10 +1,16 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskCardComponent } from './task-card/task-card.component';
 import { AddTaskFormComponent } from './add-task-form/add-task-form.component';
 import { Task } from '../../../shared/services/task.service';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+
+interface BoardList {
+  id: string;
+  title: string;
+  tasks: Task[];
+}
 
 @Component({
   selector: 'app-task-list',
@@ -28,6 +34,7 @@ export class TaskListComponent implements OnInit, OnChanges {
   @Input() connectedListIds: string[] = [];
   @Input() currentPosition: number = 1;
   @Input() totalLists: number = 0;
+  @Input() allLists: BoardList[] = [];
   @Output() editTaskRequest = new EventEmitter<Task>();
   @Output() addTaskRequest = new EventEmitter<string>();
   @Output() titleChanged = new EventEmitter<{ listId: string; newTitle: string }>();
@@ -35,6 +42,7 @@ export class TaskListComponent implements OnInit, OnChanges {
   @Output() deleteListRequested = new EventEmitter<string>();
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();
   @Output() moveListRequest = new EventEmitter<{ listId: string; newPosition: number }>();
+  @Output() taskMoveRequest = new EventEmitter<{ taskId: string, targetListId: string, newPosition: number }>();
   @ViewChild('titleInput') titleInput!: ElementRef;
   
   public isEditingTitle: boolean = false;
@@ -43,6 +51,7 @@ export class TaskListComponent implements OnInit, OnChanges {
   public isPositionSelectorOpen: boolean = false;
   public selectedPosition: number = 1;
   public availablePositions: number[] = [];
+  public isDragDisabled = window.innerWidth <= 768;
   
   constructor() {}
   
@@ -131,5 +140,14 @@ export class TaskListComponent implements OnInit, OnChanges {
       });
     }
     this.menuToggled.emit(this.listId);
+  }
+  
+  onTaskMoveRequested(event: { taskId: string, targetListId: string, newPosition: number }): void {
+    this.taskMoveRequest.emit(event);
+  }
+  
+  @HostListener('window:resize')
+  onResize(): void {
+    this.isDragDisabled = window.innerWidth <= 768;
   }
 }

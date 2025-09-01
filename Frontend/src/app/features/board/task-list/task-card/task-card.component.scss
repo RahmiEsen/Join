@@ -10,7 +10,7 @@
     border: 1px solid $border-color;
     border-radius: 10px;
     box-shadow: $shadow;
-    overflow: hidden;
+    overflow: visible !important;
     transition: all 0.1s ease-in-out;
     cursor: pointer;
     header {
@@ -55,6 +55,29 @@
                 transition: transform 450ms ease; */
                 margin: 0;
             }
+        }
+        .more-options-btn {
+            all: unset;
+            @include center;
+            position: absolute;
+            top: 9px;
+            right: 11px;
+            padding: 2px;
+            border-radius: 8px;
+            transition: opacity 0.2s ease-in-out;
+            opacity: 0;
+            cursor: pointer;
+            &:hover {
+                box-shadow: none;
+                background-color: #ffffff50;
+            }
+            &.active {
+                opacity: 1;
+                background-color: $primary;
+            }
+        }
+        &:hover .more-options-btn {
+            opacity: 1;
         }
     }
     section {
@@ -136,22 +159,136 @@
     &:hover {
         border-color: #388bff;
         box-shadow: 0px 0px 0px 1px #388bff;
-        /* header .titel button {
-            opacity: 1;
-            transform: translateX(0);
+    }
+}
+
+.task-dropdown {
+    position: absolute;
+    @include column;
+    top: 30px;
+    right: -200px;
+    width: 230px;
+    background-color: #FFF;
+    border-radius: 10px;
+    border: 1px solid #D1D1D1;
+    padding: 6px 8px;
+    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1019607843);
+    overflow: hidden;
+    z-index: 9999;
+    transition: all 100ms ease-in-out;
+    gap: 5px;
+    .menu-header {
+        @include space-between;
+        width: 100%;
+        p {
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
         }
-        header .titel span {
-            transform: translateX(8px);
-            margin: 0;
+        button {
+            all: unset;
+            padding: 2px 4px;
+            transition: all 100ms ease-in-out;
+            img {
+                height: 16px;
+            }
+            &:hover {
+                border-radius: 8px;
+                box-shadow: none;
+                background-color: #dcdfe4;
+            }
         }
-        .titel button {
-            opacity: 1;
-            transform: translateX(0);
+    }
+    .content {
+        @include space-between;
+        width: 100%;
+        border-radius: 5px;
+        padding: 4px 6px;
+        transition: all 100ms ease-in-out;
+        cursor: pointer;
+        span {
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .titel span {
-            transform: translateX(8px);
-            margin: 0;
-        } */
+        img {
+            width: 14px;
+            height: 14px;
+        }
+        &:hover {
+            background-color: #dcdfe4;
+        }
+    }
+    .list {
+        @include space-between;
+        width: 100%;
+        border: 1px solid #D1D1D1;
+        border-radius: 6px;
+        padding: 6px 8px;
+        transition: all 100ms ease-in-out;
+        .selection {
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+        }
+        .img-wrapper {
+            @include center;
+            height: 18px;
+            width: 18px;
+        }
+        &.focused  {
+            border: 1px solid #0c66e4;
+        }
+        &:hover {
+            background-color: #f1f2f4;
+        }
+    }
+    .list-dropdown {
+        position: relative;
+        @include column;
+        width: 100%;
+        border: 1px solid #D1D1D1;
+        border-radius: 6px;
+        padding: 6px 0;
+        overflow: hidden;
+        transition: all 100ms ease-in;
+        span {
+            font-size: 12px;
+            padding: 6px 8px;
+            border-left: 2px solid transparent;
+            cursor: pointer;
+            &:hover {
+                border-left: 2px solid #0c66e4;
+                background-color: #f1f2f4;
+            }
+            &.active {
+                color: #0c66e4;
+                background-color: #e9f2ff;
+                border-left: 2px solid #0c66e4;
+                &:hover {
+                    background-color: #cce0ff;
+                }
+            }
+        }
+    }
+    p {
+        font-size: 12px;
+        font-weight: 700;
+    }
+    button {
+        width: fit-content;
+        font-size: 14px;
+        padding: 6px 12px;
+        gap: 5px;
+        .img-wrapper {
+            @include center;
+            height: 18px;
+            width: 18px;
+            img {
+                height: 100%;
+            }
+        }
     }
 }
 
@@ -190,5 +327,34 @@
     .task section .assigned-contacts .contact-avatar {
         height: 38px;
         width: 38px;
+    }
+    .task-dropdown {
+        top: 32px;
+        right: -5px;
+        p {
+            font-size: 14px;
+        }
+        .menu-header p {
+            font-size: 16px;
+        }
+        .menu-header button img {
+            height: 22px;
+        }
+        .content span {
+            font-size: 14px;
+        }
+        .content img {
+            width: 16px;
+            height: 16px;
+        }
+        .list .selection {
+            font-size: 14px;
+        }
+        .list-dropdown span {
+            font-size: 14px;
+        }
+    }
+    .task header .more-options-btn {
+        opacity: 1;
     }
 }

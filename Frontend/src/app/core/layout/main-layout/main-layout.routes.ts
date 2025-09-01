@@ -2,11 +2,6 @@ import { Routes } from '@angular/router';
 
 export const MAIN_LAYOUT_ROUTES: Routes = [
     {
-        path: 'summary',
-        loadChildren: () =>
-        import('../../../features/summary/summary.routes').then((m) => m.SUMMARY_ROUTES)
-    },
-    {
         path: 'add-task',
         loadChildren: () =>
         import('../../../features/add-task/add-task.routes').then((m) => m.ADD_TASK_ROUTES)

@@ -8,21 +8,25 @@
         (click)="$event.stopPropagation()">
     </app-add-task>
 </div>
-<div class="board-wrapper" 
+<div class="board-wrapper #boardWrapper" 
     cdkDropListGroup 
     cdkDropList 
     [cdkDropListData]="taskLists"
+    [cdkDropListDisabled]="isDragDisabled"
     cdkDropListOrientation="horizontal"
     (cdkDropListDropped)="dropList($event)"
     (click)="toggleListMenu('')">
     <app-task-list
         *ngFor="let list of taskLists; let i = index"
-        cdkDrag 
+        cdkDrag
+        [cdkDragDisabled]="isDragDisabled"
         [title]="list.title"
         [tasks]="list.tasks"
         [listId]="list.id"
         [currentPosition]="i + 1"
         [totalLists]="taskLists.length"
+        [allLists]="taskLists"
+        (taskMoveRequest)="handleMoveTask($event)"
         (moveListRequest)="handleMoveList($event)"
         [isMenuOpen]="list.id === openListMenuId"
         [connectedListIds]="getAllListIds()"
@@ -34,7 +38,7 @@
         (addTaskRequest)="addTask($event, list.id)">
     </app-task-list>
     <button class="add-list"
-    *ngIf="!isAddListFormVisible"
+    *ngIf="!isAddListFormVisible && !isLoading"
     (click)="toggleAddListForm()">
         <img src="assets/images/plus-active.png" alt="Add Task">
         <span>Add a Task</span>

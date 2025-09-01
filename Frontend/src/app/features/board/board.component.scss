@@ -102,3 +102,28 @@
     transform: translateY(100vh);
     transition: transform 400ms ease-out;
 }
+
+@media (max-width: 768px) {
+    .board-wrapper {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        padding-bottom: 16px;
+        padding-left: 16px;
+        scroll-padding-left: 16px;
+        direction: ltr;
+        overscroll-behavior-x: contain;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        scrollbar-width: none;
+    }
+    .add-list {
+        width: 92vw;
+    }
+    ::ng-deep .board-wrapper > app-task-list,
+    .board-wrapper > .add-list {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+    }
+}
