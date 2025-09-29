@@ -1,137 +1,202 @@
 <div class="task" (click)="onOpenEdit()">
-    <header
-        [ngClass]="{
-            'image-cover': task.coverImage, 
-            'color-cover': task.coverColor && !task.coverImage
-        }"
-        [style.backgroundImage]="task.coverImage ? 'url(' + task.coverImage + ')' : null"
-        [style.backgroundColor]="task.coverColor">
-        <div class="titel">
-            <span>{{ task.title }}</span>
+  <header
+    [ngClass]="{
+      'image-cover': task.coverImage,
+      'color-cover': task.coverColor && !task.coverImage
+    }"
+    [style.backgroundImage]="
+      task.coverImage ? 'url(' + task.coverImage + ')' : null
+    "
+    [style.backgroundColor]="task.coverColor"
+  >
+    <div class="titel">
+      <span>{{ task.title }}</span>
+    </div>
+    <button
+      class="more-options-btn"
+      cdkOverlayOrigin
+      #trigger="cdkOverlayOrigin"
+      [class.active]="isMenuOpen"
+      (click)="toggleDropdown($event)"
+    >
+      <img *ngIf="!isMenuOpen" src="assets/images/more-horz.png" alt="More" />
+      <img
+        *ngIf="isMenuOpen"
+        src="assets/images/more-horz-active.png"
+        alt="More Active"
+      />
+    </button>
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOpen]="isMenuOpen"
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayHasBackdrop]="true"
+      (backdropClick)="closeDropdown()"
+      [cdkConnectedOverlayPositions]="[
+        { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top' },
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'start',
+          overlayY: 'bottom'
+        }
+      ]"
+    >
+      <div class="task-dropdown" *ngIf="isMenuOpen">
+        <div class="menu-header">
+          <button
+            class="back"
+            *ngIf="dropdownState === 'move'"
+            (click)="goBackToMainMenu($event)"
+          >
+            <img src="assets/images/go-back.png" alt="back" />
+          </button>
+          <p>{{ dropdownState === "main" ? "List actions" : "Move list" }}</p>
+          <button class="close" (click)="toggleDropdown($event)">
+            <img src="assets/images/close.png" alt="Close" />
+          </button>
         </div>
-        <button class="more-options-btn"
-        cdkOverlayOrigin
-        #trigger="cdkOverlayOrigin"
-        [class.active]="isMenuOpen"
-        (click)="toggleDropdown($event)">
-            <img *ngIf="!isMenuOpen" src="assets/images/more-horz.png" alt="More">
-            <img *ngIf="isMenuOpen" src="assets/images/more-horz-active.png" alt="More Active">
-        </button>
-        <ng-template
-        cdkConnectedOverlay
-        [cdkConnectedOverlayOpen]="isMenuOpen"
-        [cdkConnectedOverlayOrigin]="trigger"
-        [cdkConnectedOverlayHasBackdrop]="true"
-        (backdropClick)="closeDropdown()"
-        [cdkConnectedOverlayPositions]="[
-            { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top' },
-            { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom' }
-        ]">
-            <div class="task-dropdown"
-            *ngIf="isMenuOpen">
-                <div class="menu-header">
-                    <button class="back" 
-                    *ngIf="dropdownState === 'move'" 
-                    (click)="goBackToMainMenu($event)">
-                        <img src="assets/images/go-back.png" alt="back">
-                    </button>
-                    <p>{{ dropdownState === 'main' ? 'List actions' : 'Move list' }}</p>
-                    <button class="close"
-                    (click)="toggleDropdown($event)">
-                        <img src="assets/images/close.png" alt="Close">
-                    </button>
-                </div>
-                <ng-container 
-                *ngIf="dropdownState === 'main'">
-                    <div class="content" 
-                    (click)="onDeleteList()">
-                        <span>Delete</span>
-                        <img src="assets/images/delete.png" alt="Delete">
-                    </div>
-                    <div class="content" 
-                    (click)="openMoveView($event)">
-                        <span>Move list</span>
-                        <img src="assets/images/move-list.png" alt="Move">
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="dropdownState === 'move'">
-                    <p class="select-label">List</p>
-                    <div class="list" [class.focused]="isListSelectorOpen" (click)="toggleListSelector($event)">
-                        <div class="selection">
-                            {{ getSelectedList()?.title }}
-                        </div>
-                        <div class="img-wrapper"> 
-                            <img [src]="isListSelectorOpen ? 'assets/images/arrow-dropdown-up.png' : 'assets/images/arrow-dropdown-down.png'" alt="Toggle">
-                        </div>
-                    </div>
-                    <div class="list-dropdown" *ngIf="isListSelectorOpen">
-                        <span *ngFor="let list of allLists" (click)="selectList(list.id, $event)" [class.active]="list.id === selectedListId">
-                            {{ list.title }}
-                            <ng-container *ngIf="list.id === listId"> (currently)</ng-container>
-                        </span>
-                    </div>
-
-                    <p class="select-label">Position</p>
-                    <div class="list" [class.focused]="isPositionSelectorOpen" (click)="togglePositionSelector($event)">
-                        <div class="selection">{{ selectedPosition }}</div>
-                        <div class="img-wrapper"> 
-                            <img [src]="isPositionSelectorOpen ? 'assets/images/arrow-dropdown-up.png' : 'assets/images/arrow-dropdown-down.png'" alt="Toggle">
-                        </div>
-                    </div>
-                    <div class="list-dropdown" *ngIf="isPositionSelectorOpen">
-                        <span *ngFor="let pos of availablePositions" (click)="selectPosition(pos, $event)" [class.active]="pos === currentPosition && selectedListId === listId">
-                            {{ pos }}
-                            <ng-container *ngIf="pos === currentPosition && selectedListId === listId"> (currently)</ng-container>
-                        </span>
-                    </div>
-        
-                    <button class="submit-btn" (click)="onMoveTask()">Move</button>
-                </ng-container>
+        <ng-container *ngIf="dropdownState === 'main'">
+          <div class="content" (click)="deleteTask($event)">
+            <span>Delete</span>
+            <img src="assets/images/delete.png" alt="Delete" />
+          </div>
+          <div class="content" (click)="openMoveView($event)">
+            <span>Move list</span>
+            <img src="assets/images/move-list.png" alt="Move" />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="dropdownState === 'move'">
+          <p class="select-label">List</p>
+          <div
+            class="list"
+            [class.focused]="isListSelectorOpen"
+            (click)="toggleListSelector($event)"
+          >
+            <div class="selection">
+              {{ getSelectedList()?.title }}
             </div>
-        </ng-template>
-    </header>
-    <section 
-    *ngIf="task.labels?.length > 0 || task.description || (task.checklists && task.checklists.length > 0) || task.dueDate || (task.assignedContacts && task.assignedContacts.length > 0)">
-        <div class="labels" 
-        (click)="toggleLabels($event)">
-            <span 
-                *ngFor="let label of task.labels"
-                [style.backgroundColor]="label.color"
-                [ngClass]="{'active': areLabelsVisible}">
-                <ng-container *ngIf="areLabelsVisible">
-                    {{ label.title }}
-                </ng-container>
+            <div class="img-wrapper">
+              <img
+                [src]="
+                  isListSelectorOpen
+                    ? 'assets/images/arrow-dropdown-up.png'
+                    : 'assets/images/arrow-dropdown-down.png'
+                "
+                alt="Toggle"
+              />
+            </div>
+          </div>
+          <div class="list-dropdown" *ngIf="isListSelectorOpen">
+            <span
+              *ngFor="let list of allLists"
+              (click)="selectList(list.id, $event)"
+              [class.active]="list.id === selectedListId"
+            >
+              {{ list.title }}
+              <ng-container *ngIf="list.id === listId">
+                (currently)</ng-container
+              >
             </span>
-        </div>
-        <div class="wrapper">
-            <div class="date" 
-            *ngIf="task.startDate || task.dueDate">
-                <img src="assets/images/date.png" alt="Date">
-                <span>{{ formatDateRange(task) }}</span>
+          </div>
+
+          <p class="select-label">Position</p>
+          <div
+            class="list"
+            [class.focused]="isPositionSelectorOpen"
+            (click)="togglePositionSelector($event)"
+          >
+            <div class="selection">{{ selectedPosition }}</div>
+            <div class="img-wrapper">
+              <img
+                [src]="
+                  isPositionSelectorOpen
+                    ? 'assets/images/arrow-dropdown-up.png'
+                    : 'assets/images/arrow-dropdown-down.png'
+                "
+                alt="Toggle"
+              />
             </div>
-            <div class="description" 
-            *ngIf="task.description">
-                <img src="assets/images/description.png" alt="Description">
-            </div>
-            <div class="checklist"
-            *ngIf="task.checklists && task.checklists.length > 0">
-                <img src="assets/images/checklist.png" alt="Checklist">
-                <span>{{ getChecklistProgress(task) }}</span>
-            </div>
-        </div>
-        <div class="assigned-contacts" 
-        *ngIf="task.assignedContacts && task.assignedContacts.length > 0">
-            <div class="contact-avatar"
-            *ngFor="let contact of task.members"
-            [style.backgroundColor]="!contact.profilePicture ? contact.color : 'transparent'"
-            [title]="contact.firstName + ' ' + contact.lastName">
-            <img *ngIf="contact.profilePicture" 
-                [src]="backendUrl + '/' + contact.profilePicture"
-                alt="{{ contact.firstName }}">
-            <ng-container *ngIf="!contact.profilePicture">
-                {{ getInitials(contact.firstName, contact.lastName) }}
-            </ng-container>
-        </div>
-        </div>
-    </section>
+          </div>
+          <div class="list-dropdown" *ngIf="isPositionSelectorOpen">
+            <span
+              *ngFor="let pos of availablePositions"
+              (click)="selectPosition(pos, $event)"
+              [class.active]="
+                pos === currentPosition && selectedListId === listId
+              "
+            >
+              {{ pos }}
+              <ng-container
+                *ngIf="pos === currentPosition && selectedListId === listId"
+              >
+                (currently)</ng-container
+              >
+            </span>
+          </div>
+
+          <button class="submit-btn" (click)="onMoveTask()">Move</button>
+        </ng-container>
+      </div>
+    </ng-template>
+  </header>
+  <section
+    *ngIf="
+      task.labels?.length > 0 ||
+      task.description ||
+      (task.checklists && task.checklists.length > 0) ||
+      task.dueDate ||
+      (task.assignedContacts && task.assignedContacts.length > 0)
+    "
+  >
+    <div class="labels" (click)="toggleLabels($event)">
+      <span
+        *ngFor="let label of task.labels"
+        [style.backgroundColor]="label.color"
+        [ngClass]="{ active: areLabelsVisible }"
+      >
+        <ng-container *ngIf="areLabelsVisible">
+          {{ label.title }}
+        </ng-container>
+      </span>
+    </div>
+    <div class="wrapper">
+      <div class="date" *ngIf="task.startDate || task.dueDate">
+        <img src="assets/images/date.png" alt="Date" />
+        <span>{{ formatDateRange(task) }}</span>
+      </div>
+      <div class="description" *ngIf="task.description">
+        <img src="assets/images/description.png" alt="Description" />
+      </div>
+      <div
+        class="checklist"
+        *ngIf="task.checklists && task.checklists.length > 0"
+      >
+        <img src="assets/images/checklist.png" alt="Checklist" />
+        <span>{{ getChecklistProgress(task) }}</span>
+      </div>
+    </div>
+    <div
+      class="assigned-contacts"
+      *ngIf="task.assignedContacts && task.assignedContacts.length > 0"
+    >
+      <div
+        class="contact-avatar"
+        *ngFor="let contact of task.members"
+        [style.backgroundColor]="
+          !contact.profilePicture ? contact.color : 'transparent'
+        "
+        [title]="contact.firstName + ' ' + contact.lastName"
+      >
+        <img
+          *ngIf="contact.profilePicture"
+          [src]="backendUrl + '/' + contact.profilePicture"
+          alt="{{ contact.firstName }}"
+        />
+        <ng-container *ngIf="!contact.profilePicture">
+          {{ getInitials(contact.firstName, contact.lastName) }}
+        </ng-container>
+      </div>
+    </div>
+  </section>
 </div>

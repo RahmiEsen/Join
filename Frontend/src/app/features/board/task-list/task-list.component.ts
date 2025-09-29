@@ -1,4 +1,15 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild, ElementRef, HostListener } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  ElementRef,
+  HostListener,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TaskCardComponent } from './task-card/task-card.component';
 import { AddTaskFormComponent } from './add-task-form/add-task-form.component';
@@ -23,9 +34,8 @@ interface BoardList {
     DragDropModule,
   ],
   templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.scss'
+  styleUrl: './task-list.component.scss',
 })
-
 export class TaskListComponent implements OnInit, OnChanges {
   @Input() title: string = '';
   @Input() tasks: Task[] = [];
@@ -37,14 +47,24 @@ export class TaskListComponent implements OnInit, OnChanges {
   @Input() allLists: BoardList[] = [];
   @Output() editTaskRequest = new EventEmitter<Task>();
   @Output() addTaskRequest = new EventEmitter<string>();
-  @Output() titleChanged = new EventEmitter<{ listId: string; newTitle: string }>();
+  @Output() titleChanged = new EventEmitter<{
+    listId: string;
+    newTitle: string;
+  }>();
   @Output() menuToggled = new EventEmitter<string>();
   @Output() deleteListRequested = new EventEmitter<string>();
   @Output() taskDropped = new EventEmitter<CdkDragDrop<Task[]>>();
-  @Output() moveListRequest = new EventEmitter<{ listId: string; newPosition: number }>();
-  @Output() taskMoveRequest = new EventEmitter<{ taskId: string, targetListId: string, newPosition: number }>();
+  @Output() moveListRequest = new EventEmitter<{
+    listId: string;
+    newPosition: number;
+  }>();
+  @Output() taskMoveRequest = new EventEmitter<{
+    taskId: string;
+    targetListId: string;
+    newPosition: number;
+  }>();
   @ViewChild('titleInput') titleInput!: ElementRef;
-  
+
   public isEditingTitle: boolean = false;
   public editedTitle: string = '';
   public dropdownState: 'main' | 'move' = 'main';
@@ -52,13 +72,13 @@ export class TaskListComponent implements OnInit, OnChanges {
   public selectedPosition: number = 1;
   public availablePositions: number[] = [];
   public isDragDisabled = window.innerWidth <= 768;
-  
+
   constructor() {}
-  
+
   ngOnInit(): void {
     this.editedTitle = this.title;
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['title']) {
       this.editedTitle = this.title;
@@ -69,10 +89,13 @@ export class TaskListComponent implements OnInit, OnChanges {
     }
     if (changes['currentPosition'] || changes['totalLists']) {
       this.selectedPosition = this.currentPosition;
-      this.availablePositions = Array.from({ length: this.totalLists }, (_, i) => i + 1);
+      this.availablePositions = Array.from(
+        { length: this.totalLists },
+        (_, i) => i + 1
+      );
     }
   }
-  
+
   enableTitleEdit(): void {
     this.isEditingTitle = true;
     setTimeout(() => {
@@ -80,7 +103,7 @@ export class TaskListComponent implements OnInit, OnChanges {
       this.titleInput.nativeElement.select();
     }, 0);
   }
-  
+
   saveTitle(): void {
     this.isEditingTitle = false;
     const newTitle = this.editedTitle.trim();
@@ -88,50 +111,50 @@ export class TaskListComponent implements OnInit, OnChanges {
       this.titleChanged.emit({ listId: this.listId, newTitle });
     }
   }
-  
+
   toggleDropdown(event: MouseEvent): void {
     event.stopPropagation();
     this.menuToggled.emit(this.listId);
   }
-  
+
   openMoveList(event: MouseEvent): void {
     event.stopPropagation();
     this.dropdownState = 'move';
   }
-  
+
   goBackToMainMenu(event: MouseEvent): void {
     event.stopPropagation();
     this.dropdownState = 'main';
     this.isPositionSelectorOpen = false;
   }
-  
+
   togglePositionSelector(event: MouseEvent): void {
     event.stopPropagation();
     this.isPositionSelectorOpen = !this.isPositionSelectorOpen;
   }
-  
+
   onOpenTaskEdit(task: Task): void {
     this.editTaskRequest.emit(task);
   }
-  
+
   onAddTask(title: string): void {
     this.addTaskRequest.emit(title);
   }
-  
+
   onDeleteList(): void {
     this.deleteListRequested.emit(this.listId);
   }
-  
+
   onTaskDropped(event: CdkDragDrop<Task[]>): void {
     this.taskDropped.emit(event);
   }
-  
+
   selectPosition(position: number, event: MouseEvent): void {
     event.stopPropagation();
     this.selectedPosition = position;
     this.isPositionSelectorOpen = false;
   }
-  
+
   onMoveList(): void {
     if (this.selectedPosition !== this.currentPosition) {
       this.moveListRequest.emit({
@@ -141,13 +164,23 @@ export class TaskListComponent implements OnInit, OnChanges {
     }
     this.menuToggled.emit(this.listId);
   }
-  
-  onTaskMoveRequested(event: { taskId: string, targetListId: string, newPosition: number }): void {
+
+  onTaskMoveRequested(event: {
+    taskId: string;
+    targetListId: string;
+    newPosition: number;
+  }): void {
     this.taskMoveRequest.emit(event);
   }
-  
+
   @HostListener('window:resize')
   onResize(): void {
     this.isDragDisabled = window.innerWidth <= 768;
+  }
+
+  handleTaskDelete(taskId: string): void {
+    console.log(
+      `Die Task-Liste hat die Löschanfrage für Task-ID erhalten: ${taskId}`
+    );
   }
 }
