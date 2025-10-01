@@ -74,32 +74,80 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 
 ### Board Interaction Workflow
 
-**1. Reordering lists via Drag & Drop:** Users can intuitively change the order of lists to match their workflow.
-![Dragging a List](Frontend/src/assets/images/board/flow-02-drag-list.jpg)
-
-**2. Using the List Context Menu:** Each list also provides a context menu for precise actions.
-![List Context Menu](Frontend/src/assets/images/board/flow-03-list-menu.jpg)
-
-**3. Moving a list via Menu:** From the menu, users can move a list to a specific position.
-![Move List Menu](Frontend/src/assets/images/board/flow-04-move-list-menu.jpg)
-
-**4. Adding a new list:** New columns can be added directly on the board.
-![Add New List](Frontend/src/assets/images/board/flow-05-add-list.jpg)
-
-**5. Moving cards via Drag & Drop:** A card's status is updated by simply dragging it to a new list.
-![Dragging a Card](Frontend/src/assets/images/board/flow-06-drag-card.jpg)
-
-**6. Adding a new card:** Quick-add forms allow for the creation of new tasks in any list.
-![Add New Card](Frontend/src/assets/images/board/flow-08-add-card.jpg)
-
-**7. Using the Card Context Menu:** Each card has its own menu for actions like moving or deleting.
-![Card Context Menu](Frontend/src/assets/images/board/flow-09-card-menu.jpg)
-
-**8. Moving a card via Menu:** The menu allows for moving a card to a different list and position, perfect for touch devices.
-![Move Card via Menu](Frontend/src/assets/images/board/flow-10-move-card-menu-list.jpg)
-
-**9. Deleting a card:** Cards can be removed via their context menu.
-![Delete Card via Menu](Frontend/src/assets/images/board/flow-12-delete-card-menu.jpg)
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-02-drag-list.jpg" alt="Reordering lists with drag and drop" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>1. Reorder Lists via Drag & Drop</h3>
+      <p>Users can intuitively change the order of the lists to match their workflow.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>2. Use the List Context Menu</h3>
+      <p>Alternatively, each list provides a context menu for more precise actions.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-03-list-menu.jpg" alt="List Context Menu" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-04-move-list-menu.jpg" alt="Moving a list to a specific position using the menu" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>3. Move a List via Menu</h3>
+      <p>From the menu, users can move a list to a specific position, which is ideal for touch devices.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>4. Add a New List</h3>
+      <p>New columns can be added directly on the board via an inline form.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-05-add-list.jpg" alt="Adding a new list to the board" width="100%">
+    </td>
+  </tr>
+    <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-08-add-card.jpg" alt="Adding a new card to a list" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>5. Add a New Card</h3>
+      <p>Quick-add forms within each list allow for the fast creation of new tasks.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>6. Move Cards via Drag & Drop</h3>
+      <p>A card's status is updated by simply dragging it to a new list.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-06-drag-card.jpg" alt="Moving a card between lists with drag and drop" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-09-card-menu.jpg" alt="Context menu on a card" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>7. Use the Card Context Menu</h3>
+      <p>Each card also has its own menu for quick actions like moving or deleting.</p>
+    </td>
+  </tr>
+    <tr>
+    <td width="50%" valign="middle">
+      <h3>8. Move or Delete a Card</h3>
+      <p>The menu allows for precise control over a card's position or for its deletion.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-12-delete-card-menu.jpg" alt="Deleting a card via its menu" width="100%">
+    </td>
+  </tr>
+</table>
 
 </details>
 
