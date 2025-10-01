@@ -305,27 +305,62 @@ A complete rich text editor is integrated for task descriptions, offering a wide
 <details open>
 <summary><strong>📇 Full-Fledged Contact Management</strong></summary>
 
-Join includes a comprehensive contact management system with a dedicated responsive design.
+Join includes a comprehensive contact management system with a dedicated responsive design, allowing for full CRUD functionality in an intuitive interface.
 
--   **Full CRUD Functionality:** Users can Create, Read, Update, and Delete contacts through a seamless and intuitive interface.
--   **Organized & Grouped List:** Contacts are automatically sorted alphabetically and grouped by their first initial, making navigation effortless.
--   **Dedicated Responsive Design:**
-    -   **Desktop:** A classic two-panel "master-detail" layout shows the contact list on the left and the selected contact's details on the right with a smooth slide-in animation.
-    -   **Mobile/Tablet:** The interface transforms into a native-app-like screen-by-screen flow, utilizing a floating action button (FAB) and context menus for a clean, touch-friendly experience.
--   **Create & Edit via Responsive Modal:** A beautifully animated modal slides in for adding and editing contacts (from the **side on desktop**, from the **bottom on mobile**), featuring a live preview for profile picture uploads.
-
-![Contacts Page](URL_ZUM_KONTAKTE_BILD_HIER_EINFUEGEN)
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>1. Organized Overview</h3>
+      <p>The main view presents a clean, alphabetically sorted list of all contacts. The list is intelligently grouped by the first initial, making navigation through long lists effortless.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/contacts/contacts-overview.JPG" alt="Overview of the contact list" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/contacts/contacts-edit-modal.JPG" alt="Modal for editing a contact" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Create & Edit via Modal</h3>
+      <p>A beautifully animated modal slides in for adding and editing contacts (from the side on desktop, from the bottom on mobile). It features a live preview for profile picture uploads and robust form validation.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>3. Detailed View & Feedback</h3>
+      <p>After creating or editing, the user is presented with the detailed contact view and a smooth success notification. The layout is a classic master-detail view on desktop and a screen-by-screen flow on mobile.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/contacts/contacts-detail-view.JPG" alt="Detailed view of a single contact after an update" width="100%">
+    </td>
+  </tr>
+</table>
 
 </details>
 
 <details open>
 <summary><strong>🎨 Workspace Customization</strong></summary>
 
-To enhance the user experience, Join includes a board personalization feature.
+To enhance the user experience, Join includes a board personalization feature. The selected background is saved to the user's profile and is automatically applied upon their next login.
 
--   **Persistent User Choice:** The selected background is saved to the user's profile and is automatically applied upon their next login.
--   **Interactive Widget:** Customization is handled via an elegant, animated floating widget that expands to reveal options without interrupting the workflow.
--   **Rich Library:** Users can choose from a curated library of high-quality images or a modern palette of vibrant gradient backgrounds.
+<table>
+  <tr>
+    <td align="center"><strong>1. Open Widget</strong></td>
+    <td align="center"><strong>2. Select a Color</strong></td>
+    <td align="center"><strong>3. Select an Image</strong></td>
+  </tr>
+  <tr>
+    <td width="33%"><img src="Frontend/src/assets/images/backgrounds/background-main-menu.JPG" alt="The background changer widget"></td>
+    <td width="33%"><img src="Frontend/src/assets/images/backgrounds/background-select-color.JPG" alt="Selecting a gradient color background"></td>
+    <td width="33%"><img src="Frontend/src/assets/images/backgrounds/background-select-image.JPG" alt="Selecting a photo background"></td>
+  </tr>
+  <tr>
+    <td align="center">An elegant, floating widget provides access to all options.</td>
+    <td align="center">Choose from a modern palette of vibrant gradient backgrounds.</td>
+    <td align="center">Or select from a curated library of high-quality images.</td>
+  </tr>
+</table>
 
 </details>
 
@@ -336,8 +371,6 @@ The application is designed to be fully functional and user-friendly across all 
 
 -   **Smart Layout Adaptation:** The UI intelligently adapts its layout for major components, such as the Kanban board (horizontal scroll), the contact page (master-detail vs. single screen), and editor modals (side-slide vs. bottom-slide).
 -   **Optimized Touch Experience:** On mobile, drag-and-drop is strategically disabled in favor of context menus to ensure a smooth and conflict-free scrolling experience.
-
-![Mobile Responsive View](URL_ZUM_MOBILE_BILD_HIER_EINFUEGEN)
 
 </details>
 
@@ -351,7 +384,7 @@ The application is designed to be fully functional and user-friendly across all 
     -   **Angular CDK** for professional drag-and-drop functionality and custom overlays.
     -   **Angular Router** for a seamless single-page application (SPA) experience.
 -   **Backend:** **NestJS** + **Prisma** + **PostgreSQL**
--   **Authentication:** **JWT** (stored in `localStorage`)
+-   **Authentication:** **JWT**
 -   **Rich Text Editor:** **Tiptap.dev**
 -   **Styling:** **SCSS** with a modular, component-based structure
 
