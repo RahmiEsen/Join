@@ -154,58 +154,213 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 <details open>
 <summary><strong>📝 The Feature-Rich Task Editor</strong></summary>
 
-Clicking a task opens a powerful modal editor that offers granular control over every detail, showcasing a highly modular and feature-complete design.
+Clicking a task opens a powerful modal editor that offers granular control over every detail. This editor is not just a form, but a collection of highly interactive and feature-complete components designed for a seamless user experience.
 
-#### 🎨 Full-Fledged Rich Text Editor (Tiptap.dev)
--   **Advanced Formatting:** Headings (H1-H6), bold, italic, underline, strikethrough, and bulleted or numbered lists.
--   **Text Color & Highlighting:** Multiple color palettes for both font color and background highlighting.
--   **Advanced Text Transformation:** Unique tools to transform selected text (e.g., to `UPPERCASE`, `lowercase`, or `Capitalize Each Word`).
--   **Image & File Embedding:** Upload and embed images directly into the description.
+---
 
-#### ✅ Sub-Tasks via Interactive Checklists
--   Add multiple checklists to any task, each with an editable title and full CRUD functionality for items.
--   A **color-coded progress bar** and percentage text visualize the completion status in real-time.
--   Completed items can be hidden to maintain focus on open tasks, enhancing clarity.
+### 🎨 Cover Customization Workflow
 
-#### 🎴 Extensive Cover Customization
--   Visually categorize tasks with a cover, managed via a detailed menu with options for a rich color palette, a gallery of professional stock photos, or custom image uploads.
+The editor allows for rich visual customization of each task card through an intuitive cover menu.
 
-#### 🏷 Full Label Manager & Custom Date Picker
--   An integrated tool to create, edit, delete, and assign colored labels to tasks.
--   A **custom-built calendar component** allows for selecting a start date, a due date, or a date range with an intuitive UI.
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>1. Opening the Cover Menu</h3>
+      <p>The journey begins by opening the task. A dedicated button in the header opens the cover menu, presenting all customization options.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-menu.JPG" alt="Opening the Cover Menu" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-color.JPG" alt="Selecting a solid color for the cover" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Applying a Solid Color</h3>
+      <p>Users can choose from a vibrant palette of solid colors to categorize or highlight a task. The change is instantly reflected in the header.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>3. Choosing a Stock Photo</h3>
+      <p>A curated library of professional stock photos is available to give tasks a more visual and descriptive background.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-image-stock.JPG" alt="Selecting a stock photo for the cover" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-image-upload.JPG" alt="Using an uploaded image as a cover" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>4. Using Uploaded Attachments</h3>
+      <p>Any image previously uploaded to the task is available in the "Attachments" section and can be reused as a cover with a single click.</p>
+    </td>
+  </tr>
+</table>
 
-#### 👥 Member Assignment & Interactive Selections
--   Assign one or more team members to a task from the contact list.
--   All selections (labels, dates, members) are displayed as interactive pills below the toolbar. Clicking a selection re-opens its respective editor, creating a fast and intuitive workflow.
+---
 
-![Task Editor Modal](URL_ZUM_EDITOR_BILD_HIER_EINFUEGEN)
+### ⚙️ Managing Task Details
+
+The editor provides a suite of modular tools to manage labels, dates, members, and sub-tasks.
+
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>1. Full Label Management</h3>
+      <p>An integrated tool allows users to create, edit, delete, and assign colored labels from a feature-rich dropdown menu.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-labels-edit.JPG" alt="Editing or creating a new label" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-date-picker.JPG" alt="Custom date picker for start and due dates" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Custom Date Picker</h3>
+      <p>A custom-built, interactive calendar component provides an intuitive way to select a start date, a due date, or a date range.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>3. Member Assignment</h3>
+      <p>Team members can be easily assigned to a task by selecting them from a clean, searchable list of all project contacts.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-members-select.JPG" alt="Assigning members from a contact list" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-checklist-add-item.JPG" alt="Adding a new sub-task to a checklist" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>4. Interactive Checklists</h3>
+      <p>Break down tasks into smaller, manageable sub-tasks. New items can be added via a simple inline form.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>5. Checklist Progress Tracking</h3>
+      <p>As items are completed, a color-coded progress bar and percentage display provide immediate visual feedback on the checklist's status.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-checklist-progress.JPG" alt="Checklist showing progress bar and completed items" width="100%">
+    </td>
+  </tr>
+</table>
+
+---
+
+### ✍️ Rich Text Editor Workflow (Tiptap.dev)
+
+A complete rich text editor is integrated for task descriptions, offering a wide range of powerful formatting options.
+
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>1. Headings & Structure</h3>
+      <p>Users can structure their content with a full range of heading levels from H1 to H6, or revert to normal paragraph text.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-headings.JPG" alt="Selecting a heading level from the toolbar" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-case-transform.JPG" alt="Advanced text case transformation options" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Advanced Text Transformation</h3>
+      <p>A unique and powerful feature allows for transforming selected text to UPPERCASE, lowercase, Capitalized, and more.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>3. Text Color & Highlighting</h3>
+      <p>Extensive color palettes for both font color and background highlighting give users full creative control over the text appearance.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-highlight.JPG" alt="Highlighting text with a color from the palette" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-formatting.JPG" alt="Final formatted text with lists, styles, and an embedded image" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>4. Full Formatting Suite</h3>
+      <p>The editor supports all standard formatting, including bold, italics, lists, and the ability to embed images directly within the description.</p>
+    </td>
+  </tr>
+</table>
 
 </details>
 
 <details open>
 <summary><strong>📇 Full-Fledged Contact Management</strong></summary>
 
-Join includes a comprehensive contact management system with a dedicated responsive design.
+Join includes a comprehensive contact management system with a dedicated responsive design, allowing for full CRUD functionality in an intuitive interface.
 
--   **Full CRUD Functionality:** Users can Create, Read, Update, and Delete contacts through a seamless and intuitive interface.
--   **Organized & Grouped List:** Contacts are automatically sorted alphabetically and grouped by their first initial, making navigation effortless.
--   **Dedicated Responsive Design:**
-    -   **Desktop:** A classic two-panel "master-detail" layout shows the contact list on the left and the selected contact's details on the right with a smooth slide-in animation.
-    -   **Mobile/Tablet:** The interface transforms into a native-app-like screen-by-screen flow, utilizing a floating action button (FAB) and context menus for a clean, touch-friendly experience.
--   **Create & Edit via Responsive Modal:** A beautifully animated modal slides in for adding and editing contacts (from the **side on desktop**, from the **bottom on mobile**), featuring a live preview for profile picture uploads.
-
-![Contacts Page](URL_ZUM_KONTAKTE_BILD_HIER_EINFUEGEN)
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>1. Organized Overview</h3>
+      <p>The main view presents a clean, alphabetically sorted list of all contacts. The list is intelligently grouped by the first initial, making navigation through long lists effortless.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/contacts/contacts-overview.JPG" alt="Overview of the contact list" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/contacts/contacts-edit-modal.JPG" alt="Modal for editing a contact" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Create & Edit via Modal</h3>
+      <p>A beautifully animated modal slides in for adding and editing contacts (from the side on desktop, from the bottom on mobile). It features a live preview for profile picture uploads and robust form validation.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>3. Detailed View & Feedback</h3>
+      <p>After creating or editing, the user is presented with the detailed contact view and a smooth success notification. The layout is a classic master-detail view on desktop and a screen-by-screen flow on mobile.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/contacts/contacts-detail-view.JPG" alt="Detailed view of a single contact after an update" width="100%">
+    </td>
+  </tr>
+</table>
 
 </details>
 
 <details open>
 <summary><strong>🎨 Workspace Customization</strong></summary>
 
-To enhance the user experience, Join includes a board personalization feature.
+To enhance the user experience, Join includes a board personalization feature. The selected background is saved to the user's profile and is automatically applied upon their next login.
 
--   **Persistent User Choice:** The selected background is saved to the user's profile and is automatically applied upon their next login.
--   **Interactive Widget:** Customization is handled via an elegant, animated floating widget that expands to reveal options without interrupting the workflow.
--   **Rich Library:** Users can choose from a curated library of high-quality images or a modern palette of vibrant gradient backgrounds.
+<table>
+  <tr>
+    <td align="center"><strong>1. Open Widget</strong></td>
+    <td align="center"><strong>2. Select a Color</strong></td>
+    <td align="center"><strong>3. Select an Image</strong></td>
+  </tr>
+  <tr>
+    <td width="33%"><img src="Frontend/src/assets/images/backgrounds/background-main-menu.JPG" alt="The background changer widget"></td>
+    <td width="33%"><img src="Frontend/src/assets/images/backgrounds/background-select-color.JPG" alt="Selecting a gradient color background"></td>
+    <td width="33%"><img src="Frontend/src/assets/images/backgrounds/background-select-image.JPG" alt="Selecting a photo background"></td>
+  </tr>
+  <tr>
+    <td align="center">An elegant, floating widget provides access to all options.</td>
+    <td align="center">Choose from a modern palette of vibrant gradient backgrounds.</td>
+    <td align="center">Or select from a curated library of high-quality images.</td>
+  </tr>
+</table>
 
 </details>
 
@@ -216,8 +371,6 @@ The application is designed to be fully functional and user-friendly across all 
 
 -   **Smart Layout Adaptation:** The UI intelligently adapts its layout for major components, such as the Kanban board (horizontal scroll), the contact page (master-detail vs. single screen), and editor modals (side-slide vs. bottom-slide).
 -   **Optimized Touch Experience:** On mobile, drag-and-drop is strategically disabled in favor of context menus to ensure a smooth and conflict-free scrolling experience.
-
-![Mobile Responsive View](URL_ZUM_MOBILE_BILD_HIER_EINFUEGEN)
 
 </details>
 
@@ -231,7 +384,7 @@ The application is designed to be fully functional and user-friendly across all 
     -   **Angular CDK** for professional drag-and-drop functionality and custom overlays.
     -   **Angular Router** for a seamless single-page application (SPA) experience.
 -   **Backend:** **NestJS** + **Prisma** + **PostgreSQL**
--   **Authentication:** **JWT** (stored in `localStorage`)
+-   **Authentication:** **JWT**
 -   **Rich Text Editor:** **Tiptap.dev**
 -   **Styling:** **SCSS** with a modular, component-based structure
 
