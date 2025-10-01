@@ -90,7 +90,7 @@ The core of Join is an interactive board that provides an intuitive, visual way 
       <p>Alternatively, each list provides a context menu for more precise actions.</p>
     </td>
     <td width="50%" valign="middle">
-      <img src="Frontend/src/assets/images/board/flow-03-list-menu.jpg" alt="List Context Menu" width="100%">
+      <img src="Frontend/src/assets/images/board/flow-03-list-menu.JPG" alt="List Context Menu" width="100%">
     </td>
   </tr>
   <tr>
