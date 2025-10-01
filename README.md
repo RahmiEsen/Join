@@ -5,7 +5,7 @@
 > **Join** is a modern, Trello-inspired Kanban tool built with **Angular** and **NestJS**.
 > It helps individuals and teams **organize tasks**, **visualize workflows**, and **collaborate efficiently** – with a strong focus on clean architecture, interactivity, and a polished user experience.
 
-![Join Kanban Board Preview](URL_ZUM_HAUPTBILD_HIER_EINFUEGEN)
+![Join Kanban Board Preview](Frontend/src/assets/images/board/flow-01-overview.jpg)
 
 ---
 
@@ -68,15 +68,38 @@ The application features a complete, user-friendly, and secure process for passw
 <details open>
 <summary><strong>📋 Interactive Kanban Board</strong></summary>
 
-The core of Join is an interactive board that provides an intuitive, visual way to manage workflows, built with the power of the **Angular Component Dev Kit (CDK)**.
+The core of Join is an interactive board that provides an intuitive, visual way to manage workflows, built with the power of the **Angular Component Dev Kit (CDK)**. The following workflow demonstrates the core interactions.
 
--   **Full Drag & Drop Functionality:**
-    -   **Reorder Columns:** Horizontally drag and drop entire task lists to customize the workflow.
-    -   **Move Tasks:** Vertically drag and drop tasks within a list to reprioritize, or move them between lists to update their status. All position changes are persisted in the backend.
--   **Complete List (Column) Management:**
-    -   **Inline Title Editing:** Simply click on a list's title to edit it on the fly.
-    -   **Context Menus:** In addition to drag-and-drop, lists can be precisely moved or deleted via a dedicated context menu, ensuring full functionality on touch devices.
-![Kanban Board](URL_ZUM_BOARD_BILD_HIER_EINFUEGEN)
+---
+
+### Board Interaction Workflow
+
+**1. Reordering lists via Drag & Drop:** Users can intuitively change the order of lists to match their workflow.
+![Dragging a List](Frontend/src/assets/images/board/flow-02-drag-list.jpg)
+
+**2. Using the List Context Menu:** Each list also provides a context menu for precise actions.
+![List Context Menu](Frontend/src/assets/images/board/flow-03-list-menu.jpg)
+
+**3. Moving a list via Menu:** From the menu, users can move a list to a specific position.
+![Move List Menu](Frontend/src/assets/images/board/flow-04-move-list-menu.jpg)
+
+**4. Adding a new list:** New columns can be added directly on the board.
+![Add New List](Frontend/src/assets/images/board/flow-05-add-list.jpg)
+
+**5. Moving cards via Drag & Drop:** A card's status is updated by simply dragging it to a new list.
+![Dragging a Card](Frontend/src/assets/images/board/flow-06-drag-card.jpg)
+
+**6. Adding a new card:** Quick-add forms allow for the creation of new tasks in any list.
+![Add New Card](Frontend/src/assets/images/board/flow-08-add-card.jpg)
+
+**7. Using the Card Context Menu:** Each card has its own menu for actions like moving or deleting.
+![Card Context Menu](Frontend/src/assets/images/board/flow-09-card-menu.jpg)
+
+**8. Moving a card via Menu:** The menu allows for moving a card to a different list and position, perfect for touch devices.
+![Move Card via Menu](Frontend/src/assets/images/board/flow-10-move-card-menu-list.jpg)
+
+**9. Deleting a card:** Cards can be removed via their context menu.
+![Delete Card via Menu](Frontend/src/assets/images/board/flow-12-delete-card-menu.jpg)
 
 </details>
 
@@ -86,7 +109,6 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 Clicking a task opens a powerful modal editor that offers granular control over every detail, showcasing a highly modular and feature-complete design.
 
 #### 🎨 Full-Fledged Rich Text Editor (Tiptap.dev)
-A complete rich text editor is built-in for task descriptions, offering:
 -   **Advanced Formatting:** Headings (H1-H6), bold, italic, underline, strikethrough, and bulleted or numbered lists.
 -   **Text Color & Highlighting:** Multiple color palettes for both font color and background highlighting.
 -   **Advanced Text Transformation:** Unique tools to transform selected text (e.g., to `UPPERCASE`, `lowercase`, or `Capitalize Each Word`).
