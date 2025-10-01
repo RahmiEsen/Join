@@ -154,82 +154,151 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 <details open>
 <summary><strong>📝 The Feature-Rich Task Editor</strong></summary>
 
-Clicking a task opens a powerful modal editor that offers granular control over every detail, showcasing a highly modular and feature-complete design.
+Clicking a task opens a powerful modal editor that offers granular control over every detail. This editor is not just a form, but a collection of highly interactive and feature-complete components designed for a seamless user experience.
 
-### ⚙️ Task Customization & Management
+---
 
-The editor provides a suite of tools to define and customize every aspect of a task.
+### 🎨 Cover Customization Workflow
+
+The editor allows for rich visual customization of each task card through an intuitive cover menu.
+
 <table>
   <tr>
-    <td align="center"><strong>1. Cover Customization</strong></td>
-    <td align="center"><strong>2. Full Label Manager</strong></td>
-    <td align="center"><strong>3. Custom Date Picker</strong></td>
+    <td width="50%" valign="middle">
+      <h3>1. Opening the Cover Menu</h3>
+      <p>The journey begins by opening the task. A dedicated button in the header opens the cover menu, presenting all customization options.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-menu.JPG" alt="Opening the Cover Menu" width="100%">
+    </td>
   </tr>
   <tr>
-    <td width="33%"><img src="Frontend/src/assets/images/editor/editor-cover-menu.JPG" alt="Cover Menu Options"></td>
-    <td width="33%"><img src="Frontend/src/assets/images/editor/editor-labels-edit.JPG" alt="Editing a label"></td>
-    <td width="33%"><img src="Frontend/src/assets/images/editor/editor-date-picker.JPG" alt="Custom date picker calendar"></td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-color.JPG" alt="Selecting a solid color for the cover" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Applying a Solid Color</h3>
+      <p>Users can choose from a vibrant palette of solid colors to categorize or highlight a task. The change is instantly reflected in the header.</p>
+    </td>
   </tr>
   <tr>
-    <td align="center">Choose from colors, stock photos, or upload your own images.</td>
-    <td align="center">Create, edit, delete, and assign colored labels.</td>
-    <td align="center">A custom-built calendar for selecting start and due dates.</td>
+    <td width="50%" valign="middle">
+      <h3>3. Choosing a Stock Photo</h3>
+      <p>A curated library of professional stock photos is available to give tasks a more visual and descriptive background.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-image-stock.JPG" alt="Selecting a stock photo for the cover" width="100%">
+    </td>
   </tr>
-   <tr>
-    <td align="center"><strong>4. Member Assignment</strong></td>
-    <td align="center"><strong>5. Interactive Checklists</strong></td>
-    <td align="center"><strong>6. Checklist Progress</strong></td>
-  </tr>
-   <tr>
-    <td><img src="Frontend/src/assets/images/editor/editor-members-select.JPG" alt="Assigning members to the task"></td>
-    <td><img src="Frontend/src/assets/images/editor/editor-checklist-add-item.JPG" alt="Adding a new item to a checklist"></td>
-    <td><img src="Frontend/src/assets/images/editor/editor-checklist-progress.JPG" alt="Checklist with a progress bar"></td>
-  </tr>
-    <tr>
-    <td align="center">Assign one or more team members to the task.</td>
-    <td align="center">Add, edit, and check off individual sub-tasks.</td>
-    <td align="center">A progress bar visualizes the completion status in real-time.</td>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-cover-image-upload.JPG" alt="Using an uploaded image as a cover" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>4. Using Uploaded Attachments</h3>
+      <p>Any image previously uploaded to the task is available in the "Attachments" section and can be reused as a cover with a single click.</p>
+    </td>
   </tr>
 </table>
 
-### 🎨 Full-Fledged Rich Text Editor (Tiptap.dev)
+---
 
-For the task description, a complete rich text editor based on Tiptap.dev is integrated, offering a wide range of formatting options.
+### ⚙️ Managing Task Details
+
+The editor provides a suite of modular tools to manage labels, dates, members, and sub-tasks.
+
 <table>
   <tr>
-    <td align="center"><strong>1. Headings & Structure</strong></td>
-    <td align="center"><strong>2. Advanced Text Transformation</strong></td>
-    <td align="center"><strong>3. Text Color & Highlighting</strong></td>
+    <td width="50%" valign="middle">
+      <h3>1. Full Label Management</h3>
+      <p>An integrated tool allows users to create, edit, delete, and assign colored labels from a feature-rich dropdown menu.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-labels-edit.JPG" alt="Editing or creating a new label" width="100%">
+    </td>
   </tr>
   <tr>
-    <td width="33%"><img src="Frontend/src/assets/images/editor/editor-richtext-headings.JPG" alt="Selecting a heading level"></td>
-    <td width="33%"><img src="Frontend/src/assets/images/editor/editor-richtext-case-transform.JPG" alt="Case transformation options"></td>
-    <td width="33%"><img src="Frontend/src/assets/images/editor/editor-richtext-highlight.JPG" alt="Highlighting text with a color"></td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-date-picker.JPG" alt="Custom date picker for start and due dates" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Custom Date Picker</h3>
+      <p>A custom-built, interactive calendar component provides an intuitive way to select a start date, a due date, or a date range.</p>
+    </td>
   </tr>
   <tr>
-    <td align="center">Choose from H1-H6 to structure the description.</td>
-    <td align="center">Unique tools to transform text (e.g., to UPPERCASE).</td>
-    <td align="center">Extensive color palettes for font and background.</td>
+    <td width="50%" valign="middle">
+      <h3>3. Member Assignment</h3>
+      <p>Team members can be easily assigned to a task by selecting them from a clean, searchable list of all project contacts.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-members-select.JPG" alt="Assigning members from a contact list" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-checklist-add-item.JPG" alt="Adding a new sub-task to a checklist" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>4. Interactive Checklists</h3>
+      <p>Break down tasks into smaller, manageable sub-tasks. New items can be added via a simple inline form.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>5. Checklist Progress Tracking</h3>
+      <p>As items are completed, a color-coded progress bar and percentage display provide immediate visual feedback on the checklist's status.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-checklist-progress.JPG" alt="Checklist showing progress bar and completed items" width="100%">
+    </td>
   </tr>
 </table>
 
-#### ✅ Sub-Tasks via Interactive Checklists
--   Add multiple checklists to any task, each with an editable title and full CRUD functionality for items.
--   A **color-coded progress bar** and percentage text visualize the completion status in real-time.
--   Completed items can be hidden to maintain focus on open tasks, enhancing clarity.
+---
 
-#### 🎴 Extensive Cover Customization
--   Visually categorize tasks with a cover, managed via a detailed menu with options for a rich color palette, a gallery of professional stock photos, or custom image uploads.
+### ✍️ Rich Text Editor Workflow (Tiptap.dev)
 
-#### 🏷 Full Label Manager & Custom Date Picker
--   An integrated tool to create, edit, delete, and assign colored labels to tasks.
--   A **custom-built calendar component** allows for selecting a start date, a due date, or a date range with an intuitive UI.
+A complete rich text editor is integrated for task descriptions, offering a wide range of powerful formatting options.
 
-#### 👥 Member Assignment & Interactive Selections
--   Assign one or more team members to a task from the contact list.
--   All selections (labels, dates, members) are displayed as interactive pills below the toolbar. Clicking a selection re-opens its respective editor, creating a fast and intuitive workflow.
-
-![Task Editor Modal](URL_ZUM_EDITOR_BILD_HIER_EINFUEGEN)
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>1. Headings & Structure</h3>
+      <p>Users can structure their content with a full range of heading levels from H1 to H6, or revert to normal paragraph text.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-headings.JPG" alt="Selecting a heading level from the toolbar" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-case-transform.JPG" alt="Advanced text case transformation options" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>2. Advanced Text Transformation</h3>
+      <p>A unique and powerful feature allows for transforming selected text to UPPERCASE, lowercase, Capitalized, and more.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>3. Text Color & Highlighting</h3>
+      <p>Extensive color palettes for both font color and background highlighting give users full creative control over the text appearance.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-highlight.JPG" alt="Highlighting text with a color from the palette" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/editor/editor-richtext-formatting.JPG" alt="Final formatted text with lists, styles, and an embedded image" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>4. Full Formatting Suite</h3>
+      <p>The editor supports all standard formatting, including bold, italics, lists, and the ability to embed images directly within the description.</p>
+    </td>
+  </tr>
+</table>
 
 </details>
 
