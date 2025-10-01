@@ -5,7 +5,7 @@
 > **Join** is a modern, Trello-inspired Kanban tool built with **Angular** and **NestJS**.
 > It helps individuals and teams **organize tasks**, **visualize workflows**, and **collaborate efficiently** – with a strong focus on clean architecture, interactivity, and a polished user experience.
 
-![Join Kanban Board Preview](URL_ZUM_HAUPTBILD_HIER_EINFUEGEN)
+![Join Kanban Board Preview](Frontend/src/assets/images/board/flow-01-overview.jpg)
 
 ---
 
@@ -68,15 +68,86 @@ The application features a complete, user-friendly, and secure process for passw
 <details open>
 <summary><strong>📋 Interactive Kanban Board</strong></summary>
 
-The core of Join is an interactive board that provides an intuitive, visual way to manage workflows, built with the power of the **Angular Component Dev Kit (CDK)**.
+The core of Join is an interactive board that provides an intuitive, visual way to manage workflows, built with the power of the **Angular Component Dev Kit (CDK)**. The following workflow demonstrates the core interactions.
 
--   **Full Drag & Drop Functionality:**
-    -   **Reorder Columns:** Horizontally drag and drop entire task lists to customize the workflow.
-    -   **Move Tasks:** Vertically drag and drop tasks within a list to reprioritize, or move them between lists to update their status. All position changes are persisted in the backend.
--   **Complete List (Column) Management:**
-    -   **Inline Title Editing:** Simply click on a list's title to edit it on the fly.
-    -   **Context Menus:** In addition to drag-and-drop, lists can be precisely moved or deleted via a dedicated context menu, ensuring full functionality on touch devices.
-![Kanban Board](URL_ZUM_BOARD_BILD_HIER_EINFUEGEN)
+---
+
+### Board Interaction Workflow
+
+<table>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-02-drag-list.jpg" alt="Reordering lists with drag and drop" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>1. Reorder Lists via Drag & Drop</h3>
+      <p>Users can intuitively change the order of the lists to match their workflow.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>2. Use the List Context Menu</h3>
+      <p>Alternatively, each list provides a context menu for more precise actions.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-03-list-menu.JPG" alt="List Context Menu" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-04-move-list-menu.jpg" alt="Moving a list to a specific position using the menu" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>3. Move a List via Menu</h3>
+      <p>From the menu, users can move a list to a specific position, which is ideal for touch devices.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>4. Add a New List</h3>
+      <p>New columns can be added directly on the board via an inline form.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-05-add-list.jpg" alt="Adding a new list to the board" width="100%">
+    </td>
+  </tr>
+    <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-08-add-card.jpg" alt="Adding a new card to a list" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>5. Add a New Card</h3>
+      <p>Quick-add forms within each list allow for the fast creation of new tasks.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <h3>6. Move Cards via Drag & Drop</h3>
+      <p>A card's status is updated by simply dragging it to a new list.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-06-drag-card.jpg" alt="Moving a card between lists with drag and drop" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-09-card-menu.jpg" alt="Context menu on a card" width="100%">
+    </td>
+    <td width="50%" valign="middle">
+      <h3>7. Use the Card Context Menu</h3>
+      <p>Each card also has its own menu for quick actions like moving or deleting.</p>
+    </td>
+  </tr>
+    <tr>
+    <td width="50%" valign="middle">
+      <h3>8. Move or Delete a Card</h3>
+      <p>The menu allows for precise control over a card's position or for its deletion.</p>
+    </td>
+    <td width="50%" valign="middle">
+      <img src="Frontend/src/assets/images/board/flow-12-delete-card-menu.jpg" alt="Deleting a card via its menu" width="100%">
+    </td>
+  </tr>
+</table>
 
 </details>
 
@@ -86,7 +157,6 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 Clicking a task opens a powerful modal editor that offers granular control over every detail, showcasing a highly modular and feature-complete design.
 
 #### 🎨 Full-Fledged Rich Text Editor (Tiptap.dev)
-A complete rich text editor is built-in for task descriptions, offering:
 -   **Advanced Formatting:** Headings (H1-H6), bold, italic, underline, strikethrough, and bulleted or numbered lists.
 -   **Text Color & Highlighting:** Multiple color palettes for both font color and background highlighting.
 -   **Advanced Text Transformation:** Unique tools to transform selected text (e.g., to `UPPERCASE`, `lowercase`, or `Capitalize Each Word`).
