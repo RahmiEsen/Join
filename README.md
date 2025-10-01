@@ -1,9 +1,11 @@
 # 📌 Join – A Kanban Project Management Tool
 
-[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/) [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/) [![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/) [![Sass](https://img.shields.io/badge/Style-SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com/)
+[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/) [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/) [![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/) [![Sass](https://img.shields.io/badge/Style-SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com/)
 
 > **Join** is a modern, Trello-inspired Kanban tool built with **Angular** and **NestJS**.
 > It helps individuals and teams **organize tasks**, **visualize workflows**, and **collaborate efficiently** – with a strong focus on clean architecture, interactivity, and a polished user experience.
+
+![Join Kanban Board Preview](URL_ZUM_HAUPTBILD_HIER_EINFUEGEN)
 
 ---
 
@@ -17,15 +19,13 @@
 
 - [✨ Key Features](#-key-features)
 - [🛠 Technology Stack](#-technology-stack)
-- [⚡ Getting Started](#-getting-started)
 - [👨‍💻 Author](#-author)
-- [📜 License](#-license)
 
 ---
 
 ## ✨ Key Features
 
-<details>
+<details open>
 <summary><strong>🔑 Comprehensive Authentication System</strong></summary>
 
 A complete and secure workflow for user management ensures a smooth and safe onboarding experience, featuring:
@@ -36,9 +36,11 @@ A complete and secure workflow for user management ensures a smooth and safe onb
 -   **Full Password Reset Flow:** A secure, token-based process for users to request a password reset link via email and update their credentials.
 -   **"Remember Me" Functionality:** Persists the user's email in `localStorage` for faster future logins.
 
+![Authentication UI](URL_ZUM_AUTH_BILD_HIER_EINFUEGEN)
+
 </details>
 
-<details>
+<details open>
 <summary><strong>📋 Interactive Kanban Board</strong></summary>
 
 The core of Join is an interactive board that provides an intuitive, visual way to manage workflows, built with the power of the **Angular Component Dev Kit (CDK)**.
@@ -52,7 +54,7 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 
 </details>
 
-<details>
+<details open>
 <summary><strong>📝 The Feature-Rich Task Editor</strong></summary>
 
 Clicking a task opens a powerful modal editor that offers granular control over every detail, showcasing a highly modular and feature-complete design.
@@ -80,9 +82,11 @@ A complete rich text editor is built-in for task descriptions, offering:
 -   Assign one or more team members to a task from the contact list.
 -   All selections (labels, dates, members) are displayed as interactive pills below the toolbar. Clicking a selection re-opens its respective editor, creating a fast and intuitive workflow.
 
+![Task Editor Modal](URL_ZUM_EDITOR_BILD_HIER_EINFUEGEN)
+
 </details>
 
-<details>
+<details open>
 <summary><strong>📇 Full-Fledged Contact Management</strong></summary>
 
 Join includes a comprehensive contact management system with a dedicated responsive design.
@@ -94,9 +98,11 @@ Join includes a comprehensive contact management system with a dedicated respons
     -   **Mobile/Tablet:** The interface transforms into a native-app-like screen-by-screen flow, utilizing a floating action button (FAB) and context menus for a clean, touch-friendly experience.
 -   **Create & Edit via Responsive Modal:** A beautifully animated modal slides in for adding and editing contacts (from the **side on desktop**, from the **bottom on mobile**), featuring a live preview for profile picture uploads.
 
+![Contacts Page](URL_ZUM_KONTAKTE_BILD_HIER_EINFUEGEN)
+
 </details>
 
-<details>
+<details open>
 <summary><strong>🎨 Workspace Customization</strong></summary>
 
 To enhance the user experience, Join includes a board personalization feature.
@@ -107,7 +113,7 @@ To enhance the user experience, Join includes a board personalization feature.
 
 </details>
 
-<details>
+<details open>
 <summary><strong>📱 Responsive & Mobile-First Design</strong></summary>
 
 The application is designed to be fully functional and user-friendly across all devices, demonstrating a deep understanding of responsive principles.
@@ -115,51 +121,23 @@ The application is designed to be fully functional and user-friendly across all 
 -   **Smart Layout Adaptation:** The UI intelligently adapts its layout for major components, such as the Kanban board (horizontal scroll), the contact page (master-detail vs. single screen), and editor modals (side-slide vs. bottom-slide).
 -   **Optimized Touch Experience:** On mobile, drag-and-drop is strategically disabled in favor of context menus to ensure a smooth and conflict-free scrolling experience.
 
+![Mobile Responsive View](URL_ZUM_MOBILE_BILD_HIER_EINFUEGEN)
+
 </details>
 
 ---
 
 ## 🛠 Technology Stack
 
--   **Frontend:** **Angular** (Standalone Components, Reactive Forms, Angular CDK, Angular Router)
+-   **Frontend:** **Angular**
+    -   Written in **TypeScript**, utilizing modern features like **Standalone Components**.
+    -   **Reactive Forms** for robust and testable form logic.
+    -   **Angular CDK** for professional drag-and-drop functionality and custom overlays.
+    -   **Angular Router** for a seamless single-page application (SPA) experience.
 -   **Backend:** **NestJS** + **Prisma** + **PostgreSQL**
 -   **Authentication:** **JWT** (stored in `localStorage`)
 -   **Rich Text Editor:** **Tiptap.dev**
 -   **Styling:** **SCSS** with a modular, component-based structure
-
----
-
-## ⚡ Getting Started
-
-To get a local copy up and running, follow these simple steps.
-
-### **Prerequisites**
-
-Make sure you have Node.js and the Angular CLI installed.
--   npm
-    ```sh
-    npm install -g @angular/cli
-    ```
-
-### **Installation**
-
-1.  Clone the repo
-    ```sh
-    git clone [https://github.com/RahmiEsen/Join-Kanban-Board.git](https://github.com/RahmiEsen/Join-Kanban-Board.git)
-    ```
-2.  Navigate to the project directory
-    ```sh
-    cd Join-Kanban-Board
-    ```
-3.  Install NPM packages
-    ```sh
-    npm install
-    ```
-4.  Run the development server
-    ```sh
-    ng serve
-    ```
-5.  Open your browser and navigate to `http://localhost:4200/`
 
 ---
 
@@ -168,5 +146,3 @@ Make sure you have Node.js and the Angular CLI installed.
 **Rahmi Esen**
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-000?style=for-the-badge&logo=vercel&logoColor=white)](https://rahmiesen.de/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rahmi-esen-574182310/) [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RahmiEsen)
-
----
