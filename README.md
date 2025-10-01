@@ -133,16 +133,10 @@ Now open 👉 [http://localhost:4200/](http://localhost:4200/)
 
 **Rahmi Esen**  
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-000?style=for-the-badge&logo=vercel&logoColor=white)](https://your-portfolio-link.com)  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/YOUR_PROFILE)  
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/YOUR_USERNAME)  
+[![Portfolio](https://img.shields.io/badge/Portfolio-000?style=for-the-badge&logo=vercel&logoColor=white)](https://rahmiesen.de/)  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/rahmi-esen-574182310/)  
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/RahmiEsen)  
 
----
-
-## 📜 License  
-
-Distributed under the **MIT License**.  
-See [`LICENSE`](LICENSE) for more details.  
 
 ---
 
