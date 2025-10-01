@@ -1,6 +1,7 @@
 # 📌 Join – A Kanban Project Management Tool
 
-[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Sass](https://img.shields.io/badge/Style-SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com/)  [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/) [![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/) 
+[![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)](https://angular.io/) [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/) [![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://www.prisma.io/) [![Sass](https://img.shields.io/badge/Style-SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white)](https://sass-lang.com/)
+
 > **Join** is a modern, Trello-inspired Kanban tool built with **Angular** and **NestJS**.
 > It helps individuals and teams **organize tasks**, **visualize workflows**, and **collaborate efficiently** – with a strong focus on clean architecture, interactivity, and a polished user experience.
 
@@ -27,23 +28,40 @@
 <details open>
 <summary><strong>🔑 Comprehensive Authentication System</strong></summary>
 
-A complete and secure workflow for user management ensures a smooth and safe onboarding experience, featuring:
+A complete and secure workflow for user management ensures a smooth and safe onboarding experience. The system includes standard registration, Google OAuth, guest access, and a full password reset flow.
 
--   **Standard Registration & Login:** Users can create an account and log in securely with an email and password, powered by a robust real-time validation system.
--   **Google OAuth 2.0:** Convenient one-click sign-in using existing Google accounts via a secure backend flow.
--   **Guest Access:** A "Guest Login" feature allows new users to explore the application's core functionality without needing to register.
--   **Full Password Reset Flow:** A secure, token-based process for users to request a password reset link via email and update their credentials.
--   **"Remember Me" Functionality:** Persists the user's email in `localStorage` for faster future logins.
+| Login Page | Sign Up Page |
+| :---: | :---: |
+| ![Login Page](Frontend/src/assets/images/auth/login.jpg) | ![Sign Up Page](Frontend/src/assets/images/auth/signup.jpg) |
 
-![Authentication UI](![8](https://github.com/user-attachments/assets/308abc42-e026-467b-8771-541978b5f94e)
-![7](https://github.com/user-attachments/assets/4c262391-672d-493a-8239-2726ede17567)
-![6](https://github.com/user-attachments/assets/7770d5c5-16a5-4d2c-93ac-9a4c02898479)
-![5](https://github.com/user-attachments/assets/fd043b6c-54de-4a2a-95e2-4223a38afbab)
-![4](https://github.com/user-attachments/assets/4b02acd1-9716-4570-8566-7661a944b410)
-![3](https://github.com/user-attachments/assets/a70d3560-485c-45ad-98a0-4bbec0c85c2a)
-![2](https://github.com/user-attachments/assets/2681264f-c503-4a1d-94bb-bc932d766643)
-![1](https://github.com/user-attachments/assets/6d50afd4-736f-4bb1-b6dd-c16f7528b1f3)
-)
+#### Seamless Password Reset Flow
+The application features a complete, user-friendly, and secure process for password recovery, illustrated below:
+
+<table>
+  <tr>
+    <td align="center"><strong>1. Login Error & Request</strong></td>
+    <td align="center"><strong>2. Email Confirmation</strong></td>
+    <td align="center"><strong>3. Received Email</strong></td>
+  </tr>
+  <tr>
+    <td width="33%"><img src="Frontend/src/assets/images/auth/login-error.jpg" alt="Login Error with Forgot Password Link"></td>
+    <td width="33%"><img src="Frontend/src/assets/images/auth/reset-email-sent.jpg" alt="Email Sent Confirmation"></td>
+    <td width="33%"><img src="Frontend/src/assets/images/auth/reset-email.jpg" alt="Password Reset Email"></td>
+  </tr>
+  <tr>
+    <td align="center">A "Forgot Password?" link appears after a failed login attempt.</td>
+    <td align="center">The user is notified that a reset email has been sent.</td>
+    <td align="center">The user receives a secure email with a link to reset their password.</td>
+  </tr>
+   <tr>
+    <td align="center"><strong>4. New Password Form</strong></td>
+    <td colspan="2" align="center"><strong>Process Complete</strong></td>
+  </tr>
+   <tr>
+    <td><img src="Frontend/src/assets/images/auth/reset-password-form.jpg" alt="Form to enter a new password"></td>
+    <td colspan="2">The user sets a new password, completing the secure reset cycle.</td>
+  </tr>
+</table>
 
 </details>
 
@@ -58,6 +76,7 @@ The core of Join is an interactive board that provides an intuitive, visual way 
 -   **Complete List (Column) Management:**
     -   **Inline Title Editing:** Simply click on a list's title to edit it on the fly.
     -   **Context Menus:** In addition to drag-and-drop, lists can be precisely moved or deleted via a dedicated context menu, ensuring full functionality on touch devices.
+![Kanban Board](URL_ZUM_BOARD_BILD_HIER_EINFUEGEN)
 
 </details>
 
