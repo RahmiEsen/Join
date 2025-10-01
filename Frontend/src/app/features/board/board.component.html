@@ -1,62 +1,67 @@
-<div class="edit-task-overlay"
-    *ngIf="selectedTaskForEdit"
-    [ngClass]="{'is-visible': isModalVisible}"
-    (click)="closeEditMode()">
-    <app-add-task
-        [taskToEdit]="selectedTaskForEdit"
-        (taskSavedOrCancelled)="onTaskSaved()"
-        (click)="$event.stopPropagation()">
-    </app-add-task>
+<div
+  class="edit-task-overlay"
+  *ngIf="selectedTaskForEdit"
+  [ngClass]="{ 'is-visible': isModalVisible }"
+  (click)="closeEditMode()"
+>
+  <app-add-task
+    [taskToEdit]="selectedTaskForEdit"
+    (taskSavedOrCancelled)="onTaskSaved()"
+    (click)="$event.stopPropagation()"
+  >
+  </app-add-task>
 </div>
-<div class="board-wrapper #boardWrapper" 
-    cdkDropListGroup 
-    cdkDropList 
-    [cdkDropListData]="taskLists"
-    [cdkDropListDisabled]="isDragDisabled"
-    cdkDropListOrientation="horizontal"
-    (cdkDropListDropped)="dropList($event)"
-    (click)="toggleListMenu('')">
-    <app-task-list
-        *ngFor="let list of taskLists; let i = index"
-        cdkDrag
-        [cdkDragDisabled]="isDragDisabled"
-        [title]="list.title"
-        [tasks]="list.tasks"
-        [listId]="list.id"
-        [currentPosition]="i + 1"
-        [totalLists]="taskLists.length"
-        [allLists]="taskLists"
-        (taskMoveRequest)="handleMoveTask($event)"
-        (moveListRequest)="handleMoveList($event)"
-        [isMenuOpen]="list.id === openListMenuId"
-        [connectedListIds]="getAllListIds()"
-        (taskDropped)="dropTask($event)"
-        (menuToggled)="toggleListMenu($event)"
-        (deleteListRequested)="onDeleteList($event)"
-        (titleChanged)="onListTitleChanged($event)"
-        (editTaskRequest)="openTaskForEdit($event)"
-        (addTaskRequest)="addTask($event, list.id)">
-    </app-task-list>
-    <button class="add-list"
+<div
+  class="board-wrapper #boardWrapper"
+  cdkDropListGroup
+  cdkDropList
+  [cdkDropListData]="taskLists"
+  [cdkDropListDisabled]="isDragDisabled"
+  cdkDropListOrientation="horizontal"
+  (cdkDropListDropped)="dropList($event)"
+  (click)="toggleListMenu('')"
+>
+  <app-task-list
+    *ngFor="let list of taskLists; let i = index"
+    cdkDrag
+    [cdkDragDisabled]="isDragDisabled"
+    [title]="list.title"
+    [tasks]="list.tasks"
+    [listId]="list.id"
+    [currentPosition]="i + 1"
+    [totalLists]="taskLists.length"
+    [allLists]="taskLists"
+    (taskMoveRequest)="handleMoveTask($event)"
+    (moveListRequest)="handleMoveList($event)"
+    [isMenuOpen]="list.id === openListMenuId"
+    [connectedListIds]="getAllListIds()"
+    (taskDropped)="dropTask($event)"
+    (menuToggled)="toggleListMenu($event)"
+    (deleteListRequested)="onDeleteList($event)"
+    (titleChanged)="onListTitleChanged($event)"
+    (editTaskRequest)="openTaskForEdit($event)"
+    (addTaskRequest)="addTask($event, list.id)"
+    (deleteTaskRequest)="onDeleteTask($event)"
+  >
+  </app-task-list>
+  <button
+    class="add-list"
     *ngIf="!isAddListFormVisible && !isLoading"
-    (click)="toggleAddListForm()">
-        <img src="assets/images/plus-active.png" alt="Add Task">
-        <span>Add a Task</span>
-    </button>
-    <div class="add-task-list"
-    *ngIf="isAddListFormVisible">
-        <div class="list-titel">
-        <input 
-            placeholder="Enter list title..."
-            [(ngModel)]="newListName">
-        <div class="button-wrapper">
-            <button (click)="addNewList()">Add Task</button>
-            <button class="close"
-            (click)="toggleAddListForm()">
-                <img src="assets/images/close.png" alt="Close">
-            </button>
-        </div>
+    (click)="toggleAddListForm()"
+  >
+    <img src="assets/images/plus-active.png" alt="Add Task" />
+    <span>Add a Task</span>
+  </button>
+  <div class="add-task-list" *ngIf="isAddListFormVisible">
+    <div class="list-titel">
+      <input placeholder="Enter list title..." [(ngModel)]="newListName" />
+      <div class="button-wrapper">
+        <button (click)="addNewList()">Add Task</button>
+        <button class="close" (click)="toggleAddListForm()">
+          <img src="assets/images/close.png" alt="Close" />
+        </button>
+      </div>
     </div>
-    </div>
+  </div>
 </div>
 <app-background></app-background>

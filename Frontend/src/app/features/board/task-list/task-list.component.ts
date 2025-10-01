@@ -63,6 +63,7 @@ export class TaskListComponent implements OnInit, OnChanges {
     targetListId: string;
     newPosition: number;
   }>();
+  @Output() deleteTaskRequest = new EventEmitter<string>();
   @ViewChild('titleInput') titleInput!: ElementRef;
 
   public isEditingTitle: boolean = false;
@@ -182,5 +183,6 @@ export class TaskListComponent implements OnInit, OnChanges {
     console.log(
       `Die Task-Liste hat die Löschanfrage für Task-ID erhalten: ${taskId}`
     );
+    this.deleteTaskRequest.emit(taskId);
   }
 }
