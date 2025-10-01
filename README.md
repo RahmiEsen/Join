@@ -35,7 +35,15 @@ A complete and secure workflow for user management ensures a smooth and safe onb
 -   **Full Password Reset Flow:** A secure, token-based process for users to request a password reset link via email and update their credentials.
 -   **"Remember Me" Functionality:** Persists the user's email in `localStorage` for faster future logins.
 
-![Authentication UI](URL_ZUM_AUTH_BILD_HIER_EINFUEGEN)
+![Authentication UI](![8](https://github.com/user-attachments/assets/308abc42-e026-467b-8771-541978b5f94e)
+![7](https://github.com/user-attachments/assets/4c262391-672d-493a-8239-2726ede17567)
+![6](https://github.com/user-attachments/assets/7770d5c5-16a5-4d2c-93ac-9a4c02898479)
+![5](https://github.com/user-attachments/assets/fd043b6c-54de-4a2a-95e2-4223a38afbab)
+![4](https://github.com/user-attachments/assets/4b02acd1-9716-4570-8566-7661a944b410)
+![3](https://github.com/user-attachments/assets/a70d3560-485c-45ad-98a0-4bbec0c85c2a)
+![2](https://github.com/user-attachments/assets/2681264f-c503-4a1d-94bb-bc932d766643)
+![1](https://github.com/user-attachments/assets/6d50afd4-736f-4bb1-b6dd-c16f7528b1f3)
+)
 
 </details>
 
