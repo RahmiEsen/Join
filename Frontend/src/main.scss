@@ -1,338 +1,353 @@
-@use './styles/variables' as *;
-@use './styles/mixins' as *;
+@use "./styles/variables" as *;
+@use "./styles/mixins" as *;
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scrollbar-width: none; 
-    ::-webkit-scrollbar {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
     display: none;
-    }
+  }
 }
 
 body {
-    font-family: $font-family;
+  font-family: $font-family;
 }
 
 h1 {
-    color: $black;
-    font-size: 61px;
-    font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
+  color: $black;
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
 }
 
 h2 {
-    color: $black;
-    font-size: 47px;
-    font-weight: 500;
-    line-height: 1.2;
-    text-align: center;
+  color: $black;
+  font-size: 47px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
 }
 
 span {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 p {
-    margin: 0;
+  margin: 0;
 }
 
-input, textarea {
-    @include space-between;
-    color: $black;
-    font-size: 20px;
-    font-family: "Inter", sans-serif;
-    font-weight: 400;
-    line-height: 1.2;
-    border: $border;
-    border-radius: $border-radius;
-    border-color: $border-color;
-    padding: 12px 16px;
-    &::placeholder {
-        color: $border-color;
-    }
-    &:focus {
-        outline: none;
-        border-color: $hover
-    }
+input,
+textarea {
+  @include space-between;
+  color: $black;
+  font-size: 20px;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  line-height: 1.2;
+  border: $border;
+  border-radius: $border-radius;
+  border-color: $border-color;
+  padding: 12px 16px;
+  &::placeholder {
+    color: $border-color;
+  }
+  &:focus {
+    outline: none;
+    border-color: $hover;
+  }
 }
 
 button {
+  @include center;
+  background-color: $primary;
+  color: #fff;
+  font-family: $font-family;
+  font-size: 21px;
+  font-weight: 700;
+  border: $border;
+  border-radius: $border-radius;
+  border-color: $primary;
+  padding: 15px 24px;
+  transition: all 100ms ease-in-out;
+  gap: 4px;
+  cursor: pointer;
+  .img {
     @include center;
-    background-color: $primary;
-    color: #fff;
-    font-family: $font-family;
-    font-size: 21px;
-    font-weight: 700;
-    border: $border;
-    border-radius: $border-radius;
-    border-color: $primary;
-    padding: 15px 24px;
-    transition: all 100ms ease-in-out;
-    gap: 4px;
-    cursor: pointer;
-    .img {
-        @include center;
-        height: 24px;
-        width: 24px;
-        background-color: transparent;
-        img {
-            background-color: transparent;
-        }
+    height: 24px;
+    width: 24px;
+    background-color: transparent;
+    img {
+      background-color: transparent;
     }
-    &:hover {
-        background-color: $hover;
-        border-color: $hover;
-        box-shadow: $shadow-hover;
-    }
+  }
+  &:hover {
+    background-color: $hover;
+    border-color: $hover;
+    box-shadow: $shadow-hover;
+  }
 }
 
 textarea {
-    color: $black;
-    font-size: 20px;
-    font-weight: 400;
-    border: $border;
-    border-radius: $border-radius;
-    border-color: $border-color;
-    padding: 16px;
-    &::placeholder {
-        color: $border-color;
-    }
-    &:focus {
-        outline: none;
-    }
+  color: $black;
+  font-size: 20px;
+  font-weight: 400;
+  border: $border;
+  border-radius: $border-radius;
+  border-color: $border-color;
+  padding: 16px;
+  &::placeholder {
+    color: $border-color;
+  }
+  &:focus {
+    outline: none;
+  }
 }
 
 a {
-    text-decoration: none;
-    color: $link;
-    &:hover {
-        border-bottom: 1px solid $hover;
-    }
+  text-decoration: none;
+  color: $link;
+  &:hover {
+    border-bottom: 1px solid $hover;
+  }
 }
 
 main {
-    position: absolute;
-    height: calc(100vh - 72px);
-    width: 100%;
-    top: 72px;
-    right: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-color: #fff6 #00000026;
+  position: absolute;
+  height: calc(100vh - 72px);
+  width: 100%;
+  top: 72px;
+  right: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-color: #fff6 #00000026;
 }
 
 .secondary-btn {
+  background-color: transparent;
+  color: $primary;
+  font-weight: 700;
+  .img-wrapper {
+    @include center;
+    height: 24px;
+    width: 24px;
+    position: relative;
+    img {
+      position: absolute;
+      transition: all 100ms ease-in-out;
+    }
+    .icon-default {
+      opacity: 1;
+    }
+    .icon-hover {
+      opacity: 0;
+    }
+  }
+  &:hover {
+    color: $hover;
     background-color: transparent;
-    color: $primary;
-    font-weight: 700;
+    border-color: $hover;
+    box-shadow: $shadow-hover;
     .img-wrapper {
-        @include center;
-        height: 24px;
-        width: 24px;
-        position: relative;
-        img {
-            position: absolute;
-            transition: all 100ms ease-in-out;
-        }
-        .icon-default {
-            opacity: 1;
-        }
-        .icon-hover {
-            opacity: 0;
-        }
+      .icon-default {
+        opacity: 0;
+      }
+      .icon-hover {
+        opacity: 1;
+      }
     }
-    &:hover {
-        color: $hover;
-        background-color: transparent;
-        border-color: $hover;
-        box-shadow: $shadow-hover;
-        .img-wrapper {
-            .icon-default {
-                opacity: 0;
-            }
-            .icon-hover {
-                opacity: 1;
-            }
-        }
-    }
+  }
 }
 
 .info-btn {
-    height: 32px;
-    width: 32px;
-    background-color: transparent;
-    padding: 0;
-    border: none;
-    img {
-        height: 20px;
-        width: 20px;
-    }
-    &:hover {
-        background-color: unset;
-        border-color: none;
-        box-shadow: none;
-    }
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  img {
+    height: 20px;
+    width: 20px;
+  }
+  &:hover {
+    background-color: unset;
+    border-color: none;
+    box-shadow: none;
+  }
 }
 
 .error {
-    color: $error;
-    font-size: 13px;
-    font-weight: 400;
+  color: $error;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .avatar {
-    @include center;
-    color: $white;
-    border-radius: 50%;
-    cursor: pointer;
+  @include center;
+  color: $white;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .underline {
-    height: 3px;
-    width: 90px;
-    background-color: $hover;
-    border-radius: 3px
+  height: 3px;
+  width: 90px;
+  background-color: $hover;
+  border-radius: 3px;
 }
 
 .success-popup {
-    @include center;
-    height: 74px;
-    color: $white;
-    border-radius: 20px;
-    background-color: $primary;
-    padding: 0 25px;
-    box-shadow: $shadow-success;
-    cursor: pointer;
+  @include center;
+  height: 74px;
+  color: $white;
+  border-radius: 20px;
+  background-color: $primary;
+  padding: 0 25px;
+  box-shadow: $shadow-success;
+  cursor: pointer;
 }
 
 .priority-btn {
-    color: $black;
+  color: $black;
+  background-color: $white;
+  font-size: 20px;
+  font-weight: 400;
+  padding: 16px 10px;
+  border: unset;
+  box-shadow: $shadow;
+  gap: 8px;
+  &:hover {
     background-color: $white;
-    font-size: 20px;
-    font-weight: 400;
-    padding: 16px 10px;
-    border: unset;
-    box-shadow: $shadow;
-    gap: 8px;
-    &:hover {
-        background-color: $white;
-        border-color: unset;
-        box-shadow: $shadow-hover;
-    }
+    border-color: unset;
+    box-shadow: $shadow-hover;
+  }
 }
 
-.close, .add-cover, .back {
-    @include center;
-    height: 32px;
-    width: 32px;
-    transition: all 100ms ease-in-out;
-    cursor: pointer;
-    &:hover {
-        background-color: $icon-hover;
-        border-radius: 50%;
-    }
+.close,
+.add-cover,
+.back {
+  @include center;
+  height: 32px;
+  width: 32px;
+  transition: all 100ms ease-in-out;
+  cursor: pointer;
+  &:hover {
+    background-color: $icon-hover;
+    border-radius: 50%;
+  }
 }
 
 app-sidebar {
-    @include center;
-    width: 100%;
+  @include center;
+  width: 100%;
 }
 
 app-auth-layout {
-    @include center;
-    height: 100vh;
+  @include center;
+  height: 100vh;
 }
 
 app-success-popup {
-    position: absolute;
-    @include center;
+  position: absolute;
+  @include center;
 }
 
-app-contact-item, app-contact-list, app-contact-details, app-task-header, app-task-description, app-toolbar, app-task-toolbar, app-task-checklist, app-task-selections, app-add-task-form, app-task-card {
-    width: 100%;
+app-contact-item,
+app-contact-list,
+app-contact-details,
+app-task-header,
+app-task-description,
+app-toolbar,
+app-task-toolbar,
+app-task-checklist,
+app-task-selections,
+app-add-task-form,
+app-task-card {
+  width: 100%;
 }
 
 app-contacts {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    padding: 12px 16px 64px;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 12px 16px 64px;
 }
 
 app-add-task {
-    @include column-center;
+  @include column-center;
 }
 
 app-board {
-    @include start;
-    width: 100%;
-    height: 100%;
-    padding: 12px 0 64px;
+  @include start;
+  width: 100%;
+  height: 100%;
+  padding: 12px 0 64px;
 }
 
 @media (max-width: 1024px) {
-    h1 {
-        font-size: 47px;
+  h1 {
+    font-size: 47px;
+  }
+  button {
+    font-size: 16px;
+  }
+  main {
+    top: 80px;
+    height: calc(100vh - 160px);
+    width: 100%;
+  }
+  aside {
+    position: fixed;
+    height: 80px;
+    width: 100%;
+    bottom: 0;
+    padding: 0 16px;
+    footer {
+      display: none;
     }
-    button {
-        font-size: 16px;
-    }
-    main {
-        top: 80px;
-        height: calc(100vh - 160px);
-        width: 100%;
-    }
-    aside {
-        position: fixed;
-        height: 80px;
-        width: 100%;
-        bottom: 0;
-        padding: 0 16px;
-        footer {
-            display: none;
+    nav {
+      @include space-between;
+      height: 100%;
+      flex-direction: unset;
+      a {
+        @include column-center;
+        width: 80px;
+        height: 76px;
+        padding: 8px 1px;
+        gap: 10px;
+        &:hover,
+        &.active {
+          border-radius: 16px;
         }
-        nav {
-            @include space-between;
+        .img-wrapper {
+          height: 24px;
+          width: 24px;
+          img {
+            width: 100%;
             height: 100%;
-            flex-direction: unset;
-            a {
-                @include column-center;
-                width: 80px;
-                height: 76px;
-                padding: 8px 1px;
-                gap: 10px;
-                &:hover, &.active {
-                    border-radius: 16px;
-                }
-                .img-wrapper {
-                    height: 24px;
-                    width: 24px;
-                    img {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-                p {
-                    font-size: 14px;
-                }
-            }
+          }
         }
+        p {
+          font-size: 14px;
+        }
+      }
     }
-    app-contact-item, app-contact-list {
-        width: 100%;
-    }
+  }
+  app-contact-item,
+  app-contact-list {
+    width: 100%;
+  }
 }
 
-app-task-list.cdk-drag-preview, 
+app-task-list.cdk-drag-preview,
 app-task-card.cdk-drag-preview {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    overflow: visible !important;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible !important;
 }
 
 app-task-list.cdk-drag-preview .list-wrapper,
@@ -342,10 +357,13 @@ app-task-card.cdk-drag-preview .task {
 
 app-task-list.cdk-drag-placeholder::before,
 app-task-card.cdk-drag-placeholder::before {
-  content: '';
+  content: "";
   visibility: visible;
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.3);
   border: 2px dashed #ccc;
   border-radius: 10px;
@@ -358,13 +376,13 @@ app-task-card.cdk-drag-placeholder {
 }
 
 .cdk-drag-animating {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 .cdk-drop-list-dragging .cdk-drag {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 .cdk-overlay-dark-backdrop {
-    background: transparent;
+  background: transparent;
 }
