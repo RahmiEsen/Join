@@ -1,208 +1,209 @@
-@use '../../../../styles/mixins' as *;
-@use '../../../../styles/variables' as *;
+@use "../../../../styles/mixins" as *;
+@use "../../../../styles/variables" as *;
 
 .overlay {
-    position: fixed;
-    @include center;
-    height: 100vh;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    background-color: $overlay;
-    z-index: 2;
-    .overlay-card {
-        @include center-start;
-        max-width: 1212px;
-        width: 95%;
-        height: 592px;
-        border-radius: 30px;
-        overflow: hidden;
-        animation: slideIn 0.3s ease forwards;
-        &.slide-out {
-            animation: slideOut 0.3s ease forwards;
-        }
-        .overlay-left {
-            @include column;
-            height: 100%;
-            width: 467px;
-            color: $white;
-            background-color: $primary;
-            padding: 66px 48px;
-            gap: 12px;
-            .close {
-                display: none;
-                top: 24px;
-                right: 24px;
-            }
-            .logo {
-                width: 56px;
-                height: 67px;
-            }
-            .headline {
-                @include column;
-                gap: 16px;
-                h1 {
-                    color: $white;
-                    text-align: start;
-                }
-                span {
-                    font-size: 27px;
-                }
-            }
-        }
-        .overlay-right {
-            position: relative;
-            @include column-center;
-            height: 100%;
-            width: calc(1212px - 467px);
-            background-color: $white;
-            padding: 66px 48px;
-            .close {
-                position: absolute;
-                top: 48px;
-                right: 80px;
-            }
-            .contact-wrapper {
-                @include space-between;
-                width: 100%;
-                .avatar {
-                    height: 120px;
-                    width: 120px;
-                    font-size: 47px;
-                    background-color: $border-color !important;
-                    border: 3px solid $white;
-                    box-shadow: $shadow;
-                    overflow: hidden;
-                    transition: background-color .2s ease;
-                    img {
-                        width: 50%;
-                        height: 50%
-                    }
-                }
-                .contact-form {
-                    @include center;
-                    gap: 54px;
-                    .contact-section {
-                        @include column;
-                        width: 422px;
-                        input {
-                            width: 100%;
-                        }
-                        .button-wrapper {
-                            @include center-start;
-                            width: 364px;
-                            gap: 24px;
-                            button {
-                                padding: 16px;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+  position: fixed;
+  @include center;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  background-color: $overlay;
+  z-index: 2;
+  .overlay-card {
+    @include center-start;
+    max-width: 1212px;
+    width: 95%;
+    height: 592px;
+    border-radius: 30px;
+    overflow: hidden;
+    animation: slideIn 0.3s ease forwards;
+    &.slide-out {
+      animation: slideOut 0.3s ease forwards;
     }
+    .overlay-left {
+      @include column;
+      height: 100%;
+      width: 467px;
+      color: $white;
+      background-color: $primary;
+      padding: 66px 48px;
+      gap: 12px;
+      .close {
+        display: none;
+        top: 24px;
+        right: 24px;
+      }
+      .logo {
+        width: 56px;
+        height: 67px;
+      }
+      .headline {
+        @include column;
+        gap: 16px;
+        h1 {
+          color: $white;
+          text-align: start;
+        }
+        span {
+          font-size: 27px;
+        }
+      }
+    }
+    .overlay-right {
+      position: relative;
+      @include column-center;
+      height: 100%;
+      width: calc(1212px - 467px);
+      background-color: $white;
+      padding: 66px 48px;
+      .close {
+        position: absolute;
+        top: 48px;
+        right: 80px;
+      }
+      .contact-wrapper {
+        @include space-between;
+        width: 100%;
+        .avatar {
+          height: 120px;
+          width: 120px;
+          font-size: 47px;
+          background-color: $border-color !important;
+          border: 3px solid $white;
+          box-shadow: $shadow;
+          overflow: hidden;
+          transition: background-color 0.2s ease;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        .contact-form {
+          @include center;
+          gap: 54px;
+          .contact-section {
+            @include column;
+            width: 422px;
+            input {
+              width: 100%;
+            }
+            .button-wrapper {
+              @include center-start;
+              width: 364px;
+              gap: 24px;
+              button {
+                padding: 16px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 @keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideOut {
-    from {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 @keyframes slideInMobile {
-    from {
-        opacity: 0;
-        transform: translateY(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideOutMobile {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(100%);
-    }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(100%);
+  }
 }
 
 @media (max-width: 1024px) {
-    .overlay {
-        .overlay-card {
-            @include column;
-            height: auto;
-            max-height: calc(100% - 165px);
-            max-width: 396px;
-            animation: slideInMobile 0.3s ease forwards;
-            &.slide-out {
-            animation: slideOutMobile 0.3s ease forwards;
-            }
-            .overlay-left {
-                width: 100%;
-                flex: 0 1 352px;
-                min-height: 200px;
-                padding: 66px 24px;
-                .close {
-                    display: flex;
-                }
-                .logo {
-                    display: none;
-                }
-                .headline span {
-                    font-size: 20px;
-                }
-            }
-            .overlay-right {
-                width: 100%;
-                flex: 1 1 auto;
-                min-height: 300px;
-                padding: 0;
-                .close {
-                    display: none;
-                }
-                .contact-wrapper {
-                    height: 100%;
-                    position: relative;
-                    .avatar {
-                        position: absolute;
-                        top: -60px;
-                        left: 50%;
-                        transform: translateX(-50%);
-                    }
-                    .contact-form {
-                        width: 100%;
-                        height: 100%;
-                        padding: 80px 24px 24px;
-                        box-sizing: border-box;
-                        .contact-section {
-                            width: 100%;
-                            max-width: 422px;
-                            margin: 0 auto;
-                        }
-                    }
-                }
-            }
+  .overlay {
+    .overlay-card {
+      @include column;
+      height: auto;
+      max-height: calc(100% - 165px);
+      max-width: 396px;
+      animation: slideInMobile 0.3s ease forwards;
+      &.slide-out {
+        animation: slideOutMobile 0.3s ease forwards;
+      }
+      .overlay-left {
+        width: 100%;
+        flex: 0 1 352px;
+        min-height: 200px;
+        padding: 66px 24px;
+        .close {
+          display: flex;
         }
+        .logo {
+          display: none;
+        }
+        .headline span {
+          font-size: 20px;
+        }
+      }
+      .overlay-right {
+        width: 100%;
+        flex: 1 1 auto;
+        min-height: 300px;
+        padding: 0;
+        .close {
+          display: none;
+        }
+        .contact-wrapper {
+          height: 100%;
+          position: relative;
+          .avatar {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+          .contact-form {
+            width: 100%;
+            height: 100%;
+            padding: 80px 24px 24px;
+            box-sizing: border-box;
+            .contact-section {
+              width: 100%;
+              max-width: 422px;
+              margin: 0 auto;
+            }
+          }
+        }
+      }
     }
+  }
 }
